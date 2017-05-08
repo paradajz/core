@@ -29,6 +29,9 @@ ISR(USART1_RX_vect)
         RingBuffer_Insert(&rxBuffer, data);
 }
 
+///
+/// \brief Empty ISR handler for UART transmission.
+///
 ISR(USART1_TX_vect)
 {
     

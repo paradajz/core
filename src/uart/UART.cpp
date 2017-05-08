@@ -111,9 +111,6 @@ int8_t UART::write(uint8_t data)
         return -1;
     #endif
 
-    if (!(UCSR1B & (1<<TXEN1)))
-        return -1;
-
     if (RingBuffer_IsFull(&txBuffer))
         return -1;
 

@@ -18,13 +18,4 @@
 #include "adc/ADC.h"
 #include "reset/Reset.h"
 #include "strings/Strings.h"
-
-///
-/// \brief Initialization of integrated MCU peripherals.
-///
-/// This function initializes:
-/// \li ADC
-/// \li UART
-/// \ingroup core
-///
-void coreInit();
+#include "spi/SPI.h"

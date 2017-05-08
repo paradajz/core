@@ -14,6 +14,11 @@ void disablePeripherals();
 ///
 /// \brief Initiates watchdog software MCU reset by setting watch-dog timeout and waiting until watchdog is activated.
 ///
-void reboot();
+void mcuReset();
+
+///
+/// \brief Used to reset watchdog timer on MCU startup.
+///
+void wdt_init() __attribute__((naked)) __attribute__((section(".init3")));
 
 /// @}

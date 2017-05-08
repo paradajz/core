@@ -2,7 +2,7 @@
 
 #define WDFR 3
 
-void disablePeripherals(void)
+void disablePeripherals()
 {
     //disable eeprom
     EECR = 0;
@@ -25,48 +25,30 @@ void disablePeripherals(void)
     //disable timers
     TIMSK0 = 0;
     TIMSK1 = 0;
-    TIMSK2 = 0;
     TIMSK3 = 0;
-    TIMSK4 = 0;
-    TIMSK5 = 0;
 
     //disable USART
-    UCSR0B = 0;
     UCSR1B = 0;
-    UCSR2B = 0;
-    UCSR3B = 0;
 
     //disable I2C
     TWCR = 0;
 
-    //write low to all pins
-    PORTA = 0;
-    PORTB = 0;
-    PORTC = 0;
-    PORTD = 0;
-    PORTE = 0;
-    PORTF = 0;
-    PORTG = 0;
-    PORTH = 0;
-    PORTJ = 0;
-    PORTK = 0;
-    PORTL = 0;
-
     //set all pins to inputs
-    DDRA = 0;
     DDRB = 0;
     DDRC = 0;
     DDRD = 0;
     DDRE = 0;
     DDRF = 0;
-    DDRG = 0;
-    DDRH = 0;
-    DDRJ = 0;
-    DDRK = 0;
-    DDRL = 0;
+
+    //write low to all pins
+    PORTB = 0;
+    PORTC = 0;
+    PORTD = 0;
+    PORTE = 0;
+    PORTF = 0;
 }
 
-void reboot()
+void mcuReset()
 {
     cli();
     //stop watchdog timer, if running
@@ -78,4 +60,11 @@ void reboot()
 
     wdt_enable(WDTO_15MS);
     while(1);
+}
+
+void wdt_init(void)
+{
+    MCUSR &= ~(1 << WDRF);
+    wdt_disable();
+    return;
 }

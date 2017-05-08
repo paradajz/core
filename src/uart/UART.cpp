@@ -2,12 +2,12 @@
 #include "RingBuffer/RingBuffer.h"
 #include <avr/interrupt.h>
 
-RingBuff_t  txBuffer, rxBuffer;
-
-bool        rxEnabled,
-            txEnabled;
-
-//isr functions
+#if USE_TX > 0
+RingBuff_t  txBuffer;
+#endif
+#if USE_RX > 0
+RingBuff_t  rxBuffer;
+#endif
 
 ///
 /// \brief Default constructor.
@@ -17,6 +17,7 @@ UART::UART()
     
 }
 
+#if USE_RX > 0
 ///
 /// \brief ISR used to store incoming data from UART to buffer.
 ///
@@ -28,6 +29,13 @@ ISR(USART1_RX_vect)
         RingBuffer_Insert(&rxBuffer, data);
 }
 
+ISR(USART1_TX_vect)
+{
+    
+}
+#endif
+
+#if USE_TX > 0
 ///
 /// \brief ISR used to send data from outgoing buffer to UART.
 ///
@@ -35,11 +43,12 @@ ISR(USART1_UDRE_vect)
 {
     if (RingBuffer_IsEmpty(&txBuffer))
     {
-        // buffer is empty, disable transmit interrupt
-        if (!rxEnabled)
-            UCSR1B = (1<<TXCIE1) | (1<<TXEN1);
-        else
-            UCSR1B = (1<<RXEN1) | (1<<TXCIE1) | (1<<TXEN1) | (1<<RXCIE1);
+        //buffer is empty, disable transmit interrupt
+        #if USE_RX > 0
+        UCSR1B = (1<<RXEN1) | (1<<TXCIE1) | (1<<TXEN1) | (1<<RXCIE1);
+        #else
+        UCSR1B = (1<<TXCIE1) | (1<<TXEN1);
+        #endif
     }
     else
     {
@@ -47,20 +56,13 @@ ISR(USART1_UDRE_vect)
         UDR1 = data;
     }
 }
-
-ISR(USART1_TX_vect)
-{
-    
-}
+#endif
 
 ///
 /// \brief Initializes UART peripheral.
 ///
-void UART::begin(uint32_t baudRate, bool enableRX, bool enableTX)
+void UART::begin(uint32_t baudRate)
 {
-    rxEnabled = enableRX;
-    txEnabled = enableTX;
-
     int16_t baud_count = ((F_CPU / 8) + (baudRate / 2)) / baudRate;
 
     if ((baud_count & 1) && baud_count <= 4096)
@@ -74,31 +76,28 @@ void UART::begin(uint32_t baudRate, bool enableRX, bool enableTX)
         UBRR1 = (baud_count >> 1) - 1;
     }
 
-    if (enableRX && enableTX)
-        UCSR1B = (1<<RXEN1) | (1<<TXCIE1) | (1<<TXEN1) | (1<<RXCIE1);
-    else if (enableRX && !enableTX)
-        UCSR1B = (1<<RXEN1) | (1<<RXCIE1);
-    else if (enableTX & !enableRX)
-        UCSR1B = (1<<TXCIE1) | (1<<TXEN1);
+    #if ((USE_RX > 0) && (USE_TX > 0))
+    UCSR1B = (1<<RXEN1) | (1<<TXCIE1) | (1<<TXEN1) | (1<<RXCIE1);
+    #endif
+
+    #if ((USE_RX > 0) && (USE_TX == 0))
+    UCSR1B = (1<<RXEN1) | (1<<RXCIE1);
+    #endif
+
+    #if ((USE_RX == 0) && (USE_TX > 0))
+    UCSR1B = (1<<TXCIE1) | (1<<TXEN1);
+    #endif
 
     //8 bit, no parity, 1 stop bit
     UCSR1C = (1<<UCSZ11) | (1<<UCSZ10);
 
+    #if USE_RX > 0
     RingBuffer_InitBuffer(&rxBuffer);
+    #endif
+
+    #if USE_TX > 0
     RingBuffer_InitBuffer(&txBuffer);
-}
-
-///
-/// \brief Reads a byte from incoming UART buffer
-/// \returns Single byte on success, -1 is buffer is empty.
-///
-uint8_t UART::read()
-{
-    if (RingBuffer_IsEmpty(&rxBuffer))
-    return -1;
-
-    uint8_t data = RingBuffer_Remove(&rxBuffer);
-    return data;
+    #endif
 }
 
 ///
@@ -108,8 +107,9 @@ uint8_t UART::read()
 ///
 int8_t UART::write(uint8_t data)
 {
-    if (!txEnabled)
+    #if USE_TX == 0
         return -1;
+    #endif
 
     if (!(UCSR1B & (1<<TXEN1)))
         return -1;
@@ -119,10 +119,11 @@ int8_t UART::write(uint8_t data)
 
     RingBuffer_Insert(&txBuffer, data);
 
-    if (!rxEnabled)
-        UCSR1B = (1<<TXCIE1) | (1<<TXEN1) | (1<<UDRIE1);
-    else
-        UCSR1B = (1<<RXEN1) | (1<<TXCIE1) | (1<<TXEN1) | (1<<RXCIE1) | (1<<UDRIE1);
+    #if USE_RX > 0
+    UCSR1B = (1<<RXEN1) | (1<<TXCIE1) | (1<<TXEN1) | (1<<RXCIE1) | (1<<UDRIE1);
+    #else
+    UCSR1B = (1<<TXCIE1) | (1<<TXEN1) | (1<<UDRIE1);
+    #endif
 
     return 0;
 }
@@ -133,7 +134,28 @@ int8_t UART::write(uint8_t data)
 ///
 bool UART::available()
 {
+    #if USE_RX == 0
+    return 0;
+    #else
     return !RingBuffer_IsEmpty(&rxBuffer);
+    #endif
+}
+
+///
+/// \brief Reads a byte from incoming UART buffer
+/// \returns Single byte on success, -1 is buffer is empty.
+///
+int16_t UART::read()
+{
+    #if USE_RX == 0
+    return -1;
+    #else
+    if (RingBuffer_IsEmpty(&rxBuffer))
+        return -1;
+
+    uint8_t data = RingBuffer_Remove(&rxBuffer);
+    return data;
+    #endif
 }
 
 UART uart;

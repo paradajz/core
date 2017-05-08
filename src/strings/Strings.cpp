@@ -4,7 +4,7 @@ void addNumberToCharArray(int32_t number, uint8_t &stringSize, bool temp)
 {
     char intToCharArray[7];
     itoa(number, intToCharArray, 10);
-    stringSize += getNumberOfDigits(number);
+    stringSize += strlen(intToCharArray);
 
     if (number < 0)
         stringSize++;

@@ -1,24 +1,16 @@
 #include "UART.h"
+#include "RingBuffer/RingBuffer.h"
+#include <avr/interrupt.h>
+
+RingBuff_t  txBuffer, rxBuffer;
+
+bool        rxEnabled,
+            txEnabled;
+
+//isr functions
 
 ///
-/// \brief Stream used to send printf statements to UART.
-///
-static FILE uart_printf_stream;
-
-///
-/// \brief Buffer holding outgoing serial data.
-/// See RingBuff_t enumeration.
-///
-RingBuff_t txBuffer;
-
-///
-/// \brief Buffer holding incoming serial data.
-/// See RingBuff_t enumeration.
-///
-RingBuff_t rxBuffer;
-
-///
-/// \brief Default constructor (empty).
+/// \brief Default constructor.
 ///
 UART::UART()
 {
@@ -31,6 +23,7 @@ UART::UART()
 ISR(USART1_RX_vect)
 {
     uint8_t data = UDR1;
+
     if (!RingBuffer_IsFull(&rxBuffer))
         RingBuffer_Insert(&rxBuffer, data);
 }
@@ -43,7 +36,10 @@ ISR(USART1_UDRE_vect)
     if (RingBuffer_IsEmpty(&txBuffer))
     {
         // buffer is empty, disable transmit interrupt
-        UCSR1B = (1<<RXEN1) | (1<<TXCIE1) | (1<<TXEN1) | (1<<RXCIE1);
+        if (!rxEnabled)
+            UCSR1B = (1<<TXCIE1) | (1<<TXEN1);
+        else
+            UCSR1B = (1<<RXEN1) | (1<<TXCIE1) | (1<<TXEN1) | (1<<RXCIE1);
     }
     else
     {
@@ -52,68 +48,24 @@ ISR(USART1_UDRE_vect)
     }
 }
 
-///
-/// \brief Empty ISR handler for UART transmission.
-///
 ISR(USART1_TX_vect)
 {
     
 }
 
 ///
-/// \brief Prints a character to FILE stream
-/// @param [in] c   Character to write
-///
-int printChar(char c, FILE *stream)
-{
-    //write directly to UART
-    while ((UCSR0A & (1 << UDRE0)) == 0) {};
-    UDR0 = c;
-    return 0;
-}
-
-///
 /// \brief Initializes UART peripheral.
 ///
-void UART::init()
+void UART::begin(uint32_t baudRate, bool enableRX, bool enableTX)
 {
-    int16_t baud_count;
+    rxEnabled = enableRX;
+    txEnabled = enableTX;
 
-    //uart0
-    UCSR0B = (1<<RXEN0) | (1<<TXEN0);
-
-    uart_printf_stream.put   = printChar;
-    uart_printf_stream.get   = NULL;
-    uart_printf_stream.flags = _FDEV_SETUP_WRITE;
-    uart_printf_stream.udata = 0;
-    stdout = &uart_printf_stream;
-
-    baud_count = ((F_CPU / 8) + (BAUD_RATE_DEBUG / 2)) / BAUD_RATE_DEBUG;
+    int16_t baud_count = ((F_CPU / 8) + (baudRate / 2)) / baudRate;
 
     if ((baud_count & 1) && baud_count <= 4096)
     {
-        //double speed uart
-        UCSR0A = (1<<U2X0);
-        UBRR0 = baud_count - 1;
-    }
-    else
-    {
-        UCSR0A = 0;
-        UBRR0 = (baud_count >> 1) - 1;
-    }
-
-    //8 bit, no parity, 1 stop bit
-    UCSR0C = (1<<UCSZ00) | (1<<UCSZ01);
-
-    //uart1
-    UCSR1B = (1<<RXEN1) | (1<<TXCIE1) | (1<<TXEN1) | (1<<RXCIE1);
-
-    baud_count = ((F_CPU / 8) + (BAUD_RATE_DISPLAY / 2)) / BAUD_RATE_DISPLAY;
-
-    if ((baud_count & 1) && baud_count <= 4096)
-    {
-        //double speed uart
-        UCSR1A = (1<<U2X1);
+        UCSR1A = (1<<U2X1); //double speed uart
         UBRR1 = baud_count - 1;
     }
     else
@@ -121,6 +73,13 @@ void UART::init()
         UCSR1A = 0;
         UBRR1 = (baud_count >> 1) - 1;
     }
+
+    if (enableRX && enableTX)
+        UCSR1B = (1<<RXEN1) | (1<<TXCIE1) | (1<<TXEN1) | (1<<RXCIE1);
+    else if (enableRX && !enableTX)
+        UCSR1B = (1<<RXEN1) | (1<<RXCIE1);
+    else if (enableTX & !enableRX)
+        UCSR1B = (1<<TXCIE1) | (1<<TXEN1);
 
     //8 bit, no parity, 1 stop bit
     UCSR1C = (1<<UCSZ11) | (1<<UCSZ10);
@@ -131,12 +90,12 @@ void UART::init()
 
 ///
 /// \brief Reads a byte from incoming UART buffer
-/// \returns Single byte on success, -1 if buffer is empty.
+/// \returns Single byte on success, -1 is buffer is empty.
 ///
-int16_t UART::read()
+uint8_t UART::read()
 {
     if (RingBuffer_IsEmpty(&rxBuffer))
-        return -1;
+    return -1;
 
     uint8_t data = RingBuffer_Remove(&rxBuffer);
     return data;
@@ -149,6 +108,9 @@ int16_t UART::read()
 ///
 int8_t UART::write(uint8_t data)
 {
+    if (!txEnabled)
+        return -1;
+
     if (!(UCSR1B & (1<<TXEN1)))
         return -1;
 
@@ -156,7 +118,12 @@ int8_t UART::write(uint8_t data)
         return -1;
 
     RingBuffer_Insert(&txBuffer, data);
-    UCSR1B = (1<<RXEN1) | (1<<TXCIE1) | (1<<TXEN1) | (1<<RXCIE1) | (1<<UDRIE1);
+
+    if (!rxEnabled)
+        UCSR1B = (1<<TXCIE1) | (1<<TXEN1) | (1<<UDRIE1);
+    else
+        UCSR1B = (1<<RXEN1) | (1<<TXCIE1) | (1<<TXEN1) | (1<<RXCIE1) | (1<<UDRIE1);
+
     return 0;
 }
 

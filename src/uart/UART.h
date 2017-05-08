@@ -12,9 +12,9 @@ class UART
 {
     public:
     UART();
-    void init();
+    void begin(uint32_t baudRate, bool enableRX, bool enableTX);
     bool available();
-    int16_t read();
+    uint8_t read();
     int8_t write(uint8_t data);
 };
 

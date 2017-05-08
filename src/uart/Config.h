@@ -1,13 +1,4 @@
 #pragma once
 
-#include "RingBuffer/RingBuffer.h"
-
-///
-/// \brief Baudrate used to send printf statements.
-///
-#define BAUD_RATE_DEBUG     115200
-
-///
-/// \brief Baudrate at which SDW display communicates with MCU.
-///
-#define BAUD_RATE_DISPLAY   115200
+//RX/TX buffer size in bytes
+#define SERIAL_BUFFER_SIZE 64

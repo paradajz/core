@@ -1,5 +1,7 @@
 #pragma once
 
+#include "RingBuffer/RingBuffer.h"
+
 ///
 /// \brief Baudrate used to send printf statements.
 ///

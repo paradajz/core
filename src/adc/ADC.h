@@ -25,13 +25,26 @@ void setUpADC();
 /// \brief Get ADC value from last set ADC channel.
 /// \return Value from ADC registers (ADCH and ADCL).
 ///
-uint16_t getADCvalue();
+uint16_t getADCvalue()
+{
+    //single conversion mode
+    ADCSRA |= (1<<ADSC);
+
+    //wait until ADC conversion is complete
+    while (ADCSRA & (1<<ADSC));
+
+    return ADC;
+}
 
 ///
 /// \brief Disable digital input circuitry on specified ADC channel to reduce noise.
 /// @param[in] channel ADC Channel.
 ///
-void disconnectDigitalInADC(uint8_t channel);
+inline void disconnectDigitalInADC(uint8_t channel);
+{
+    if (adcChannel < 6)
+        DIDR0 |= (1<<adcChannel);
+}
 
 ///
 /// \brief Sets active ADC channel

@@ -35,20 +35,3 @@ void setUpADC()
     //enable ADC
     ADCSRA |= (1<<ADEN);
 }
-
-uint16_t getADCvalue()
-{
-    //single conversion mode
-    ADCSRA |= (1<<ADSC);
-
-    //wait until ADC conversion is complete
-    while (ADCSRA & (1<<ADSC));
-
-    return ADC;
-}
-
-void disconnectDigitalInADC(uint8_t adcChannel)
-{
-    if (adcChannel < 6)
-        DIDR0 |= (1<<adcChannel);
-}

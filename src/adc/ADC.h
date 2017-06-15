@@ -25,7 +25,7 @@ void setUpADC();
 /// \brief Get ADC value from last set ADC channel.
 /// \return Value from ADC registers (ADCH and ADCL).
 ///
-uint16_t getADCvalue()
+inline uint16_t getADCvalue()
 {
     //single conversion mode
     ADCSRA |= (1<<ADSC);

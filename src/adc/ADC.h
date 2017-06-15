@@ -40,7 +40,7 @@ uint16_t getADCvalue()
 /// \brief Disable digital input circuitry on specified ADC channel to reduce noise.
 /// @param[in] channel ADC Channel.
 ///
-inline void disconnectDigitalInADC(uint8_t channel)
+inline void disconnectDigitalInADC(uint8_t adcChannel)
 {
     if (adcChannel < 6)
         DIDR0 |= (1<<adcChannel);

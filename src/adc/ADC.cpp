@@ -1,5 +1,4 @@
 #include "ADC.h"
-#include "Config.h"
 
 void setUpADC()
 {

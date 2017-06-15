@@ -1,13 +1,25 @@
 #pragma once
 
-#include "Config.h"
-
 ///
 /// \brief Various functions used to manipulate strings more easily.
 /// \defgroup strings_core Strings
 /// \ingroup core
 /// @{
 ///
+
+#ifndef MAX_TEXT_SIZE
+#error MAX_TEXT_SIZE undefined
+#endif
+
+///
+/// \brief String buffer used by all string functions. Must be declared externally.
+///
+extern char stringBuffer[MAX_TEXT_SIZE+1];
+
+///
+/// \brief Temporary buffer. Must be declared externally.
+///
+extern char tempBuffer[MAX_TEXT_SIZE+1];
 
 ///
 /// \brief Appends single number to stringBuffer.

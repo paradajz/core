@@ -34,7 +34,9 @@ ISR(USART1_RX_vect)
     if (!RingBuffer_IsFull(&rxBuffer))
         RingBuffer_Insert(&rxBuffer, data);
 }
+#endif
 
+#ifdef USE_TX
 ///
 /// \brief Empty ISR handler for UART transmission.
 ///
@@ -53,7 +55,7 @@ ISR(USART1_UDRE_vect)
     if (RingBuffer_IsEmpty(&txBuffer))
     {
         //buffer is empty, disable transmit interrupt
-        #if USE_RX > 0
+        #ifdef USE_RX
         UCSR1B = (1<<RXEN1) | (1<<TXCIE1) | (1<<TXEN1) | (1<<RXCIE1);
         #else
         UCSR1B = (1<<TXCIE1) | (1<<TXEN1);
@@ -86,26 +88,26 @@ void UART::begin(uint32_t baudRate)
         UBRR1 = (baud_count >> 1) - 1;
     }
 
-    #if defined(USE_RX) && defined(USE_TX)
+    #if (defined(USE_RX) && defined(USE_TX))
     UCSR1B = (1<<RXEN1) | (1<<TXCIE1) | (1<<TXEN1) | (1<<RXCIE1);
     #endif
 
-    #if defined(USE_RX) && !defined(USE_TX)
+    #if (defined(USE_RX) && !defined(USE_TX))
     UCSR1B = (1<<RXEN1) | (1<<RXCIE1);
     #endif
 
-    #if !defined(USE_RX) && defined(USE_TX)
+    #if (!defined(USE_RX) && defined(USE_TX))
     UCSR1B = (1<<TXCIE1) | (1<<TXEN1);
     #endif
 
     //8 bit, no parity, 1 stop bit
     UCSR1C = (1<<UCSZ11) | (1<<UCSZ10);
 
-    #if defined(USE_RX)
+    #ifdef USE_RX
     RingBuffer_InitBuffer(&rxBuffer);
     #endif
 
-    #if defined(USE_TX)
+    #ifdef USE_TX
     RingBuffer_InitBuffer(&txBuffer);
     #endif
 }
@@ -126,7 +128,7 @@ int8_t UART::write(uint8_t data)
 
     RingBuffer_Insert(&txBuffer, data);
 
-    #if defined(USE_RX)
+    #ifdef USE_RX
     UCSR1B = (1<<RXEN1) | (1<<TXCIE1) | (1<<TXEN1) | (1<<RXCIE1) | (1<<UDRIE1);
     #else
     UCSR1B = (1<<TXCIE1) | (1<<TXEN1) | (1<<UDRIE1);

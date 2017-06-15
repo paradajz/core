@@ -22,11 +22,11 @@ void setUpADC()
     //setup voltage reference
     #ifdef VREF_AREF
     //nothing, this is default setting
-    #elif defined(VREF_AVCC)
+    #elif defined (VREF_AVCC)
     ADMUX |= (1<<REFS0);
-    #elif defined(VREF_INTERNAL_2V56)
+    #elif defined (VREF_INTERNAL_2V56)
     ADMUX |= (1<<REFS0) | (1<<REFS1);
-    #elif defined(VREF_INTERNAL_1V1)
+    #elif defined (VREF_INTERNAL_1V1)
     ADMUX |= (1<<REFS1);
     #else
     #error "No ADC reference selected or setting is invalid. Valid options are VREF_AREF, VREF_AVCC, VREF_INTERNAL_2V56 and VREF_INTERNAL_1V1"

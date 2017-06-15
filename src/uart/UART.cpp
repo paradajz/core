@@ -2,10 +2,16 @@
 #include "RingBuffer/RingBuffer.h"
 #include <avr/interrupt.h>
 
-#if USE_TX > 0
+#ifdef USE_TX
+///
+/// \brief Buffer in which outgoing data is stored.
+///
 RingBuff_t  txBuffer;
 #endif
-#if USE_RX > 0
+#ifdef USE_RX
+///
+/// \brief Buffer in which incoming data is stored.
+///
 RingBuff_t  rxBuffer;
 #endif
 
@@ -17,7 +23,7 @@ UART::UART()
     
 }
 
-#if USE_RX > 0
+#ifdef USE_RX
 ///
 /// \brief ISR used to store incoming data from UART to buffer.
 ///
@@ -38,7 +44,7 @@ ISR(USART1_TX_vect)
 }
 #endif
 
-#if USE_TX > 0
+#ifdef USE_TX
 ///
 /// \brief ISR used to send data from outgoing buffer to UART.
 ///
@@ -63,6 +69,7 @@ ISR(USART1_UDRE_vect)
 
 ///
 /// \brief Initializes UART peripheral.
+/// @param [in] baudRate UART baudrate.
 ///
 void UART::begin(uint32_t baudRate)
 {
@@ -79,26 +86,26 @@ void UART::begin(uint32_t baudRate)
         UBRR1 = (baud_count >> 1) - 1;
     }
 
-    #if ((USE_RX > 0) && (USE_TX > 0))
+    #if defined(USE_RX) && defined(USE_TX)
     UCSR1B = (1<<RXEN1) | (1<<TXCIE1) | (1<<TXEN1) | (1<<RXCIE1);
     #endif
 
-    #if ((USE_RX > 0) && (USE_TX == 0))
+    #if defined(USE_RX) && !defined(USE_TX)
     UCSR1B = (1<<RXEN1) | (1<<RXCIE1);
     #endif
 
-    #if ((USE_RX == 0) && (USE_TX > 0))
+    #if !defined(USE_RX) && defined(USE_TX)
     UCSR1B = (1<<TXCIE1) | (1<<TXEN1);
     #endif
 
     //8 bit, no parity, 1 stop bit
     UCSR1C = (1<<UCSZ11) | (1<<UCSZ10);
 
-    #if USE_RX > 0
+    #if defined(USE_RX)
     RingBuffer_InitBuffer(&rxBuffer);
     #endif
 
-    #if USE_TX > 0
+    #if defined(USE_TX)
     RingBuffer_InitBuffer(&txBuffer);
     #endif
 }
@@ -110,7 +117,7 @@ void UART::begin(uint32_t baudRate)
 ///
 int8_t UART::write(uint8_t data)
 {
-    #if USE_TX == 0
+    #if !defined(USE_TX)
         return -1;
     #endif
 
@@ -119,7 +126,7 @@ int8_t UART::write(uint8_t data)
 
     RingBuffer_Insert(&txBuffer, data);
 
-    #if USE_RX > 0
+    #if defined(USE_RX)
     UCSR1B = (1<<RXEN1) | (1<<TXCIE1) | (1<<TXEN1) | (1<<RXCIE1) | (1<<UDRIE1);
     #else
     UCSR1B = (1<<TXCIE1) | (1<<TXEN1) | (1<<UDRIE1);
@@ -134,7 +141,7 @@ int8_t UART::write(uint8_t data)
 ///
 bool UART::available()
 {
-    #if USE_RX == 0
+    #if !defined(USE_RX)
     return 0;
     #else
     return !RingBuffer_IsEmpty(&rxBuffer);
@@ -142,12 +149,12 @@ bool UART::available()
 }
 
 ///
-/// \brief Reads a byte from incoming UART buffer
+/// \brief Reads a byte from incoming UART buffer.
 /// \returns Single byte on success, -1 is buffer is empty.
 ///
 int16_t UART::read()
 {
-    #if USE_RX == 0
+    #if !defined(USE_RX)
     return -1;
     #else
     if (RingBuffer_IsEmpty(&rxBuffer))

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Config.h"
-
 ///
 /// \brief Object for interfacing with configured UART peripheral.
 /// \defgroup uart UART

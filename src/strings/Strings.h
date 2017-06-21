@@ -7,6 +7,8 @@
 /// @{
 ///
 
+#ifdef USE_STRINGS
+
 #ifndef MAX_TEXT_SIZE
 #error MAX_TEXT_SIZE undefined
 #endif
@@ -60,3 +62,4 @@ void startLine(bool temp = false);
 void endLine(uint8_t &stringSize, bool temp = false);
 
 /// @}
+#endif

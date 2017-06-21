@@ -1,3 +1,5 @@
+#ifdef USE_STRINGS
+
 #include "Strings.h"
 
 void addNumberToCharArray(int32_t number, uint8_t &stringSize, bool temp)
@@ -88,3 +90,5 @@ void endLine(uint8_t &stringSize, bool temp)
     else
         stringBuffer[stringSize] = '\0';
 }
+
+#endif

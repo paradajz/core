@@ -2,7 +2,7 @@
 
 #define WDFR 3
 
-void disablePeripherals(void)
+void disablePeripherals()
 {
     //disable eeprom
     EECR = 0;

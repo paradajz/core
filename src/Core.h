@@ -11,6 +11,7 @@
 #include <avr/wdt.h>
 #include <avr/eeprom.h>
 #include <avr/pgmspace.h>
+#include <assert.h>
 
 #include "helpers/Helpers.h"
 #include "timing/Timing.h"

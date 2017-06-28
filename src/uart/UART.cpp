@@ -94,7 +94,7 @@ ISR(USART1_UDRE_vect)
 ///
 void UART::init
 (uint32_t baudRate
-#ifdef DEBUG
+#ifdef USE_TX_DEBUG
 , uint32_t baudRate_debug
 #endif
 )

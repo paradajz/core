@@ -1,6 +1,8 @@
 #include "Reset.h"
 
+#ifndef WDFR
 #define WDFR 3
+#endif
 
 void disablePeripherals()
 {

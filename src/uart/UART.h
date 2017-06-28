@@ -10,14 +10,14 @@ class UART
 {
     public:
     UART();
-    void begin
-	(
-	uint32_t baudRate
-	#ifdef USE_TX_DEBUG
-	, uint32_t baudRate_debug
-	#endif
-	);
-    bool available();
+    void init
+    (
+    uint32_t baudRate
+    #ifdef USE_TX_DEBUG
+    , uint32_t baudRate_debug
+    #endif
+    );
+    bool rxAvailable();
     int16_t read();
     int8_t write(uint8_t data);
 };

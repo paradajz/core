@@ -92,17 +92,17 @@ ISR(USART1_UDRE_vect)
 /// \brief Initializes UART peripheral.
 /// @param [in] baudRate UART baudrate.
 ///
-void UART::begin
+void UART::init
 (uint32_t baudRate
 #ifdef DEBUG
 , uint32_t baudRate_debug
 #endif
 )
 {
-	int16_t baud_count;
-	
-	#ifdef USE_TX_DEBUG
-	UCSR0B = (1<<RXEN0) | (1<<TXEN0);
+    int16_t baud_count;
+
+    #ifdef USE_TX_DEBUG
+    UCSR0B = (1<<RXEN0) | (1<<TXEN0);
 
     uart_printf_stream.put   = printChar;
     uart_printf_stream.get   = NULL;
@@ -126,9 +126,9 @@ void UART::begin
 
     //8 bit, no parity, 1 stop bit
     UCSR0C = (1<<UCSZ00) | (1<<UCSZ01);
-	#endif
-	
-	baud_count = ((F_CPU / 8) + (baudRate / 2)) / baudRate;
+    #endif
+
+    baud_count = ((F_CPU / 8) + (baudRate / 2)) / baudRate;
 
     if ((baud_count & 1) && baud_count <= 4096)
     {
@@ -194,7 +194,7 @@ int8_t UART::write(uint8_t data)
 /// \brief Checks if any incoming UART data is available.
 /// \returns True if any data is available, false otherwise.
 ///
-bool UART::available()
+bool UART::rxAvailable()
 {
     #if !defined(USE_RX)
     return 0;

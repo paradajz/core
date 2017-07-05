@@ -57,4 +57,5 @@
     _NOP(); \
     setHigh((port), (pin)); \
 } while (0)
+
 /// @}

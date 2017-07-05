@@ -5,6 +5,8 @@
 /// \defgroup coreHelpers Helpers
 /// \ingroup core
 /// @{
+
 #include "BitManipulation.h"
 #include "PinManipulation.h"
+
 /// @}

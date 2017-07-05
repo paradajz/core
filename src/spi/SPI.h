@@ -54,4 +54,5 @@ void spiInit();
 /// \brief Transfers one byte of data using SPI peripheral.
 ///
 uint8_t spiTransfer(uint8_t data);
+
 /// @}

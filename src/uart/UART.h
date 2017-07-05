@@ -23,4 +23,5 @@ class UART
 };
 
 extern UART uart;
+
 /// @}

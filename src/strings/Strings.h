@@ -62,4 +62,5 @@ void startLine(bool temp = false);
 void endLine(uint8_t &stringSize, bool temp = false);
 
 /// @}
+
 #endif

@@ -2,6 +2,7 @@
 
 void setUpADC()
 {
+    #ifdef USE_ADC
     ADMUX = 0x00;
     ADCSRA = 0x0;
 
@@ -33,4 +34,5 @@ void setUpADC()
 
     //enable ADC
     ADCSRA |= (1<<ADEN);
+    #endif
 }

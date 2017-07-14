@@ -12,7 +12,7 @@ This repository contains several modules for easier control of integrated AVR pe
 
 ## ADC
 
-For ADC, analog reference and prescaler must be defined as symbols.
+For ADC, analog reference and prescaler must be defined as symbols. Also, `USE_ADC` must be defined to enabled ADC.
 
 ### Prescaler
 
@@ -30,6 +30,12 @@ Reference can be set to internal 1.1V, internal 2.56V, AVCC reference or AREF. T
 - `VREF_AVCC`
 - `VREF_INTERNAL_2V56`
 - `VREF_INTERNAL_1V1`
+
+### Enabling ADC
+
+In order to actually enable ADC, additional symbol must be defined.
+
+- `USE_ADC`
 
 ## Strings
 

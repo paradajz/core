@@ -1,3 +1,5 @@
+#if defined(USE_RX) || defined(USE_TX)
+
 #include "UART.h"
 #include "RingBuffer/RingBuffer.h"
 #include <avr/interrupt.h>
@@ -165,6 +167,7 @@ void UART::init
     #endif
 }
 
+#ifdef USE_TX
 ///
 /// \brief Writes single byte to TX buffer.
 /// @param [in] data    Byte value
@@ -189,6 +192,7 @@ int8_t UART::write(uint8_t data)
 
     return 0;
 }
+#endif
 
 ///
 /// \brief Checks if any incoming UART data is available.
@@ -221,3 +225,5 @@ int16_t UART::read()
 }
 
 UART uart;
+
+#endif

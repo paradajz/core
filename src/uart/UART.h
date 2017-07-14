@@ -6,6 +6,8 @@
 /// \ingroup core
 /// @{
 
+#if defined(USE_RX) || defined(USE_TX)
+
 class UART
 {
     public:
@@ -23,5 +25,7 @@ class UART
 };
 
 extern UART uart;
+
+#endif
 
 /// @}

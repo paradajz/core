@@ -43,6 +43,8 @@
 #ifndef _ULW_RING_BUFF_H_
 #define _ULW_RING_BUFF_H_
 
+#if defined(USE_RX) || defined(USE_TX)
+
 /* Includes: */
 #include "Config.h"
 
@@ -180,4 +182,5 @@ static inline RingBuff_Data_t RingBuffer_Remove(RingBuff_t* const Buffer)
     return Data;
 }
 
+#endif
 #endif

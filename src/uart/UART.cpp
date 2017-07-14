@@ -10,6 +10,7 @@
 ///
 RingBuff_t  txBuffer;
 #endif
+
 #ifdef USE_RX
 ///
 /// \brief Buffer in which incoming data is stored.
@@ -176,7 +177,7 @@ void UART::init
 int8_t UART::write(uint8_t data)
 {
     #if !defined(USE_TX)
-        return -1;
+    return -1;
     #endif
 
     if (RingBuffer_IsFull(&txBuffer))

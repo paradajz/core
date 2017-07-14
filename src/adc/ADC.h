@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef USE_ADC
+
 ///
 /// \brief Setup and manipulation of ADC peripheral.
 /// \defgroup adc ADC
@@ -61,3 +63,5 @@ inline void setADCchannel(uint8_t adcChannel)
 }
 
 /// @}
+
+#endif

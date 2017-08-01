@@ -41,7 +41,7 @@
 ///
 /// \brief Simple macro to create a high-to-low pulse.
 ///
-#define pulseHightToLow(port, pin) do \
+#define pulseHighToLow(port, pin) do \
 { \
     setHigh((port), (pin)); \
     _NOP(); \

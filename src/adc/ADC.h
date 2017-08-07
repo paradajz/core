@@ -62,4 +62,4 @@ inline void setADCchannel(uint8_t adcChannel)
 
 /// @}
 
-//#endif
+#endif

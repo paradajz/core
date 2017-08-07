@@ -1,12 +1,10 @@
 #pragma once
 
 ///
-/// \brief Object for interfacing with configured UART peripheral.
-/// \defgroup uart UART
-/// \ingroup core
+/// \ingroup uart
 /// @{
 
-#if defined(USE_RX) || defined(USE_TX)
+#if defined(USE_RX) || defined(USE_TX) || defined(__DOXYGEN__)
 
 class UART
 {

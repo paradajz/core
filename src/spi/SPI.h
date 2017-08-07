@@ -1,9 +1,7 @@
 #pragma once
 
 ///
-/// \brief Setup and manipulation of SPI peripheral.
-/// \defgroup spi SPI
-/// \ingroup core
+/// \ingroup spi
 /// @{
 
 #define SPI_CLOCK_MASK      0x03

@@ -1,9 +1,7 @@
 #pragma once
 
 ///
-/// \brief Provides delay function and interface to accommodate MCU run time in milliseconds.
-/// \defgroup timer Timer
-/// \ingroup core
+/// \ingroup timer
 /// @{
 
 ///

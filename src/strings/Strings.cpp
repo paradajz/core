@@ -1,4 +1,4 @@
-#ifdef USE_STRINGS
+#if defined(USE_STRINGS) || defined(__DOXYGEN__)
 
 #include "Strings.h"
 

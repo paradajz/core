@@ -1,9 +1,7 @@
 #pragma once
 
 ///
-/// \brief Various helper macros
-/// \defgroup coreHelpers Helpers
-/// \ingroup core
+/// \ingroup coreHelpers
 /// @{
 
 #include "BitManipulation.h"

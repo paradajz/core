@@ -1,0 +1,27 @@
+/// \defgroup adc ADC
+/// \brief Setup and manipulation of ADC peripheral.
+///
+
+/// \defgroup coreHelpers Helpers
+/// \brief Various helper macros.
+///
+
+/// \defgroup reset Reset
+/// \brief Provides helper functions to facilitate software reset on MCU.
+///
+
+/// \defgroup spi SPI
+/// \brief Setup and manipulation of SPI peripheral.
+///
+
+/// \defgroup strings_core Strings
+/// \brief Various functions used to manipulate strings more easily.
+///
+
+/// \defgroup timer Timer
+/// \brief Provides delay function and interface to accommodate MCU run time in milliseconds.
+///
+
+/// \defgroup uart UART
+/// \brief Object for interfacing with configured UART peripheral.
+///

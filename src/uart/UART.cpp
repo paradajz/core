@@ -1,24 +1,24 @@
-#if defined(USE_RX) || defined(USE_TX)
+#if defined(USE_RX) || defined(USE_TX) || defined(__DOXYGEN__)
 
 #include "UART.h"
 #include "RingBuffer/RingBuffer.h"
 #include <avr/interrupt.h>
 
-#ifdef USE_TX
+#if defined(USE_TX) || defined(__DOXYGEN__)
 ///
 /// \brief Buffer in which outgoing data is stored.
 ///
 RingBuff_t  txBuffer;
 #endif
 
-#ifdef USE_RX
+#if defined(USE_RX) || defined(__DOXYGEN__)
 ///
 /// \brief Buffer in which incoming data is stored.
 ///
 RingBuff_t  rxBuffer;
 #endif
 
-#ifdef USE_TX_DEBUG
+#if defined(USE_TX_DEBUG) || defined(__DOXYGEN__)
 ///
 /// \brief Stream used to send printf statements to UART.
 ///
@@ -45,7 +45,7 @@ UART::UART()
     
 }
 
-#ifdef USE_RX
+#if defined(USE_RX) || defined(__DOXYGEN__)
 ///
 /// \brief ISR used to store incoming data from UART to buffer.
 ///
@@ -58,7 +58,7 @@ ISR(USART1_RX_vect)
 }
 #endif
 
-#ifdef USE_TX
+#if defined(USE_TX) || defined(__DOXYGEN__)
 ///
 /// \brief Empty ISR handler for UART transmission.
 ///
@@ -68,7 +68,7 @@ ISR(USART1_TX_vect)
 }
 #endif
 
-#ifdef USE_TX
+#if defined(USE_TX) || defined(__DOXYGEN__)
 ///
 /// \brief ISR used to send data from outgoing buffer to UART.
 ///
@@ -168,7 +168,7 @@ void UART::init
     #endif
 }
 
-#ifdef USE_TX
+#if defined(USE_TX) || defined(__DOXYGEN__)
 ///
 /// \brief Writes single byte to TX buffer.
 /// @param [in] data    Byte value

@@ -1,11 +1,9 @@
 #pragma once
 
-#ifdef USE_ADC
+#if defined(USE_ADC) || defined(__DOXYGEN__)
 
 ///
-/// \brief Setup and manipulation of ADC peripheral.
-/// \defgroup adc ADC
-/// \ingroup core
+/// \ingroup adc
 /// @{
 
 ///
@@ -40,7 +38,7 @@ inline uint16_t getADCvalue()
 
 ///
 /// \brief Disable digital input circuitry on specified ADC channel to reduce noise.
-/// @param[in] channel ADC Channel.
+/// @param[in] adcChannel ADC Channel.
 ///
 inline void disconnectDigitalInADC(uint8_t adcChannel)
 {
@@ -50,7 +48,7 @@ inline void disconnectDigitalInADC(uint8_t adcChannel)
 
 ///
 /// \brief Sets active ADC channel
-/// @param[in] channel ADC Channel.
+/// @param[in] adcChannel ADC Channel.
 ///
 inline void setADCchannel(uint8_t adcChannel)
 {
@@ -64,4 +62,4 @@ inline void setADCchannel(uint8_t adcChannel)
 
 /// @}
 
-#endif
+//#endif

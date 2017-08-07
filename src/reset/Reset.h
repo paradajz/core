@@ -1,9 +1,7 @@
 #pragma once
 
 ///
-/// \brief Provides helper functions to facilitate software reset on MCU.
-/// \defgroup reset Reset
-/// \ingroup core
+/// \ingroup reset
 /// @{
 
 ///

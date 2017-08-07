@@ -1,4 +1,4 @@
-#ifdef USE_ADC
+#if defined(USE_ADC) || defined(__DOXYGEN__)
 
 #include "ADC.h"
 

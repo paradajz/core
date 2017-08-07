@@ -83,7 +83,7 @@ void startLine(bool temp)
         stringBuffer[0] = '\0';
 }
 
-void endLine(uint8_t &stringSize, bool temp)
+void endLine(uint8_t stringSize, bool temp)
 {
     if (temp)
         tempBuffer[stringSize] = '\0';

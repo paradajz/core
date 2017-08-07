@@ -1,7 +1,7 @@
 #pragma once
 
 ///
-/// \ingroup strings_core
+/// \ingroup coreStrings
 /// @{
 
 #if defined(USE_STRINGS) || defined(__DOXYGEN__)

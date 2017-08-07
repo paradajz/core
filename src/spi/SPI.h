@@ -1,7 +1,7 @@
 #pragma once
 
 ///
-/// \ingroup spi
+/// \ingroup coreSPI
 /// @{
 
 #define SPI_CLOCK_MASK      0x03

@@ -2,30 +2,37 @@
 /// \brief Modules for easier control of integrated AVR peripherals.
 ///
 
-/// \defgroup adc ADC
+/// \defgroup coreADC ADC
+/// \ingroup avrCore
 /// \brief Setup and manipulation of ADC peripheral.
 ///
 
 /// \defgroup coreHelpers Helpers
+/// \ingroup avrCore
 /// \brief Various helper macros.
 ///
 
-/// \defgroup reset Reset
+/// \defgroup coreReset Reset
+/// \ingroup avrCore
 /// \brief Provides helper functions to facilitate software reset on MCU.
 ///
 
-/// \defgroup spi SPI
+/// \defgroup coreSPI SPI
+/// \ingroup avrCore
 /// \brief Setup and manipulation of SPI peripheral.
 ///
 
-/// \defgroup strings_core Strings
+/// \defgroup coreStrings Strings
+/// \ingroup avrCore
 /// \brief Various functions used to manipulate strings more easily.
 ///
 
-/// \defgroup timer Timer
+/// \defgroup coreTimer Timer
+/// \ingroup avrCore
 /// \brief Provides delay function and interface to accommodate MCU run time in milliseconds.
 ///
 
-/// \defgroup uart UART
+/// \defgroup coreUART UART
+/// \ingroup avrCore
 /// \brief Object for interfacing with configured UART peripheral.
 ///

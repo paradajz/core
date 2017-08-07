@@ -1,7 +1,7 @@
 #pragma once
 
 ///
-/// \ingroup uart
+/// \ingroup coreUART
 /// @{
 
 #if defined(USE_RX) || defined(USE_TX) || defined(__DOXYGEN__)

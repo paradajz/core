@@ -3,8 +3,7 @@
 #if defined(USE_ADC) || defined(__DOXYGEN__)
 
 ///
-/// \ingroup avrCore
-/// \ingroup adc
+/// \ingroup coreADC
 /// @{
 
 ///

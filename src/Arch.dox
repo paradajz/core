@@ -1,3 +1,7 @@
+/// \defgroup avrCore Core
+/// \brief Modules for easier control of integrated AVR peripherals.
+///
+
 /// \defgroup adc ADC
 /// \brief Setup and manipulation of ADC peripheral.
 ///

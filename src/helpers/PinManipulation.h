@@ -9,20 +9,22 @@
 ///
 /// \brief Definitions for active pin/signal logic.
 /// @{
-///
+
 #define ACTIVE_HIGH             1
 #define ACTIVE_LOW              0
+
 /// @}
 
 ///
 /// \brief I/O macros.
 /// @{
-///
+
 #define setOutput(port, pin)    ((DDR(port)) |= (1 << (pin)))
 #define setInput(port, pin)     ((DDR(port)) &= ~(1 << (pin)))
 #define setLow(port, pin)       ((port) &= ~(1 << (pin)))
 #define setHigh(port, pin)      ((port) |= (1 << (pin)))
 #define readPin(port, pin)      (((PIN(port)) >> (pin)) & 0x01)
+
 /// @}
 
 ///
@@ -33,9 +35,10 @@
 /// Because of this, only PORT register must be defined, as well as specific pin.
 /// Refer to specific AVR model datasheet for more info.
 /// @{
-///
+
 #define DDR(x)                  (*(&x-1))
 #define PIN(x)                  (*(&x-2))
+
 /// @}
 
 ///

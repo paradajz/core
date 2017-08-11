@@ -37,8 +37,8 @@ inline uint16_t getADCvalue()
 }
 
 ///
-/// \brief Disable digital input circuitry on specified ADC channel to reduce noise.
-/// @param[in] adcChannel ADC Channel.
+/// \brief Disable digital input circuitry on specified ADC channel.
+/// @param[in] adcChannel   ADC Channel.
 ///
 inline void disconnectDigitalInADC(uint8_t adcChannel)
 {
@@ -47,8 +47,8 @@ inline void disconnectDigitalInADC(uint8_t adcChannel)
 }
 
 ///
-/// \brief Sets active ADC channel
-/// @param[in] adcChannel ADC Channel.
+/// \brief Sets active ADC channel.
+/// @param[in] adcChannel   ADC Channel.
 ///
 inline void setADCchannel(uint8_t adcChannel)
 {

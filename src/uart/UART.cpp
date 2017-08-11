@@ -7,6 +7,7 @@
 #if defined(USE_TX) || defined(__DOXYGEN__)
 ///
 /// \brief Buffer in which outgoing data is stored.
+/// \ingroup coreUART
 ///
 RingBuff_t  txBuffer;
 #endif
@@ -14,6 +15,7 @@ RingBuff_t  txBuffer;
 #if defined(USE_RX) || defined(__DOXYGEN__)
 ///
 /// \brief Buffer in which incoming data is stored.
+/// \ingroup coreUART
 ///
 RingBuff_t  rxBuffer;
 #endif
@@ -21,12 +23,14 @@ RingBuff_t  rxBuffer;
 #if defined(USE_TX_DEBUG) || defined(__DOXYGEN__)
 ///
 /// \brief Stream used to send printf statements to UART.
+/// \ingroup coreUART
 ///
 static FILE uart_printf_stream;
 
 ///
 /// \brief Prints a character to FILE stream
-/// @param [in] c   Character to write
+/// @param [in] c   Character to write.
+/// \ingroup coreUART
 ///
 int printChar(char c, FILE *stream)
 {
@@ -48,6 +52,7 @@ UART::UART()
 #if defined(USE_RX) || defined(__DOXYGEN__)
 ///
 /// \brief ISR used to store incoming data from UART to buffer.
+/// \ingroup coreUART
 ///
 ISR(USART1_RX_vect)
 {
@@ -61,6 +66,7 @@ ISR(USART1_RX_vect)
 #if defined(USE_TX) || defined(__DOXYGEN__)
 ///
 /// \brief Empty ISR handler for UART transmission.
+/// \ingroup coreUART
 ///
 ISR(USART1_TX_vect)
 {
@@ -71,6 +77,7 @@ ISR(USART1_TX_vect)
 #if defined(USE_TX) || defined(__DOXYGEN__)
 ///
 /// \brief ISR used to send data from outgoing buffer to UART.
+/// \ingroup coreUART
 ///
 ISR(USART1_UDRE_vect)
 {

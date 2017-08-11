@@ -29,7 +29,8 @@ static FILE uart_printf_stream;
 
 ///
 /// \brief Prints a character to FILE stream
-/// @param [in] c   Character to write.
+/// @param [in] c       Character to write.
+/// @param [in] stream  Stream used to send printf statements to UART.
 /// \ingroup coreUART
 ///
 int printChar(char c, FILE *stream)

@@ -101,7 +101,7 @@ ISR(USART1_UDRE_vect)
 
 ///
 /// \brief Initializes UART peripheral.
-/// @param [in] baudRate UART baudrate.
+/// @param [in] baudRate    UART baudrate.
 ///
 void UART::init
 (uint32_t baudRate

@@ -41,9 +41,9 @@ In order to actually enable ADC, additional symbol must be defined.
 
 ## Strings
 
-This module provides an easy way to manipulate C-style strings. To use strings, `USE_STRINGS` symbol must be defined and `MAX_TEXT_SIZE` symbol must be defined with wanted value, for instance 50:
+This module provides an easy way to manipulate C-style strings. To use strings, `USE_STRINGS` symbol must be defined and `STRING_BUFFER_SIZE` symbol must be defined with wanted value, for instance 50:
 
-- `MAX_TEXT_SIZE=50`
+- `STRING_BUFFER_SIZE=50`
 
 ## UART
 

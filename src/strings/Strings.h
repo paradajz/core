@@ -6,19 +6,19 @@
 
 #if defined(USE_STRINGS) || defined(__DOXYGEN__)
 
-#ifndef MAX_TEXT_SIZE
-#error MAX_TEXT_SIZE undefined
+#ifndef STRING_BUFFER_SIZE
+#error STRING_BUFFER_SIZE=40 undefined
 #endif
 
 ///
 /// \brief String buffer used by all string functions. Must be declared externally.
 ///
-extern char stringBuffer[MAX_TEXT_SIZE+1];
+extern char stringBuffer[STRING_BUFFER_SIZE];
 
 ///
 /// \brief Temporary buffer. Must be declared externally.
 ///
-extern char tempBuffer[MAX_TEXT_SIZE+1];
+extern char tempBuffer[STRING_BUFFER_SIZE];
 
 ///
 /// \brief Appends single number to stringBuffer.

@@ -17,6 +17,8 @@
 
 ///
 /// \brief I/O macros.
+/// @param [in] port    AVR Port.
+/// @param [in] pin     Pin index on AVR port.
 /// @{
 
 #define setOutput(port, pin)    ((DDR(port)) |= (1 << (pin)))
@@ -34,15 +36,18 @@
 /// pin, these simple macros use the fact that DDR address = PORT address - 1 and PIN address = PORT address - 2.
 /// Because of this, only PORT register must be defined, as well as specific pin.
 /// Refer to specific AVR model datasheet for more info.
+/// @param [in] port    AVR Port.
 /// @{
 
-#define DDR(x)                  (*(&x-1))
-#define PIN(x)                  (*(&x-2))
+#define DDR(port)               (*(&port-1))
+#define PIN(port)               (*(&port-2))
 
 /// @}
 
 ///
 /// \brief Simple macro to create a high-to-low pulse.
+/// @param [in] port    AVR Port.
+/// @param [in] pin     Pin index on AVR port.
 ///
 #define pulseHighToLow(port, pin) do \
 { \
@@ -53,6 +58,8 @@
 
 ///
 /// \brief Simple macro to create a low-to-high pulse.
+/// @param [in] port    AVR Port.
+/// @param [in] pin     Pin index on AVR port.
 ///
 #define pulseLowToHigh(port, pin) do \
 { \

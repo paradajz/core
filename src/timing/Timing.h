@@ -11,7 +11,7 @@
 extern volatile uint32_t rTime_ms;
 
 ///
-///\brief Date-time structure.
+/// \brief Date-time structure.
 ///
 typedef struct
 {

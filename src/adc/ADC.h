@@ -23,7 +23,7 @@ void setUpADC();
 
 ///
 /// \brief Get ADC value from last set ADC channel.
-/// \return Value from ADC registers (ADCH and ADCL).
+/// \returns Value from ADC registers (ADCH and ADCL).
 ///
 inline uint16_t getADCvalue()
 {

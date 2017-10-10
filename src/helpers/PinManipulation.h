@@ -23,6 +23,11 @@
 
 #define setOutput(port, pin)    ((DDR(port)) |= (1 << (pin)))
 #define setInput(port, pin)     ((DDR(port)) &= ~(1 << (pin)))
+#define setAnalogIn(port, pin)  do \
+{ \
+    setInput((port), (pin)); \
+    setLow((port), (pin)); \
+} while (0)
 #define setLow(port, pin)       ((port) &= ~(1 << (pin)))
 #define setHigh(port, pin)      ((port) |= (1 << (pin)))
 #define readPin(port, pin)      (((PIN(port)) >> (pin)) & 0x01)

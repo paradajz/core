@@ -18,5 +18,4 @@
 #include "uart/UART.h"
 #include "adc/ADC.h"
 #include "reset/Reset.h"
-#include "strings/Strings.h"
 #include "spi/SPI.h"

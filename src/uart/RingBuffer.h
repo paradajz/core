@@ -28,6 +28,12 @@
   this software.
 */
 
+
+/*
+    This code uses slighty modified configuration of ring buffer - buffer size is defined using global symbol UART_BUFFER_SIZE.
+    This modification is available under same terms as original project.
+*/
+
 /** \file
  *
  *  Ultra lightweight ring buffer, for fast insertion/deletion. This uses inlined functions
@@ -45,8 +51,23 @@
 
 #if defined(USE_RX) || defined(USE_TX)
 
-/* Includes: */
-#include "Config.h"
+/* Defines: */
+
+/** Size of each ring buffer, in data elements - must be between 1 and 255. */
+#define BUFFER_SIZE            255
+
+/** Type of data to store into the buffer. */
+#define RingBuff_Data_t        uint8_t
+
+/** Datatype which may be used to store the count of data stored in a buffer, retrieved
+*  via a call to \ref RingBuffer_GetCount().
+*/
+#if (BUFFER_SIZE <= 0xFF)
+#define RingBuff_Count_t   uint8_t
+#else
+#define RingBuff_Count_t   uint16_t
+#endif
+
 
 /* Type Defines: */
 
@@ -60,6 +81,7 @@ typedef struct
     RingBuff_Data_t* Out;                       /**< Current retrieval location in the circular buffer */
     RingBuff_Count_t Count;
 } RingBuff_t;
+
 
 /* Inline Functions: */
 

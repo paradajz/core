@@ -19,7 +19,7 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#if (defined(USE_ADC) || defined(__DOXYGEN__)) && defined(__ARCH_AVR__)
+#if (defined(USE_ADC) || defined(__DOXYGEN__)) && defined(__AVR__)
 
 #include "ADC.h"
 

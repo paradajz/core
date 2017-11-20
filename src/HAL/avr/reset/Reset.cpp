@@ -19,7 +19,7 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifdef __ARCH_AVR__
+#if defined(__AVR__) || defined (__DOXYGEN__)
 
 #include "Reset.h"
 

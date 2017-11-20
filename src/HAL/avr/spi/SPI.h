@@ -21,7 +21,7 @@
 
 #pragma once
 
-#if defined(__ARCH_AVR__) || defined (__DOXYGEN__)
+#if defined(__AVR__) || defined (__DOXYGEN__)
 
 #include <inttypes.h>
 

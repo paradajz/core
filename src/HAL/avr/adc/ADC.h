@@ -21,7 +21,7 @@
 
 #pragma once
 
-#if (defined(USE_ADC) && defined(__ARCH_AVR__)) || defined(__DOXYGEN__)
+#if (defined(USE_ADC) && defined(__AVR__)) || defined(__DOXYGEN__)
 
 ///
 /// \ingroup coreHALavrADC

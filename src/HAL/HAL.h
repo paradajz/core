@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef __ARCH_AVR__
+#ifdef __AVR__
 #include "avr/AVR.h"
 #elif defined(STM32)
 #include "stm32/STM32.h"

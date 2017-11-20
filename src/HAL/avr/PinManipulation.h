@@ -21,7 +21,7 @@
 
 #pragma once
 
-#ifdef __ARCH_AVR__ || defined(__DOXYGEN__)
+#if defined(__AVR__) || defined (__DOXYGEN__)
 
 ///
 /// \brief Helper macros for easier port and pin manipulation.

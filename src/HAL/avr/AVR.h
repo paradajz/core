@@ -21,7 +21,7 @@
 
 #pragma once
 
-#ifdef __ARCH_AVR__
+#if defined(__AVR__) || defined (__DOXYGEN__)
 
 #include "adc/ADC.h"
 #include "reset/Reset.h"

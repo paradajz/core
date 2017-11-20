@@ -26,5 +26,7 @@
 #include "adc/ADC.h"
 #include "reset/Reset.h"
 #include "spi/SPI.h"
+#include "Interrupt.h"
+#include "PinManipulation.h"
 
 #endif

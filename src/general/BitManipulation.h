@@ -21,14 +21,18 @@
 
 #pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <assert.h>
+///
+/// \brief Helper macros for easier byte/bit manipulation.
+/// \defgroup coreGeneralBitManipulation Bit manipulation
+/// \ingroup coreGeneral
+/// @{
 
-#include "general/BitManipulation.h"
-#include "general/RingBuffer.h"
-#include "general/Timing.h"
-#include "general/Strings.h"
-#include "general/Misc.h"
-#include "HAL/HAL.h"
+#define BIT_READ(value, bit)             (((value) >> (bit)) & 0x01)
+#define BIT_SET(value, bit)              ((value) |= (1UL << (bit)))
+#define BIT_CLEAR(value, bit)            ((value) &= ~(1UL << (bit)))
+#define BIT_WRITE(value, bit, bitvalue)  (bitvalue ? BIT_SET(value, bit) : BIT_CLEAR(value, bit))
+#define BYTE_INVERT(value)               ((value) ^ 0xFF)
+#define BYTE_LOW(value)                  ((value) & 0xFF)
+#define BYTE_HIGH(value)                 (((value) >> 8) & 0xFF)
+
+/// @}

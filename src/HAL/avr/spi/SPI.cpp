@@ -19,16 +19,33 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#pragma once
+#ifdef __ARCH_AVR__
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <assert.h>
+#include "SPI.h"
 
-#include "general/BitManipulation.h"
-#include "general/RingBuffer.h"
-#include "general/Timing.h"
-#include "general/Strings.h"
-#include "general/Misc.h"
-#include "HAL/HAL.h"
+void spiInit()
+{
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+    {
+        //SS, at90usb1286
+        setOutput(PORTB, 0);
+        setHigh(PORTB, 0);
+
+        SPCR |= (1<<MSTR);
+        SPCR |= (1<<SPE);
+
+        //clock, at90usb1286
+        setOutput(PORTB, 1);
+        //mosi, at90usb1286
+        setOutput(PORTB, 2);
+    }
+}
+
+uint8_t spiTransfer(uint8_t data)
+{
+    SPDR = data;
+    while(!(SPSR & (1<<SPIF)));
+    return SPDR;
+}
+
+#endif

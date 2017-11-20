@@ -19,16 +19,36 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#pragma once
+/// \defgroup coreGeneral General
+/// \brief General architecture-independent modules.
+///
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <assert.h>
+/// \defgroup coreHAL HAL
+/// \brief  Hardware abstraction APIs and macros.
+///
 
-#include "general/BitManipulation.h"
-#include "general/RingBuffer.h"
-#include "general/Timing.h"
-#include "general/Strings.h"
-#include "general/Misc.h"
-#include "HAL/HAL.h"
+/// \defgroup coreHALavr AVR
+/// \ingroup coreHAL
+/// \brief  Hardware abstraction APIs and macros for AVR architecture.
+///
+
+/// \defgroup coreHALstm STM32
+/// \ingroup coreHAL
+/// \brief  Hardware abstraction APIs and macros for STM32 ARM microcontrollers.
+/// \note In order for this module to work, CubeMX HAL is required.
+///
+
+/// \defgroup coreHALavrADC ADC
+/// \ingroup coreHALavr
+/// \brief Setup and manipulation of ADC peripheral.
+///
+
+/// \defgroup coreHALavrSPI SPI
+/// \ingroup coreHALavr
+/// \brief Setup and manipulation of SPI peripheral.
+///
+
+/// \defgroup coreHALavrReset Reset
+/// \ingroup coreHALavr
+/// \brief Provides helper functions to facilitate software reset on MCU.
+///

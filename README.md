@@ -1,21 +1,51 @@
-# AVR core modules
+# Core modules
 
-This repository contains several modules for easier control of integrated AVR peripherals:
+Collection of modules for easier control of integrated AVR and STM32 peripherals, as well as some general helping macros and symbols.
+
+This collection is split into two parts:
+
+- General
+- HAL
+
+## General
+
+This directory contains several modules which are independent of underlying architecture:
+
+- Bit manipulation
+    - Macros for easier bit access in variables and registers.
+- Ring buffer
+    - Contains lightweight ring buffer implementation from LUFA project.
+- Strings
+    - C++ class used for easier building of strings. `USE_STRINGS` symbol must be defined for compilation and `STRING_BUFFER_SIZE` symbol must be defined with wanted value, for instance 50: `STRING_BUFFER_SIZE=50`
+- Timing
+    - Includes simple delay function for AVR architecture, as well as `rTimeMs()` function used to get current run time in milliseconds. This function uses `rTime_ms` variable which must be externally implemented and updated in order to use the function.
+- Misc
+    - Includes various helper constants and macros.
+
+## HAL
+
+This directory contains some hardware abstraction APIs and macros for AVR architecture, as well as STM32 ARM microcontrollers which are using CubeMX HAL. For these microcontrollers, this module is just a wrapper around CubeMX HAL.
+
+### AVR
+
+Contains following modules:
 
 - ADC
-- Helpers (Bit and pin manipulation)
+    - Used for easier access to ADC peripheral inside AVR.
+- Pin manipulation
+    - Used for easier pin access (read/write and setting input/output).
 - Reset
+    - Module used to initiate MCU reboot.
 - SPI
-- Timing
-- UART
+    - Used for easier access to SPI peripheral inside AVR.
+- Interrupt
+    - Simple macros used to disable and enable all interrupts.
 
-Modules are tested for ATmega32u4, AT90USB1286 and ATmega2560.
+Only ADC module requires configuration.
 
-## ADC
+#### ADC
 
-For ADC, analog reference and prescaler must be defined as symbols. Also, `USE_ADC` must be defined to enabled ADC.
-
-### Prescaler
+##### Prescaler
 
 Valid options are 128, 64, 32 and 16. To define prescaler, use one of the following symbols:
 - `ADC_PRESCALER=128`
@@ -23,7 +53,7 @@ Valid options are 128, 64, 32 and 16. To define prescaler, use one of the follow
 - `ADC_PRESCALER=32`
 - `ADC_PRESCALER=16`
 
-### Analog reference
+##### Analog reference
 
 Reference can be set to internal 1.1V, internal 2.56V, AVCC reference or AREF. To define reference use one of the following symbols:
 
@@ -32,24 +62,17 @@ Reference can be set to internal 1.1V, internal 2.56V, AVCC reference or AREF. T
 - `VREF_INTERNAL_2V56`
 - `VREF_INTERNAL_1V1`
 
-### Enabling ADC
+##### Enabling ADC
 
 In order to actually enable ADC, additional symbol must be defined.
 
 - `USE_ADC`
 
-## Strings
+### STM32
 
-This module provides an easy way to manipulate C-style strings. To use strings, `USE_STRINGS` symbol must be defined and `STRING_BUFFER_SIZE` symbol must be defined with wanted value, for instance 50:
+In order to use this module, CubeMX HAL must be used and `STM32` symbol must be defined.
 
-- `STRING_BUFFER_SIZE=50`
-
-## UART
-
-To use UART, `USE_RX` symbol must be defined to use UART receiver and `USE_TX` symbol must be defined to use UART transmitter.
-
-- `USE_TX`
-- `USE_RX`
-
-Also, `UART_BUFFER_SIZE` symbol must be defined. For instance, to use buffer size of 30 bytes, use the following symbol:
-- `UART_BUFFER_SIZE=30`
+- Pin manipulation
+    - Used for easier pin access (read/write only).
+- Interrupt
+    - Simple macros used to disable and enable all interrupts.

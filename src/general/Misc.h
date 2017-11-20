@@ -21,14 +21,43 @@
 
 #pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <assert.h>
+#include <inttypes.h>
 
-#include "general/BitManipulation.h"
-#include "general/RingBuffer.h"
-#include "general/Timing.h"
-#include "general/Strings.h"
-#include "general/Misc.h"
-#include "HAL/HAL.h"
+///
+/// \brief Miscellaneous helpers.
+/// \defgroup coreGeneralMisc Miscellaneous
+/// \ingroup coreGeneral
+/// @{
+
+///
+/// \brief Calculates size of array.
+/// @param [in] x   Array for which size is being calculated.
+/// \returns Array size in bytes.
+///
+#define ARRAY_SIZE(x)                   (sizeof((x)) / sizeof((x)[0]))
+
+///
+/// \brief Calculates size of char array.
+/// @param [in] x   Array for which size is being calculated.
+/// \returns Array size in bytes.
+///
+#define ARRAY_SIZE_CHAR(x)              (sizeof(x) / sizeof(x[0]) -1)
+
+///
+/// \brief Constrains input value to defined range.
+/// @param [in] input   Input value.
+/// @param [in] low     Lowest possible value.
+/// @param [in] high    Largest possible value.
+///
+#define CONSTRAIN(input, low, high)     ((input) < (low) ? (low) : ((input) > (high) ? (high) : (input)))
+
+///
+/// \brief Definitions for active pin/signal logic.
+/// @{
+
+#define ACTIVE_HIGH                     1
+#define ACTIVE_LOW                      0
+
+/// @}
+
+/// @}

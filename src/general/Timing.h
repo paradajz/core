@@ -21,14 +21,50 @@
 
 #pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <assert.h>
-
-#include "general/BitManipulation.h"
-#include "general/RingBuffer.h"
-#include "general/Timing.h"
-#include "general/Strings.h"
-#include "general/Misc.h"
+#include <inttypes.h>
 #include "HAL/HAL.h"
+
+///
+/// \ingroup coreGeneral
+/// @{
+
+///
+/// \brief Definition of variable holding current MCU run time.
+/// Must be implemented externally in order to use rTimeMs() function correctly.
+///
+extern volatile uint32_t rTime_ms;
+
+///
+/// \brief Returns amount of time MCU has been running in milliseconds.
+/// Actual incrementation of rTime_ms must be done externally.
+/// \returns Runtime in milliseconds.
+///
+inline uint32_t rTimeMs()
+{
+    uint32_t _rTime_mS;
+
+    INT_DISABLE();
+    _rTime_mS = rTime_ms;
+    INT_DISABLE();
+
+    return _rTime_mS;
+}
+
+#if defined(__ARCH_AVR__) || defined (__DOXYGEN__)
+#include <util/delay.h>
+
+///
+/// \brief Delays for desired time interval in milliseconds.
+/// This function makes use of built-in _delay_ms function. Function is called repeatedly with argument 1 until
+/// ms parameter reaches 0, since _delay_ms accepts only constant known at compile-time.
+/// @param [in] ms  Delay time in milliseconds.
+///
+inline void wait_ms(uint32_t ms)
+{
+    while (ms--)
+        _delay_ms(1);
+}
+#endif
+
+
+/// @}

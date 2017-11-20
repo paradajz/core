@@ -21,14 +21,27 @@
 
 #pragma once
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <assert.h>
+#if defined(__ARCH_AVR__) || defined (__DOXYGEN__)
 
-#include "general/BitManipulation.h"
-#include "general/RingBuffer.h"
-#include "general/Timing.h"
-#include "general/Strings.h"
-#include "general/Misc.h"
-#include "HAL/HAL.h"
+///
+/// \ingroup coreHALavrReset
+/// @{
+
+///
+/// \brief Disables all peripherals present on MCU.
+///
+void disablePeripherals();
+
+///
+/// \brief Initiates watchdog software MCU reset by setting watch-dog timeout and waiting until watchdog is activated.
+///
+void mcuReset();
+
+///
+/// \brief Used to reset watchdog timer on MCU startup.
+///
+void wdt_init() __attribute__((naked)) __attribute__((section(".init3")));
+
+/// @}
+
+#endif

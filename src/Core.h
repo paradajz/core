@@ -26,6 +26,10 @@
 #include <string.h>
 #include <assert.h>
 
+#ifdef __ARCH_AVR__
+#include <avr/pgmspace.h>
+#endif
+
 #include "general/BitManipulation.h"
 #include "general/RingBuffer.h"
 #include "general/Timing.h"

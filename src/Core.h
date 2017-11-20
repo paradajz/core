@@ -26,7 +26,7 @@
 #include <string.h>
 #include <assert.h>
 
-#ifdef __ARCH_AVR__
+#ifdef __AVR__
 #include <avr/pgmspace.h>
 #endif
 

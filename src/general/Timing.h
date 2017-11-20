@@ -22,7 +22,7 @@
 #pragma once
 
 #include <inttypes.h>
-#include "HAL/HAL.h"
+#include "../HAL/HAL.h"
 
 ///
 /// \ingroup coreGeneral

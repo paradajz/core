@@ -51,7 +51,7 @@
 
 #include <inttypes.h>
 #include "Misc.h"
-#include "HAL/HAL.h"
+#include "../HAL/HAL.h"
 
 /* Defines: */
 

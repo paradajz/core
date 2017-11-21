@@ -45,9 +45,11 @@ Only ADC module requires configuration.
 
 #### ADC
 
+To configure ADC, structure of `adcConf` type must be intitialized. Structure holds two elements: `prescaler` and `vref`.
+
 ##### Prescaler
 
-Valid options are 128, 64, 32 and 16. To define prescaler, use one of the following symbols:
+Valid options are 128, 64, 32 and 16. To define prescaler, use one of the following options for `prescaler` element:
 - `ADC_PRESCALER=128`
 - `ADC_PRESCALER=64`
 - `ADC_PRESCALER=32`
@@ -55,7 +57,7 @@ Valid options are 128, 64, 32 and 16. To define prescaler, use one of the follow
 
 ##### Analog reference
 
-Reference can be set to internal 1.1V, internal 2.56V, AVCC reference or AREF. To define reference use one of the following symbols:
+Reference can be set to internal 1.1V, internal 2.56V, AVCC reference or AREF. To define reference, set `vref` element to one of the following values:
 
 - `VREF_AREF`
 - `VREF_AVCC`

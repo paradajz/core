@@ -19,9 +19,11 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#if (defined(USE_ADC) && defined(__AVR__)) || defined(__DOXYGEN__)
+
 #pragma once
 
-#if (defined(USE_ADC) && defined(__AVR__)) || defined(__DOXYGEN__)
+#include "Config.h"
 
 ///
 /// \ingroup coreHALavrADC
@@ -38,9 +40,20 @@
 #define adcInterruptEnable() (ADCSRA |= (1<<ADIE))
 
 ///
-/// \brief Sets up ADC according to parameters specified in Config.h
+/// \brief Structure holding ADC prescaler and voltage reference settings.
+/// See Config.h file for allowed settings.
 ///
-void setUpADC();
+typedef struct
+{
+    uint8_t prescaler;
+    uint8_t vref;
+} adcConf;
+
+///
+/// \brief Sets up ADC according to parameters specified in Config.h
+/// @param [in] configuration prescaler and analog voltage reference settings. See adcConf structure.
+///
+void setUpADC(adcConf configuration);
 
 ///
 /// \brief Get ADC value from last set ADC channel.

@@ -45,7 +45,7 @@ inline uint32_t rTimeMs()
 
     INT_DISABLE();
     _rTime_mS = rTime_ms;
-    INT_DISABLE();
+    INT_ENABLE();
 
     return _rTime_mS;
 }

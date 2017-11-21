@@ -49,68 +49,92 @@ class StringBuffer
     }
 
     ///
-    /// \brief Appends single number to stringBuffer.
-    /// @param [in] number              Number to append.
+    /// \brief String buffer used by all string functions.
     ///
-    void addNumberToCharArray(int32_t number)
+    char buffer[STRING_BUFFER_SIZE];
+
+    ///
+    /// \brief Appends integer to string (int32_t).
+    /// @param [in] number  Number to append.
+    ///
+    void appendInt(int32_t number)
     {
         char intToCharArray[7];
         itoa(number, intToCharArray, 10);
         stringSize += strlen(intToCharArray);
 
-        strcat(stringBuffer, intToCharArray);
-        stringBuffer[stringSize] = '\0';
+        strcat(buffer, intToCharArray);
+        buffer[stringSize] = '\0';
     }
 
     ///
-    /// \brief Appends raw byte value to stringBuffer.
-    /// @param [in] byte                Byte value to append.
-    ///
-    void addByteToCharArray(uint8_t byte)
-    {
-        stringBuffer[stringSize] = byte;
-        stringSize++;
-        stringBuffer[stringSize] = '\0';
-    }
-
-    ///
-    /// \brief Appends text to stringBuffer.
-    /// @param [in] text                Text to append.
+    /// \brief Appends text to string.
+    /// @param [in] text    Text to append.
     ///
     void appendText(const char *text)
     {
         stringSize += strlen(text);
-        strcat(stringBuffer, text);
-        stringBuffer[stringSize] = '\0';
+        strcat(buffer, text);
+        buffer[stringSize] = '\0';
     }
 
     ///
-    /// \brief Appends space to stringBuffer.
-    /// @param [in] numberOfSpaces      Number of spaces to append to stringBuffer.
+    /// \brief Appends space to string.
+    /// @param [in] numberOfSpaces  Number of spaces to append.
     ///
     void addSpaceToCharArray(uint8_t numberOfSpaces)
     {
         for (int i = 0; i < numberOfSpaces; i++)
-            stringBuffer[stringSize + i] = ' ';
+            buffer[stringSize + i] = ' ';
 
         stringSize += numberOfSpaces;
-        stringBuffer[stringSize] = '\0';
+        buffer[stringSize] = '\0';
     }
 
     ///
-    /// \brief Clears contents of stringBuffer.
+    /// \brief Converts given integer to string.
+    /// @param [in] number  Number to convert (int32_t).
+    ///
+    void intToString(int32_t number)
+    {
+        itoa(number, buffer, 10);
+        stringSize = strlen(buffer);
+    }
+
+    ///
+    /// \brief Concatenates given text to current string.
+    /// @param [in] text    Text to Concatenate.
+    ///
+    void merge(char* text)
+    {
+        strcat(buffer, text);
+        //make sure to update string size after merging
+        stringSize += strlen(text);
+    }
+
+    ///
+    /// \brief Clears entire string.
     ///
     void startLine()
     {
-        stringBuffer[0] = '\0';
+        buffer[0] = '\0';
     }
 
     ///
-    /// \brief Ends stringBuffer by appending '\0' char to current index.
+    /// \brief Ends string by appending '\0' character to current index.
     ///
     void endLine()
     {
-        stringBuffer[stringSize] = '\0';
+        buffer[stringSize] = '\0';
+    }
+
+    ///
+    /// \brief Returns current string.
+    /// \returns Current string.
+    ///
+    char* getString()
+    {
+        return buffer;
     }
 
     private:
@@ -118,11 +142,6 @@ class StringBuffer
     /// \brief Holds current size of string.
     ///
     uint8_t stringSize;
-
-    ///
-    /// \brief String buffer used by all string functions.
-    ///
-    char stringBuffer[STRING_BUFFER_SIZE];
 };
 
 

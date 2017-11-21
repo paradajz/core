@@ -23,6 +23,8 @@
 
 #if defined(__AVR__) || defined (__DOXYGEN__)
 
+#include <avr/wdt.h>
+
 ///
 /// \ingroup coreHALavrReset
 /// @{

@@ -30,6 +30,7 @@
 #include <avr/pgmspace.h>
 #include <util/atomic.h>
 #include <avr/eeprom.h>
+#include <avr/cpufunc.h>
 #endif
 
 #include "general/BitManipulation.h"

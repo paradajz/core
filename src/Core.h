@@ -28,6 +28,8 @@
 
 #ifdef __AVR__
 #include <avr/pgmspace.h>
+#include <util/atomic.h>
+#include <avr/eeprom.h>
 #endif
 
 #include "general/BitManipulation.h"

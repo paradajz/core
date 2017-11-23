@@ -23,6 +23,8 @@
 
 #if defined(__AVR__) || defined (__DOXYGEN__)
 
+#include "../../Common.h"
+
 ///
 /// \brief Helper macros for easier port and pin manipulation.
 /// \defgroup coreHALpinManAVR Pin manipulation

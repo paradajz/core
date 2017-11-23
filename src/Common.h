@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Igor PetroviÄ‡
+    Copyright 2017 Igor Petroviæ
 
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the "Software"),
@@ -21,9 +21,20 @@
 
 #pragma once
 
-#include "general/BitManipulation.h"
-#include "general/RingBuffer.h"
-#include "general/Timing.h"
-#include "general/Strings.h"
-#include "general/Misc.h"
-#include "HAL/HAL.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <assert.h>
+
+#ifdef __AVR__
+#include <avr/pgmspace.h>
+#include <util/atomic.h>
+#include <avr/eeprom.h>
+#include <avr/cpufunc.h>
+#include <avr/wdt.h>
+#include <avr/interrupt.h>
+#include <util/delay.h>
+#include <avr/io.h>
+#include <avr/eeprom.h>
+#include <avr/cpufunc.h>
+#endif

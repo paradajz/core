@@ -45,7 +45,9 @@ void disablePeripherals()
     PCICR = 0;
 
     //disable ADC
+    #ifdef ADCSRA
     ADCSRA = 0;
+    #endif
 
     //disable timers
     #ifdef TIMSK0
@@ -82,7 +84,9 @@ void disablePeripherals()
     #endif
 
     //disable I2C
+    #ifdef TWCR
     TWCR = 0;
+    #endif
 
     //write low to all pins
     #ifdef PORTA

@@ -22,6 +22,7 @@
 #if defined(__AVR__) || defined (__DOXYGEN__)
 
 #include "SPI.h"
+#include "../PinManipulation.h"
 
 void spiInit()
 {

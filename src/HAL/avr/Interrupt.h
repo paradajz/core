@@ -1,7 +1,7 @@
 #pragma once
 
 #if defined(__AVR__) || defined (__DOXYGEN__)
-#include <avr/interrupt.h>
+#include "../../Common.h"
 
 ///
 /// \defgroup corehalavrInt Interrupt

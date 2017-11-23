@@ -19,11 +19,17 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#if (defined(USE_ADC) && defined(__AVR__)) || defined(__DOXYGEN__)
+#if (defined(__AVR__)) || defined(__DOXYGEN__)
 
-#pragma once
+#ifndef ADC
+#warning This device does not support ADC.
+#else
+
+#ifndef CORE_ADC
+#define CORE_ADC
 
 #include "Config.h"
+#include "../../../Common.h"
 
 ///
 /// \ingroup coreHALavrADC
@@ -92,4 +98,6 @@ inline void setADCchannel(uint8_t adcChannel)
 
 /// @}
 
+#endif
+#endif
 #endif

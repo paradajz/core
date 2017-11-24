@@ -19,17 +19,15 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#if (defined(__AVR__)) || defined(__DOXYGEN__)
+#include "../../../Common.h"
 
-#ifndef ADC
+#ifnef ADC
 #warning This device does not support ADC.
 #else
 
-#ifndef CORE_ADC
-#define CORE_ADC
+#pragma once
 
 #include "Config.h"
-#include "../../../Common.h"
 
 ///
 /// \ingroup coreHALavrADC
@@ -59,7 +57,62 @@ typedef struct
 /// \brief Sets up ADC according to parameters specified in Config.h
 /// @param [in] configuration prescaler and analog voltage reference settings. See adcConf structure.
 ///
-void setUpADC(adcConf configuration);
+inline void setUpADC(adcConf configuration)
+{
+    ADMUX = 0x00;
+    ADCSRA = 0x0;
+
+    switch(configuration.prescaler)
+    {
+        //setup adc prescaler
+        case 128:
+        ADCSRA |= (1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);
+        break;
+
+        case 64:
+        ADCSRA |= (1<<ADPS2)|(1<<ADPS1);
+        break;
+
+        case 32:
+        ADCSRA |= (1<<ADPS2)|(1<<ADPS0);
+        break;
+
+        case 16:
+        ADCSRA |= (1<<ADPS2);
+        break;
+
+        default:
+        //128 as an fallback
+        ADCSRA |= (1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);
+        break;
+    }
+
+    switch(configuration.vref)
+    {
+        case ADC_VREF_AREF:
+        //nothing, this is default setting
+        break;
+
+        case ADC_VREF_AVCC:
+        ADMUX |= (1<<REFS0);
+        break;
+
+        case ADC_VREF_INTERNAL_2V56:
+        ADMUX |= (1<<REFS0) | (1<<REFS1);
+        break;
+
+        case ADC_VREF_INTERNAL_1V1:
+        ADMUX |= (1<<REFS1);
+        break;
+
+        default:
+        //nothing
+        break;
+    }
+
+    //enable ADC
+    ADCSRA |= (1<<ADEN);
+}
 
 ///
 /// \brief Get ADC value from last set ADC channel.
@@ -98,6 +151,4 @@ inline void setADCchannel(uint8_t adcChannel)
 
 /// @}
 
-#endif
-#endif
 #endif

@@ -21,8 +21,6 @@
 
 #pragma once
 
-#if defined(USE_STRINGS) || defined(__DOXYGEN__)
-
 ///
 /// \defgroup coreGeneralStrings Strings
 /// \ingroup coreGeneral
@@ -146,5 +144,3 @@ class StringBuffer
 
 
 /// @}
-
-#endif

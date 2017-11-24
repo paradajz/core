@@ -95,11 +95,14 @@ typedef struct
 ///
 static inline void RingBuffer_InitBuffer(RingBuff_t* const Buffer)
 {
-    INT_DISABLE();
-    Buffer->In    = Buffer->Buffer;
-    Buffer->Out   = Buffer->Buffer;
-    Buffer->Count = 0;
-    INT_ENABLE();
+    #ifdef __AVR__
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+    {
+        Buffer->In    = Buffer->Buffer;
+        Buffer->Out   = Buffer->Buffer;
+        Buffer->Count = 0;
+    }
+    #endif
 }
 
 ///
@@ -120,9 +123,12 @@ static inline RingBuff_Count_t RingBuffer_GetCount(RingBuff_t* const Buffer)
 {
     RingBuff_Count_t Count;
 
-    INT_DISABLE();
-    Count = Buffer->Count;
-    INT_ENABLE();
+    #ifdef __AVR__
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+    {
+        Count = Buffer->Count;
+    }
+    #endif
 
     return Count;
 }
@@ -172,13 +178,16 @@ static inline bool RingBuffer_IsEmpty(RingBuff_t* const Buffer)
 static inline void RingBuffer_Insert(RingBuff_t* const Buffer, const RingBuff_Data_t Data)
 {
     *Buffer->In = Data;
-            
+
     if (++Buffer->In == &Buffer->Buffer[RING_BUFFER_SIZE])
         Buffer->In = Buffer->Buffer;
 
-    INT_DISABLE();
-    Buffer->Count++;
-    INT_ENABLE();
+    #ifdef __AVR__
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+    {
+        Buffer->Count++;
+    }
+    #endif
 }
 
 ///
@@ -198,9 +207,12 @@ static inline RingBuff_Data_t RingBuffer_Remove(RingBuff_t* const Buffer)
     if (++Buffer->Out == &Buffer->Buffer[RING_BUFFER_SIZE])
         Buffer->Out = Buffer->Buffer;
 
-    INT_DISABLE();
-    Buffer->Count--;
-    INT_ENABLE();
+    #ifdef __AVR__
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+    {
+        Buffer->Count--;
+    }
+    #endif
 
     return Data;
 }

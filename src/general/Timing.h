@@ -43,9 +43,12 @@ inline uint32_t rTimeMs()
 {
     uint32_t _rTime_mS;
 
-    INT_DISABLE();
-    _rTime_mS = rTime_ms;
-    INT_ENABLE();
+    #ifdef __AVR__
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+    {
+        _rTime_mS = rTime_ms;
+    }
+    #endif
 
     return _rTime_mS;
 }

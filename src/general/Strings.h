@@ -28,7 +28,8 @@
 /// @{
 
 #ifndef STRING_BUFFER_SIZE
-#error STRING_BUFFER_SIZE undefined
+#warning Please define STRING_BUFFER_SIZE. Setting size to 1 byte.
+#define STRING_BUFFER_SIZE 1
 #endif
 
 #include <stdlib.h>

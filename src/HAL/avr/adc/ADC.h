@@ -135,8 +135,19 @@ inline uint16_t getADCvalue()
 ///
 inline void disconnectDigitalInADC(uint8_t adcChannel)
 {
-    if (adcChannel < 6)
+    if (adcChannel > 7)
+    {
+        #ifdef DIDR2
+        adcChannel -= 8;
+        DIDR2 |= (1<<adcChannel);
+        #else
+        return;
+        #endif
+    }
+    else
+    {
         DIDR0 |= (1<<adcChannel);
+    }
 }
 
 ///
@@ -145,6 +156,17 @@ inline void disconnectDigitalInADC(uint8_t adcChannel)
 ///
 inline void setADCchannel(uint8_t adcChannel)
 {
+    #if defined(ADCSRB) && defined(MUX5)
+    if (channel > 7)
+    {
+        ADCSRB |= (1<<MUX5);
+    }
+    else
+    {
+        ADCSRB &= ~(1<<MUX5);
+    }
+    #endif
+
     //select ADC channel with safety mask
     ADMUX = (ADMUX & 0xF0) | (adcChannel & 0x0F);
 }

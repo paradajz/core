@@ -157,7 +157,7 @@ inline void disconnectDigitalInADC(uint8_t adcChannel)
 inline void setADCchannel(uint8_t adcChannel)
 {
     #if defined(ADCSRB) && defined(MUX5)
-    if (channel > 7)
+    if (adcChannel > 7)
     {
         ADCSRB |= (1<<MUX5);
     }

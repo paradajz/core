@@ -117,6 +117,7 @@ class StringBuffer
     void startLine()
     {
         buffer[0] = '\0';
+        stringSize = 0;
     }
 
     ///

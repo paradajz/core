@@ -60,9 +60,12 @@ class StringBuffer
     {
         char intToCharArray[7];
         itoa(number, intToCharArray, 10);
-        stringSize += strlen(intToCharArray);
+
+        if ((stringSize + strlen(intToCharArray)) >= (STRING_BUFFER_SIZE-1))
+            return; //overflow
 
         strcat(buffer, intToCharArray);
+        stringSize += strlen(intToCharArray);
         buffer[stringSize] = '\0';
     }
 
@@ -72,8 +75,11 @@ class StringBuffer
     ///
     void appendText(const char *text)
     {
-        stringSize += strlen(text);
+        if ((stringSize + strlen(text)) >= (STRING_BUFFER_SIZE-1))
+            return; //overflow
+
         strcat(buffer, text);
+        stringSize += strlen(text);
         buffer[stringSize] = '\0';
     }
 
@@ -83,6 +89,9 @@ class StringBuffer
     ///
     void addSpaceToCharArray(uint8_t numberOfSpaces)
     {
+        if ((stringSize + numberOfSpaces) >= (STRING_BUFFER_SIZE-1))
+            return; //overflow
+
         for (int i = 0; i < numberOfSpaces; i++)
             buffer[stringSize + i] = ' ';
 
@@ -91,21 +100,14 @@ class StringBuffer
     }
 
     ///
-    /// \brief Converts given integer to string.
-    /// @param [in] number  Number to convert (int32_t).
-    ///
-    void intToString(int32_t number)
-    {
-        itoa(number, buffer, 10);
-        stringSize += strlen(buffer);
-    }
-
-    ///
     /// \brief Concatenates given text to current string.
     /// @param [in] text    Text to Concatenate.
     ///
-    void merge(char* text)
+    void merge(const char* text)
     {
+        if ((stringSize + strlen(text)) >= (STRING_BUFFER_SIZE-1))
+            return; //overflow
+
         strcat(buffer, text);
         //make sure to update string size after merging
         stringSize += strlen(text);

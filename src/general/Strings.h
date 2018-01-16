@@ -97,7 +97,7 @@ class StringBuffer
     void intToString(int32_t number)
     {
         itoa(number, buffer, 10);
-        stringSize = strlen(buffer);
+        stringSize += strlen(buffer);
     }
 
     ///

@@ -60,7 +60,12 @@
 
 /// @}
 
-inline uint8_t mapAnalog_uint8(uint8_t x, uint8_t in_min, uint8_t in_max, uint8_t out_min, uint8_t out_max)
+///
+/// \brief Functions for mapping one range of numbers to another one.
+/// @{
+///
+
+inline uint8_t mapRange_uint8(uint8_t x, uint8_t in_min, uint8_t in_max, uint8_t out_min, uint8_t out_max)
 {
     if ((in_min == out_min) && (in_max == out_max))
         return x;
@@ -68,12 +73,22 @@ inline uint8_t mapAnalog_uint8(uint8_t x, uint8_t in_min, uint8_t in_max, uint8_
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 };
 
-inline uint16_t mapAnalog_uint16(uint16_t x, uint16_t in_min, uint16_t in_max, uint16_t out_min, uint16_t out_max)
+inline uint16_t mapRange_uint16(uint16_t x, uint16_t in_min, uint16_t in_max, uint16_t out_min, uint16_t out_max)
 {
     if ((in_min == out_min) && (in_max == out_max))
         return x;
     else
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 };
+
+inline uint32_t mapRange_uint32(uint32_t x, uint32_t in_min, uint32_t in_max, uint32_t out_min, uint32_t out_max)
+{
+    if ((in_min == out_min) && (in_max == out_max))
+        return x;
+    else
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+};
+
+/// @}
 
 /// @}

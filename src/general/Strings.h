@@ -1,5 +1,5 @@
 /*
-    Copyright 2017 Igor Petroviæ
+    Copyright 2017 Igor Petroviï¿½
 
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the "Software"),
@@ -27,10 +27,7 @@
 /// \brief C++ class used for easier building of strings.
 /// @{
 
-#ifndef STRING_BUFFER_SIZE
-#warning Please define STRING_BUFFER_SIZE. Setting size to 1 byte.
-#define STRING_BUFFER_SIZE 1
-#endif
+#ifdef STRING_BUFFER_SIZE
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -148,3 +145,5 @@ class StringBuffer
 
 
 /// @}
+
+#endif

@@ -21,9 +21,7 @@
 
 #include "../../../Common.h"
 
-#ifndef ADC
-#warning This device does not support ADC.
-#else
+#ifdef ADC
 
 #pragma once
 

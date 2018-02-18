@@ -81,18 +81,33 @@ class StringBuffer
     }
 
     ///
-    /// \brief Appends space to string.
-    /// @param [in] numberOfSpaces  Number of spaces to append.
+    /// \brief Appends text located in flash memory to string.
+    /// @param [in] text    Text to append.
     ///
-    void addSpaceToCharArray(uint8_t numberOfSpaces)
+    void appendText_P(const char *text PROGMEM)
     {
-        if ((stringSize + numberOfSpaces) >= (STRING_BUFFER_SIZE-1))
+        if ((stringSize + strlen_P(text)) >= (STRING_BUFFER_SIZE-1))
             return; //overflow
 
-        for (int i = 0; i < numberOfSpaces; i++)
-            buffer[stringSize + i] = ' ';
+        strcat_P(buffer, text);
+        stringSize += strlen_P(text);
+        buffer[stringSize] = '\0';
+    }
 
-        stringSize += numberOfSpaces;
+    ///
+    /// \brief Appends character to string.
+    /// @param [in] character       Character to append.
+    /// @param [in] numberOfChars   Number of times specifed character should be appended.
+    ///
+    void appendChar(char character, uint8_t numberOfChars)
+    {
+        if ((stringSize + numberOfChars) >= (STRING_BUFFER_SIZE-1))
+            return; //overflow
+
+        for (int i = 0; i < numberOfChars; i++)
+            buffer[stringSize + i] = character;
+
+        stringSize += numberOfChars;
         buffer[stringSize] = '\0';
     }
 
@@ -136,7 +151,14 @@ class StringBuffer
         return buffer;
     }
 
-    private:
+    ///
+    /// \brief Returns size of string in buffer.
+    ///
+    uint8_t getSize()
+    {
+        return stringSize;
+    }
+
     ///
     /// \brief Holds current size of string.
     ///

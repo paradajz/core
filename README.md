@@ -16,7 +16,7 @@ This directory contains several modules which are independent of underlying arch
 - Ring buffer
     - Contains lightweight ring buffer implementation from LUFA project.
 - Strings
-    - C++ class used for easier building of strings. `USE_STRINGS` symbol must be defined for compilation and `STRING_BUFFER_SIZE` symbol must be defined with wanted value, for instance 50: `STRING_BUFFER_SIZE=50`
+    - C++ class used for easier building of strings. `STRING_BUFFER_SIZE` symbol must be defined with wanted value in order for this module to compile, for instance 50: `STRING_BUFFER_SIZE=50`
 - Timing
     - Includes simple delay function for AVR architecture, as well as `rTimeMs()` function used to get current run time in milliseconds. This function uses `rTime_ms` variable which must be externally implemented and updated in order to use the function.
 - Misc
@@ -66,7 +66,7 @@ Reference can be set to internal 1.1V, internal 2.56V, AVCC reference or AREF. T
 
 ##### Enabling ADC
 
-In order to actually enable ADC, additional symbol must be defined.
+In order to compile  ADC module, additional symbol must be defined.
 
 - `USE_ADC`
 

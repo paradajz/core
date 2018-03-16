@@ -173,11 +173,4 @@ void mcuReset()
     while(1);
 }
 
-void wdt_init(void)
-{
-    MCUSR &= ~(1 << WDRF);
-    wdt_disable();
-    return;
-}
-
 #endif

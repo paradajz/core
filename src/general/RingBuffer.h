@@ -64,6 +64,8 @@
 /// operating occurring at the same point in time, atomic (mutex) locking should be used.
 /// @{
 
+#ifdef RING_BUFFER_SIZE
+
 #include <inttypes.h>
 #include "Misc.h"
 #include "../HAL/HAL.h"
@@ -73,10 +75,6 @@
 ///
 #define RingBuff_Data_t     uint8_t
 
-#ifndef RING_BUFFER_SIZE
-#warning Please define RING_BUFFER_SIZE. Setting size to 1 byte.
-#define RING_BUFFER_SIZE 1
-#endif
 
 ///
 /// Datatype which may be used to store the count of data stored in a buffer,
@@ -232,3 +230,4 @@ static inline RingBuff_Data_t RingBuffer_Remove(RingBuff_t* const Buffer)
 }
 
 /// @}
+#endif

@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include "Common.h"
 #include "general/BitManipulation.h"
 #include "general/RingBuffer.h"
 #include "general/Timing.h"

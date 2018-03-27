@@ -79,6 +79,7 @@ class StringBuffer
         buffer[stringSize] = '\0';
     }
 
+    #ifdef __AVR__
     ///
     /// \brief Appends text located in flash memory to string.
     /// @param [in] text    Text to append.
@@ -92,6 +93,7 @@ class StringBuffer
         stringSize += strlen_P(text);
         buffer[stringSize] = '\0';
     }
+    #endif
 
     ///
     /// \brief Appends character to string.

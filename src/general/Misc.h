@@ -91,4 +91,41 @@ inline uint32_t mapRange_uint32(uint32_t x, uint32_t in_min, uint32_t in_max, ui
 
 /// @}
 
+///
+/// \brief Checks number of digits for requested value.
+/// @param[in] number   Number for which number if digits is being calculated.
+/// \returns Number of digits.
+///
+inline uint8_t getNumberOfDigits(int32_t number)
+{
+    //make sure negative numbers are processed correctly
+    number = abs(number);
+
+    if (number < 10)
+        return 1;
+
+    if (number < 100)
+        return 2;
+
+    if (number < 1000)
+        return 3;
+
+    if (number < 10000)
+        return 4;
+
+    if (number < 1000000)
+        return 6;
+
+    if (number < 10000000)
+        return 7;
+
+    if (number < 100000000)
+        return 8;
+
+    if (number < 1000000000)
+        return 9;
+
+    return 10; //max size
+}
+
 /// @}

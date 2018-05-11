@@ -157,6 +157,7 @@ inline void setADCchannel(uint8_t adcChannel)
     #if defined(ADCSRB) && defined(MUX5)
     if (adcChannel > 7)
     {
+        adcChannel -= 8;
         ADCSRB |= (1<<MUX5);
     }
     else

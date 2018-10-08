@@ -38,15 +38,7 @@ class StringBuffer
     ///
     /// \brief Default constructor (empty).
     ///
-    StringBuffer()
-    {
-        
-    }
-
-    ///
-    /// \brief String buffer used by all string functions.
-    ///
-    char buffer[STRING_BUFFER_SIZE];
+    StringBuffer() {}
 
     ///
     /// \brief Appends integer to string (int32_t).
@@ -160,10 +152,16 @@ class StringBuffer
         return stringSize;
     }
 
+    private:
     ///
     /// \brief Holds current size of string.
     ///
     uint8_t stringSize;
+
+    ///
+    /// \brief String buffer used by all string functions.
+    ///
+    char buffer[STRING_BUFFER_SIZE];
 };
 
 

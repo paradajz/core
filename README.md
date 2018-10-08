@@ -1,6 +1,6 @@
 # Core modules
 
-Collection of modules for easier control of integrated AVR and STM32 peripherals, as well as some general helping macros and symbols.
+Collection of modules for easier control of integrated AVR peripherals, as well as some general helping macros and symbols.
 
 This collection is split into two parts:
 
@@ -38,8 +38,6 @@ Contains following modules:
     - Module used to initiate MCU reboot.
 - SPI
     - Used for easier access to SPI peripheral inside AVR.
-- Interrupt
-    - Simple macros used to disable and enable all interrupts.
 
 Only ADC module requires configuration.
 
@@ -63,18 +61,3 @@ Reference can be set to internal 1.1V, internal 2.56V, AVCC reference or AREF. T
 - `VREF_AVCC`
 - `VREF_INTERNAL_2V56`
 - `VREF_INTERNAL_1V1`
-
-##### Enabling ADC
-
-In order to compile  ADC module, additional symbol must be defined.
-
-- `USE_ADC`
-
-### STM32
-
-In order to use this module, CubeMX HAL must be used and `STM32` symbol must be defined.
-
-- Pin manipulation
-    - Used for easier pin access (read/write only).
-- Interrupt
-    - Simple macros used to disable and enable all interrupts.

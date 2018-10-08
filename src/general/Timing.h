@@ -22,7 +22,10 @@
 #pragma once
 
 #include <inttypes.h>
-#include "../HAL/HAL.h"
+#ifdef __AVR__
+#include <util/atomic.h>
+#include <util/delay.h>
+#endif
 
 ///
 /// \ingroup coreGeneral
@@ -45,16 +48,13 @@ inline uint32_t rTimeMs()
 
     #ifdef __AVR__
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+    #endif
     {
         _rTime_mS = rTime_ms;
     }
-    #endif
 
     return _rTime_mS;
 }
-
-#if defined(__AVR__) || defined (__DOXYGEN__)
-#include <util/delay.h>
 
 ///
 /// \brief Delays for desired time interval in milliseconds.
@@ -65,9 +65,12 @@ inline uint32_t rTimeMs()
 inline void wait_ms(uint32_t ms)
 {
     while (ms--)
+    {
+        #ifdef __AVR__
         _delay_ms(1);
+        #endif
+    }
 }
-#endif
 
 
 /// @}

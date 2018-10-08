@@ -21,9 +21,8 @@
 
 #pragma once
 
-#if defined(__AVR__) || defined (__DOXYGEN__)
-
-#include "../../Common.h"
+#include <avr/io.h>
+#include <avr/cpufunc.h>
 
 ///
 /// \brief Helper macros for easier port and pin manipulation.
@@ -91,5 +90,3 @@
 } while (0)
 
 /// @}
-
-#endif

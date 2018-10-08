@@ -19,12 +19,10 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "../../../Common.h"
-
-#ifdef ADC
-
 #pragma once
 
+#include <inttypes.h>
+#include <avr/io.h>
 #include "Config.h"
 
 ///
@@ -171,5 +169,3 @@ inline void setADCchannel(uint8_t adcChannel)
 }
 
 /// @}
-
-#endif

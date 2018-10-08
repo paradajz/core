@@ -19,8 +19,7 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#if defined(__AVR__) || defined (__DOXYGEN__)
-
+#include <util/atomic.h>
 #include "SPI.h"
 #include "../PinManipulation.h"
 
@@ -48,5 +47,3 @@ uint8_t spiTransfer(uint8_t data)
     while(!(SPSR & (1<<SPIF)));
     return SPDR;
 }
-
-#endif

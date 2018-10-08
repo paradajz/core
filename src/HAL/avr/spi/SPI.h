@@ -21,9 +21,7 @@
 
 #pragma once
 
-#if defined(__AVR__) || defined (__DOXYGEN__)
-
-#include "../../../Common.h"
+#include <inttypes.h>
 
 ///
 /// \ingroup coreHALavrSPI
@@ -80,5 +78,3 @@ void spiInit();
 uint8_t spiTransfer(uint8_t data);
 
 /// @}
-
-#endif

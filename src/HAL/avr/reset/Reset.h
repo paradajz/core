@@ -21,10 +21,6 @@
 
 #pragma once
 
-#if defined(__AVR__) || defined (__DOXYGEN__)
-
-#include "../../../Common.h"
-
 ///
 /// \ingroup coreHALavrReset
 /// @{
@@ -40,5 +36,3 @@ void disablePeripherals();
 void mcuReset();
 
 /// @}
-
-#endif

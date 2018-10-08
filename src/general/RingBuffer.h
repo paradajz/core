@@ -66,15 +66,15 @@
 
 #ifdef RING_BUFFER_SIZE
 
-#include <inttypes.h>
-#include "Misc.h"
-#include "../HAL/HAL.h"
+#include <stdlib.h>
+#ifdef __AVR__
+#include <util/atomic.h>
+#endif
 
 ///
 /// \brief Type of data to store into the buffer.
 ///
 #define RingBuff_Data_t     uint8_t
-
 
 ///
 /// Datatype which may be used to store the count of data stored in a buffer,
@@ -109,12 +109,13 @@ static inline void RingBuffer_InitBuffer(RingBuff_t* const Buffer)
 {
     #ifdef __AVR__
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+    #endif
     {
+    
         Buffer->In    = Buffer->Buffer;
         Buffer->Out   = Buffer->Buffer;
         Buffer->Count = 0;
     }
-    #endif
 }
 
 ///
@@ -137,10 +138,11 @@ static inline RingBuff_Count_t RingBuffer_GetCount(RingBuff_t* const Buffer)
 
     #ifdef __AVR__
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+    #endif
     {
+
         Count = Buffer->Count;
     }
-    #endif
 
     return Count;
 }
@@ -196,10 +198,10 @@ static inline void RingBuffer_Insert(RingBuff_t* const Buffer, const RingBuff_Da
 
     #ifdef __AVR__
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+    #endif
     {
         Buffer->Count++;
     }
-    #endif
 }
 
 ///
@@ -221,10 +223,10 @@ static inline RingBuff_Data_t RingBuffer_Remove(RingBuff_t* const Buffer)
 
     #ifdef __AVR__
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+    #endif
     {
         Buffer->Count--;
     }
-    #endif
 
     return Data;
 }

@@ -19,8 +19,10 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#if defined(__AVR__) || defined (__DOXYGEN__)
-
+#include <avr/wdt.h>
+#include <avr/interrupt.h>
+#include <util/delay.h>
+#include <avr/io.h>
 #include "Reset.h"
 
 #ifndef WDFR
@@ -172,5 +174,3 @@ void mcuReset()
     wdt_enable(WDTO_15MS);
     while(1);
 }
-
-#endif

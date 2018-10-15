@@ -31,6 +31,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#ifdef __AVR__
+#include <avr/pgmspace.h>
+#endif
 
 class StringBuffer
 {

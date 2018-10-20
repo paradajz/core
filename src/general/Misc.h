@@ -62,6 +62,28 @@
 /// @}
 
 ///
+/// \brief Used to retrieve least significant byte in a single word (2 bytes).
+/// @param [in] value   Single word.
+/// \returns LSB from given word.
+///
+#define LSB_WORD(value)                 (value & 0xFF)
+
+///
+/// \brief Used to retrieve most significant byte in a single word (2 bytes).
+/// @param [in] value   Single word.
+/// \returns MSB from given word.
+///
+#define MSB_WORD(value)                 (value >> 8 & 0xFF)
+
+///
+/// \brief Used to construct word from given most and least significant byte.
+/// @param [in] lsb LSB in a word to construct.
+/// @param [in] msb MSB in a word to construct.
+/// \returns Word from given LSB and MSB.
+///
+#define GET_WORD(lsb,msb)               (msb << 8 | lsb)
+
+///
 /// \brief Functions for mapping one range of numbers to another one.
 /// @{
 ///

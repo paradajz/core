@@ -31,13 +31,10 @@ This directory contains some hardware abstraction APIs and macros for AVR archit
 Contains following modules:
 
 - ADC
-    - Used for easier access to ADC peripheral inside AVR.
 - Pin manipulation
-    - Used for easier pin access (read/write and setting input/output).
 - Reset
-    - Module used to initiate MCU reboot.
 - SPI
-    - Used for easier access to SPI peripheral inside AVR.
+- I2C
 
 Only ADC module requires configuration.
 

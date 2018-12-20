@@ -23,27 +23,53 @@
 #include "SPI.h"
 #include "../PinManipulation.h"
 
-void spiInit()
+#define SPI_CLOCK_MASK      0x03
+#define SPI_2XCLOCK_MASK    0x01
+#define SPI_MODE_MASK       0x0C
+
+namespace SPI
 {
-    ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+    void spiInit()
     {
-        //SS, at90usb1286
-        setOutput(PORTB, 0);
-        setHigh(PORTB, 0);
+        ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+        {
+            //SS, at90usb1286
+            setOutput(PORTB, 0);
+            setHigh(PORTB, 0);
 
-        SPCR |= (1<<MSTR);
-        SPCR |= (1<<SPE);
+            SPCR |= (1<<MSTR);
+            SPCR |= (1<<SPE);
 
-        //clock, at90usb1286
-        setOutput(PORTB, 1);
-        //mosi, at90usb1286
-        setOutput(PORTB, 2);
+            //clock, at90usb1286
+            setOutput(PORTB, 1);
+            //mosi, at90usb1286
+            setOutput(PORTB, 2);
+        }
     }
-}
 
-uint8_t spiTransfer(uint8_t data)
-{
-    SPDR = data;
-    while(!(SPSR & (1<<SPIF)));
-    return SPDR;
+    uint8_t spiTransfer(uint8_t data)
+    {
+        SPDR = data;
+        while (!(SPSR & (1<<SPIF)));
+        return SPDR;
+    }
+
+    void setBitOrder(bitOrder_t bitOrder)
+    {
+        if (bitOrder == bitOrder_t::lsb)
+            SPCR |= _BV(DORD);
+        else
+            SPCR &= ~(_BV(DORD));
+    }
+
+    void setClockDivider(clockDiv_t clockDiv)
+    {
+        SPCR = (SPCR & ~SPI_CLOCK_MASK) | ((uint8_t)clockDiv & SPI_CLOCK_MASK);
+        SPSR = (SPSR & ~SPI_2XCLOCK_MASK) | (((uint8_t)clockDiv >> 2) & SPI_2XCLOCK_MASK);
+    }
+
+    void setDataMode(mode_t dataMode)
+    {
+        SPCR = (SPCR & ~SPI_MODE_MASK) | (uint8_t)dataMode;
+    }
 }

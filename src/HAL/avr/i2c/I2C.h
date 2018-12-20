@@ -21,44 +21,21 @@
 
 #pragma once
 
+#include <util/twi.h>
 #include <inttypes.h>
 
-///
-/// \ingroup coreHALavrSPI
-/// @{
-
-namespace SPI
+namespace I2C
 {
-    enum class mode_t : uint8_t
+    enum class i2cTransfer_t : uint8_t
     {
-        mode0 = 0x00,
-        mode1 = 0x04,
-        mode2 = 0x08,
-        mode3 = 0x0C
+        write,
+        read
     };
 
-    enum class clockDiv_t : uint8_t
-    {
-        div2 = 0x04,
-        div4 = 0x00,
-        div8 = 0x05,
-        div16 = 0x01,
-        div32 = 0x06,
-        div64 = 0x02,
-        div128 = 0x03
-    };
-
-    enum class bitOrder_t : uint8_t
-    {
-        lsb,
-        msb
-    };
-
-    void init();
-    uint8_t spiTransfer(uint8_t data);
-    void setBitOrder(bitOrder_t bitOrder);
-    void setClockDivider(clockDiv_t clockDiv);
-    void setDataMode(mode_t dataMode);
-};
-
-/// @}
+    void enable();
+    void disable(bool force);
+    bool startComm(uint8_t address, i2cTransfer_t type);
+    void stopComm();
+    bool write(uint8_t data);
+    void read(uint8_t& data);
+}

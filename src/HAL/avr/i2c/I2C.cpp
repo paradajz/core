@@ -49,7 +49,7 @@ namespace I2C
     {
         //enable interrupt flag
         //enable start bit (set to master)
-        TWCR |= (1<<TWINT) | (1<<TWSTA);
+        TWCR = (1<<TWINT) | (1<<TWSTA) | (1<<TWEN);
 
         //wait for interrupt flag to be cleared
         while (!(TWCR & (1<<TWINT)));
@@ -62,7 +62,7 @@ namespace I2C
 
         //send device address
         TWDR = address + (uint8_t)type;
-        TWCR |= (1<<TWINT);
+        TWCR = (1<<TWINT) | (1<<TWEN) | (1<<TWSTA);
 
         //wait for interrupt flag to be cleared
         while (!(TWCR & (1<<TWINT)));
@@ -88,7 +88,7 @@ namespace I2C
     bool write(uint8_t data)
     {
         TWDR = data;
-        TWCR |= (1<<TWINT);
+        TWCR = (1<<TWINT) | (1<<TWEN);
 
         //wait for interrupt flag to be cleared
         while (!(TWCR & (1<<TWINT)));
@@ -101,7 +101,7 @@ namespace I2C
 
     void read(uint8_t& data)
     {
-        TWCR |= (1<<TWINT) | (1<<TWEA);
+        TWCR = (1<<TWINT) | (1<<TWEA) | (1<<TWEN);
         while (!(TWCR & (1<<TWINT)));
 
         data = TWDR;

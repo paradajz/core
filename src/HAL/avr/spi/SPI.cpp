@@ -29,7 +29,7 @@
 
 namespace SPI
 {
-    void spiInit()
+    void init()
     {
         ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
         {

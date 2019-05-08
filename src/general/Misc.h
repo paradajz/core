@@ -84,35 +84,22 @@
 #define GET_WORD(lsb,msb)               (msb << 8 | lsb)
 
 ///
-/// \brief Functions for mapping one range of numbers to another one.
-/// @{
+/// \brief Used to map one range of numbers to another one.
 ///
-
-inline uint8_t mapRange_uint8(uint8_t x, uint8_t in_min, uint8_t in_max, uint8_t out_min, uint8_t out_max)
+template <typename T>
+inline T mapRange(T x, T in_min, T in_max, T out_min, T out_max)
 {
+    //don't bother with mapping in this case
     if ((in_min == out_min) && (in_max == out_max))
         return x;
-    else
-        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-};
 
-inline uint16_t mapRange_uint16(uint16_t x, uint16_t in_min, uint16_t in_max, uint16_t out_min, uint16_t out_max)
-{
-    if ((in_min == out_min) && (in_max == out_max))
-        return x;
-    else
-        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-};
+    //smaller input range to larger output range
+    if ((in_max - in_min) > (out_max - out_min))
+        return (x - in_min) * (out_max - out_min + 1) / (in_max - in_min + 1) + out_min;
 
-inline uint32_t mapRange_uint32(uint32_t x, uint32_t in_min, uint32_t in_max, uint32_t out_min, uint32_t out_max)
-{
-    if ((in_min == out_min) && (in_max == out_max))
-        return x;
-    else
-        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    //larger input range to smaller output range
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 };
-
-/// @}
 
 ///
 /// \brief Checks number of digits for requested value.

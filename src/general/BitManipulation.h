@@ -19,7 +19,8 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#pragma once
+#ifndef __CORE_GENERAL_BIT_MANIPULATION
+#define __CORE_GENERAL_BIT_MANIPULATION
 
 ///
 /// \brief Helper macros for easier byte/bit manipulation.
@@ -36,3 +37,5 @@
 #define BYTE_HIGH(value)                 (((value) >> 8) & 0xFF)
 
 /// @}
+
+#endif

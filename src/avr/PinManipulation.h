@@ -19,7 +19,8 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#pragma once
+#ifndef __CORE_AVR_PIN_MANIPULATION
+#define __CORE_AVR_PIN_MANIPULATION
 
 #include <avr/io.h>
 #include <avr/cpufunc.h>
@@ -90,3 +91,5 @@
 } while (0)
 
 /// @}
+
+#endif

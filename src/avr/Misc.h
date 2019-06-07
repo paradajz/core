@@ -19,14 +19,27 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#pragma once
+#ifndef __CORE_AVR_MISC
+#define __CORE_AVR_MISC
 
-#define ADC_PRESCALER_128           128
-#define ADC_PRESCALER_64            64
-#define ADC_PRESCALER_32            32
-#define ADC_PRESCALER_16            16
+#include <inttypes.h>
+#include <avr/pgmspace.h>
 
-#define ADC_VREF_AREF               0
-#define ADC_VREF_AVCC               1
-#define ADC_VREF_INTERNAL_2V56      2
-#define ADC_VREF_INTERNAL_1V1       3
+namespace core
+{
+    namespace avr
+    {
+        ///
+        /// \brief Helper function for easier retrieval of far PGM address.
+        ///
+        inline uint32_t pgmGetFarAddress(uint32_t address)
+        {
+            static uint32_t temp;
+            temp = address;
+            pgm_get_far_address(temp);
+            return temp;
+        };
+    }
+}
+
+#endif

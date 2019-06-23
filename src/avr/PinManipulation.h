@@ -24,12 +24,29 @@
 
 #include <avr/io.h>
 #include <avr/cpufunc.h>
+#include <inttypes.h>
+#include "../Arch.h"
 
 ///
 /// \brief Helper macros for easier port and pin manipulation.
 /// \defgroup coreHALpinManAVR Pin manipulation
 /// \ingroup coreHALavr
 /// @{
+
+///
+/// \brief Workaround to avoid using DDR and PIN registers.
+/// On most AVR models, DDR register is used to define pin direction within port (input or output),
+/// and PIN port is used to read state of pin within port. To avoid defining DDR, PORT and PIN register for each
+/// pin, these simple macros use the fact that DDR address = PORT address - 1 and PIN address = PORT address - 2.
+/// Because of this, only PORT register must be defined, as well as specific pin.
+/// Refer to specific AVR model datasheet for more info.
+/// @param [in] port    AVR Port.
+/// @{
+
+#define DDR(port)               (*(&port-1))
+#define PIN(port)               (*(&port-2))
+
+/// @}
 
 
 ///
@@ -51,45 +68,48 @@
 
 /// @}
 
-///
-/// \brief Workaround to avoid using DDR and PIN registers.
-/// On most AVR models, DDR register is used to define pin direction within port (input or output),
-/// and PIN port is used to read state of pin within port. To avoid defining DDR, PORT and PIN register for each
-/// pin, these simple macros use the fact that DDR address = PORT address - 1 and PIN address = PORT address - 2.
-/// Because of this, only PORT register must be defined, as well as specific pin.
-/// Refer to specific AVR model datasheet for more info.
-/// @param [in] port    AVR Port.
-/// @{
+namespace core
+{
+    namespace avr
+    {
+        namespace pins
+        {
+            ///
+            /// \brief Structure used to define single MCU pin.
+            ///
+            typedef struct
+            {
+                volatile uint8_t* port;
+                uint8_t           pin;
+            } mcuPin_t;
 
-#define DDR(port)               (*(&port-1))
-#define PIN(port)               (*(&port-2))
+            ///
+            /// \brief Structure used to define single PWM channel.
+            ///
+            typedef struct
+            {
+                volatile uint8_t* timer;
+                volatile uint8_t* compareL;
+                volatile uint8_t* compareH;
+                uint8_t channel;
+            } pwmChannel_t;
 
-/// @}
+            inline void pwmOff(pwmChannel_t pwm)
+            {
+                *pwm.timer &= ~(1 << pwm.channel);
+            }
 
-///
-/// \brief Simple macro to create a high-to-low pulse.
-/// @param [in] port    AVR Port.
-/// @param [in] pin     Pin index on AVR port.
-///
-#define pulseHighToLow(port, pin) do \
-{ \
-    setHigh((port), (pin)); \
-    _NOP(); \
-    setLow((port), (pin)); \
-} while (0)
+            inline void pwmOn(pwmChannel_t pwm, uint16_t intensity)
+            {
+                *pwm.compareL = intensity & 0xFF;
 
-///
-/// \brief Simple macro to create a low-to-high pulse.
-/// @param [in] port    AVR Port.
-/// @param [in] pin     Pin index on AVR port.
-///
-#define pulseLowToHigh(port, pin) do \
-{ \
-    setLow((port), (pin)); \
-    _NOP(); \
-    setHigh((port), (pin)); \
-} while (0)
+                if (pwm.compareH != nullptr)
+                    *pwm.compareH = (intensity >> 8) & 0xFF;
 
-/// @}
+                *pwm.timer |= (1 << pwm.channel);
+            }
+        }
+    }
+}
 
 #endif

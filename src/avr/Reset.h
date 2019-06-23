@@ -26,6 +26,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include <avr/io.h>
+#include "../Arch.h"
 
 #ifndef WDFR
 #define WDFR 3

@@ -19,28 +19,10 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef __CORE_AVR_MISC
-#define __CORE_AVR_MISC
+#pragma once
 
-#include <inttypes.h>
-#include <avr/pgmspace.h>
-#include "../Arch.h"
-
-namespace core
-{
-    namespace avr
-    {
-        ///
-        /// \brief Helper function for easier retrieval of far PGM address.
-        ///
-        inline uint32_t pgmGetFarAddress(uint32_t address)
-        {
-            static uint32_t temp;
-            temp = address;
-            pgm_get_far_address(temp);
-            return temp;
-        };
-    }
-}
-
+#ifdef __AVR__
+#define CORE_ARCH   avr
+#elif defined __ARM__
+#define CORE_ARCH arm
 #endif

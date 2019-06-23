@@ -24,6 +24,7 @@
 
 #include <util/twi.h>
 #include <inttypes.h>
+#include "../Arch.h"
 
 #ifndef I2C_CLOCK
 #define I2C_CLOCK  100000L

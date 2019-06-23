@@ -24,6 +24,7 @@
 
 #include <inttypes.h>
 #include <avr/io.h>
+#include "../Arch.h"
 
 #ifdef ADC
 namespace core

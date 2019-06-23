@@ -43,8 +43,8 @@
 /// @param [in] port    AVR Port.
 /// @{
 
-#define DDR(port)               (*(&port-1))
-#define PIN(port)               (*(&port-2))
+#define DDR(port)                           (*(&port-1))
+#define PIN(port)                           (*(&port-2))
 
 /// @}
 
@@ -55,16 +55,11 @@
 /// @param [in] pin     Pin index on AVR port.
 /// @{
 
-#define setOutput(port, pin)    ((DDR(port)) |= (1 << (pin)))
-#define setInput(port, pin)     ((DDR(port)) &= ~(1 << (pin)))
-#define setAnalogIn(port, pin)  do \
-{ \
-    setInput((port), (pin)); \
-    setLow((port), (pin)); \
-} while (0)
-#define setLow(port, pin)       ((port) &= ~(1 << (pin)))
-#define setHigh(port, pin)      ((port) |= (1 << (pin)))
-#define readPin(port, pin)      (((PIN(port)) >> (pin)) & 0x01)
+#define CORE_AVR_PIN_SET_OUTPUT(port, pin)  ((DDR(port)) |= (1 << (pin)))
+#define CORE_AVR_PIN_SET_INPUT(port, pin)   ((DDR(port)) &= ~(1 << (pin)))
+#define CORE_AVR_PIN_SET_LOW(port, pin)     ((port) &= ~(1 << (pin)))
+#define CORE_AVR_PIN_SET_HIGH(port, pin)    ((port) |= (1 << (pin)))
+#define CORE_AVR_PIN_READ(port, pin)        (((PIN(port)) >> (pin)) & 0x01)
 
 /// @}
 

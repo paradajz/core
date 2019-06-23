@@ -39,7 +39,7 @@ namespace core
             /// Must be implemented externally in order to use core::timing::currentRunTimeMs() function correctly.
             ///
             extern volatile uint32_t rTime_ms;
-        }
+        }    // namespace detail
 
         ///
         /// \brief Delays for desired time interval in milliseconds.
@@ -51,9 +51,9 @@ namespace core
         {
             while (ms--)
             {
-                #ifdef __AVR__
+#ifdef __AVR__
                 _delay_ms(1);
-                #endif
+#endif
             }
         }
 
@@ -66,16 +66,16 @@ namespace core
         {
             uint32_t _rTime_mS;
 
-            #ifdef __AVR__
+#ifdef __AVR__
             ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
-            #endif
+#endif
             {
                 _rTime_mS = detail::rTime_ms;
             }
 
             return _rTime_mS;
         }
-    }
-}
+    }    // namespace timing
+}    // namespace core
 
 #endif

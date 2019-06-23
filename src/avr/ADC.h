@@ -55,7 +55,7 @@ namespace core
             typedef struct
             {
                 prescaler_t prescaler;
-                vRef_t vref;
+                vRef_t      vref;
             } conf_t;
 
             ///
@@ -63,7 +63,7 @@ namespace core
             ///
             inline void startConversion()
             {
-                ADCSRA |= (1<<ADSC);
+                ADCSRA |= (1 << ADSC);
             }
 
             ///
@@ -71,7 +71,7 @@ namespace core
             ///
             inline void enableInterrupt()
             {
-                ADCSRA |= (1<<ADIE);
+                ADCSRA |= (1 << ADIE);
             }
 
             ///
@@ -83,56 +83,56 @@ namespace core
                 ADMUX = 0x00;
                 ADCSRA = 0x0;
 
-                switch(configuration.prescaler)
+                switch (configuration.prescaler)
                 {
-                    //setup adc prescaler
-                    case prescaler_t::p128:
-                    ADCSRA |= (1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);
+                //setup adc prescaler
+                case prescaler_t::p128:
+                    ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
                     break;
 
-                    case prescaler_t::p64:
-                    ADCSRA |= (1<<ADPS2)|(1<<ADPS1);
+                case prescaler_t::p64:
+                    ADCSRA |= (1 << ADPS2) | (1 << ADPS1);
                     break;
 
-                    case prescaler_t::p32:
-                    ADCSRA |= (1<<ADPS2)|(1<<ADPS0);
+                case prescaler_t::p32:
+                    ADCSRA |= (1 << ADPS2) | (1 << ADPS0);
                     break;
 
-                    case prescaler_t::p16:
-                    ADCSRA |= (1<<ADPS2);
+                case prescaler_t::p16:
+                    ADCSRA |= (1 << ADPS2);
                     break;
 
-                    default:
+                default:
                     //128 as an fallback
-                    ADCSRA |= (1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);
+                    ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
                     break;
                 }
 
-                switch(configuration.vref)
+                switch (configuration.vref)
                 {
-                    case vRef_t::aref:
+                case vRef_t::aref:
                     //nothing, this is default setting
                     break;
 
-                    case vRef_t::avcc:
-                    ADMUX |= (1<<REFS0);
+                case vRef_t::avcc:
+                    ADMUX |= (1 << REFS0);
                     break;
 
-                    case vRef_t::int2v56:
-                    ADMUX |= (1<<REFS0) | (1<<REFS1);
+                case vRef_t::int2v56:
+                    ADMUX |= (1 << REFS0) | (1 << REFS1);
                     break;
 
-                    case vRef_t::int1v1:
-                    ADMUX |= (1<<REFS1);
+                case vRef_t::int1v1:
+                    ADMUX |= (1 << REFS1);
                     break;
 
-                    default:
+                default:
                     //nothing
                     break;
                 }
 
                 //enable ADC
-                ADCSRA |= (1<<ADEN);
+                ADCSRA |= (1 << ADEN);
             }
 
             ///
@@ -143,10 +143,11 @@ namespace core
             inline uint16_t read()
             {
                 //single conversion mode
-                ADCSRA |= (1<<ADSC);
+                ADCSRA |= (1 << ADSC);
 
                 //wait until ADC conversion is complete
-                while (ADCSRA & (1<<ADSC));
+                while (ADCSRA & (1 << ADSC))
+                    ;
 
                 return ADC;
             }
@@ -159,16 +160,16 @@ namespace core
             {
                 if (adcChannel > 7)
                 {
-                    #ifdef DIDR2
+#ifdef DIDR2
                     adcChannel -= 8;
-                    DIDR2 |= (1<<adcChannel);
-                    #else
+                    DIDR2 |= (1 << adcChannel);
+#else
                     return;
-                    #endif
+#endif
                 }
                 else
                 {
-                    DIDR0 |= (1<<adcChannel);
+                    DIDR0 |= (1 << adcChannel);
                 }
             }
 
@@ -178,24 +179,24 @@ namespace core
             ///
             inline void setChannel(uint8_t adcChannel)
             {
-                #if defined(ADCSRB) && defined(MUX5)
+#if defined(ADCSRB) && defined(MUX5)
                 if (adcChannel > 7)
                 {
                     adcChannel -= 8;
-                    ADCSRB |= (1<<MUX5);
+                    ADCSRB |= (1 << MUX5);
                 }
                 else
                 {
-                    ADCSRB &= ~(1<<MUX5);
+                    ADCSRB &= ~(1 << MUX5);
                 }
-                #endif
+#endif
 
                 //select ADC channel with safety mask
                 ADMUX = (ADMUX & 0xF0) | (adcChannel & 0x0F);
             }
-        }
-    }
-}
+        }    // namespace adc
+    }        // namespace avr
+}    // namespace core
 #endif
 
 #endif

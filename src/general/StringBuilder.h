@@ -32,7 +32,7 @@ namespace core
     ///
     /// Helper class used for easier string manipulation.
     ///
-    template <size_t stringSize>
+    template<size_t stringSize>
     class StringBuilder
     {
         public:
@@ -77,8 +77,8 @@ namespace core
         {
             size_t strSize = strlen(buffer);
 
-            if ((strSize + size) >= (bufferSize-1))
-                return false; //overflow
+            if ((strSize + size) >= (bufferSize - 1))
+                return false;    //overflow
 
             for (size_t i = 0; i < size; i++)
                 buffer[strSize + i] = ' ';
@@ -98,8 +98,8 @@ namespace core
         ///
         /// \brief Internal string buffer.
         ///
-        char        buffer[stringSize];
+        char buffer[stringSize];
     };
-}
+}    // namespace core
 
 #endif

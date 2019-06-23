@@ -27,7 +27,7 @@
 #include "../Arch.h"
 
 #ifndef I2C_CLOCK
-#define I2C_CLOCK  100000L
+#define I2C_CLOCK 100000L
 #endif
 
 namespace core
@@ -48,10 +48,10 @@ namespace core
                 TWSR = 0x00;
 
                 //use formula as per datasheet
-                TWBR = ((F_CPU/I2C_CLOCK)-16)/2;
+                TWBR = ((F_CPU / I2C_CLOCK) - 16) / 2;
 
                 //enable i2c interface
-                TWCR = (1<<TWEN);
+                TWCR = (1 << TWEN);
             }
 
             inline void disable(bool force)
@@ -64,10 +64,11 @@ namespace core
             {
                 //enable interrupt flag
                 //enable start bit (set to master)
-                TWCR = (1<<TWINT) | (1<<TWSTA) | (1<<TWEN);
+                TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
 
                 //wait for interrupt flag to be cleared
-                while (!(TWCR & (1<<TWINT)));
+                while (!(TWCR & (1 << TWINT)))
+                    ;
 
                 //check the value of TWI status register
                 uint8_t status = TW_STATUS & 0xF8;
@@ -77,10 +78,11 @@ namespace core
 
                 //send device address
                 TWDR = address + (uint8_t)type;
-                TWCR = (1<<TWINT) | (1<<TWEN) | (1<<TWSTA);
+                TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWSTA);
 
                 //wait for interrupt flag to be cleared
-                while (!(TWCR & (1<<TWINT)));
+                while (!(TWCR & (1 << TWINT)))
+                    ;
 
                 status = TW_STATUS & 0xF8;
 
@@ -92,21 +94,23 @@ namespace core
 
             inline void stopComm()
             {
-                if (TWCR & (1<<TWEN))
+                if (TWCR & (1 << TWEN))
                 {
                     //wait until all ongoing transmissions are stopped
-                    TWCR |= (1<<TWSTO);
-                    while (TWCR & (1<<TWSTO));
+                    TWCR |= (1 << TWSTO);
+                    while (TWCR & (1 << TWSTO))
+                        ;
                 }
             }
 
             inline bool write(uint8_t data)
             {
                 TWDR = data;
-                TWCR = (1<<TWINT) | (1<<TWEN);
+                TWCR = (1 << TWINT) | (1 << TWEN);
 
                 //wait for interrupt flag to be cleared
-                while (!(TWCR & (1<<TWINT)));
+                while (!(TWCR & (1 << TWINT)))
+                    ;
 
                 if ((TW_STATUS & 0xF8) != TW_MT_DATA_ACK)
                     return false;
@@ -116,13 +120,14 @@ namespace core
 
             inline void read(uint8_t& data)
             {
-                TWCR = (1<<TWINT) | (1<<TWEA) | (1<<TWEN);
-                while (!(TWCR & (1<<TWINT)));
+                TWCR = (1 << TWINT) | (1 << TWEA) | (1 << TWEN);
+                while (!(TWCR & (1 << TWINT)))
+                    ;
 
                 data = TWDR;
             }
-        }
-    }
-}
+        }    // namespace i2c
+    }        // namespace avr
+}    // namespace core
 
 #endif

@@ -40,7 +40,7 @@ namespace core
             pgm_get_far_address(temp);
             return temp;
         };
-    }
-}
+    }    // namespace avr
+}    // namespace core
 
 #endif

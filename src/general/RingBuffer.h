@@ -27,10 +27,10 @@
 
 namespace core
 {
-    template <typename T, size_t size>
+    template<typename T, size_t size>
     class RingBuffer
     {
-    public:
+        public:
         RingBuffer()
         {}
 
@@ -90,14 +90,14 @@ namespace core
             return count_;
         }
 
-    private:
-        T buffer[size];
-        size_t head = 0;
-        size_t tail = 0;
+        private:
+        T            buffer[size];
+        size_t       head = 0;
+        size_t       tail = 0;
         const size_t bufferSize = size;
-        bool full = false;
+        bool         full = false;
     };
-}
+}    // namespace core
 
 /// @}
 

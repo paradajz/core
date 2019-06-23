@@ -85,7 +85,7 @@ namespace core
         ///
         /// \brief Used to map one range of numbers to another one.
         ///
-        template <typename T>
+        template<typename T>
         inline T mapRange(T x, T in_min, T in_max, T out_min, T out_max)
         {
             //don't bother with mapping in this case
@@ -134,9 +134,9 @@ namespace core
             if (number < 1000000000)
                 return 9;
 
-            return 10; //max size
+            return 10;    //max size
         }
-    }
-}
+    }    // namespace misc
+}    // namespace core
 
 #endif

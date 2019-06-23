@@ -22,7 +22,7 @@
 #pragma once
 
 #ifdef __AVR__
-#define CORE_ARCH   avr
+#define CORE_ARCH avr
 #elif defined __ARM__
 #define CORE_ARCH arm
 #endif

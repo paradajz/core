@@ -43,11 +43,10 @@
 /// @param [in] port    AVR Port.
 /// @{
 
-#define DDR(port)                           (*(&port-1))
-#define PIN(port)                           (*(&port-2))
+#define DDR(port) (*(&port - 1))
+#define PIN(port) (*(&port - 2))
 
 /// @}
-
 
 ///
 /// \brief AVR I/O macros.
@@ -86,7 +85,7 @@ namespace core
                 volatile uint8_t* timer;
                 volatile uint8_t* compareL;
                 volatile uint8_t* compareH;
-                uint8_t channel;
+                uint8_t           channel;
             } pwmChannel_t;
 
             inline void pwmOff(pwmChannel_t pwm)
@@ -103,8 +102,8 @@ namespace core
 
                 *pwm.timer |= (1 << pwm.channel);
             }
-        }
-    }
-}
+        }    // namespace pins
+    }        // namespace avr
+}    // namespace core
 
 #endif

@@ -69,8 +69,8 @@ namespace core
                     setOutput(PORTB, 0);
                     setHigh(PORTB, 0);
 
-                    SPCR |= (1<<MSTR);
-                    SPCR |= (1<<SPE);
+                    SPCR |= (1 << MSTR);
+                    SPCR |= (1 << SPE);
 
                     //clock, at90usb1286
                     setOutput(PORTB, 1);
@@ -82,7 +82,8 @@ namespace core
             uint8_t spiTransfer(uint8_t data)
             {
                 SPDR = data;
-                while (!(SPSR & (1<<SPIF)));
+                while (!(SPSR & (1 << SPIF)))
+                    ;
                 return SPDR;
             }
 
@@ -104,8 +105,8 @@ namespace core
             {
                 SPCR = (SPCR & ~SPI_MODE_MASK) | (uint8_t)dataMode;
             }
-        }
-    }
-}
+        }    // namespace spi
+    }        // namespace avr
+}    // namespace core
 
 #endif

@@ -84,6 +84,19 @@ namespace core
 #endif
 
 //disable USART
+#ifdef UCSR0A
+                UCSR0A = 0;
+#endif
+#ifdef UCSR1A
+                UCSR1A = 0;
+#endif
+#ifdef UCSR2A
+                UCSR2A = 0;
+#endif
+#ifdef UCSR3A
+                UCSR3A = 0;
+#endif
+
 #ifdef UCSR0B
                 UCSR0B = 0;
 #endif
@@ -95,6 +108,19 @@ namespace core
 #endif
 #ifdef UCSR3B
                 UCSR3B = 0;
+#endif
+
+#ifdef UCSR0C
+                UCSR0C = 0;
+#endif
+#ifdef UCSR1C
+                UCSR1C = 0;
+#endif
+#ifdef UCSR2C
+                UCSR2C = 0;
+#endif
+#ifdef UCSR3C
+                UCSR3C = 0;
 #endif
 
 //disable I2C

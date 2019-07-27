@@ -34,64 +34,101 @@ namespace core
         RingBuffer()
         {}
 
-        void insert(T data)
-        {
-            buffer[head] = data;
-
-            if (full)
-                tail = (tail + 1) % bufferSize;
-
-            head = (head + 1) % bufferSize;
-
-            full = head == tail;
-        }
-
-        T remove()
-        {
-            if (isEmpty())
-                return 0;
-
-            //Read data and advance the tail (we now have a free space)
-            auto val = buffer[tail];
-            full = false;
-            tail = (tail + 1) % bufferSize;
-
-            return val;
-        }
-
-        void reset()
-        {
-            head = tail;
-            full = false;
-        }
-
-        bool isEmpty() const
-        {
-            return (!full && (head == tail));
-        }
-
         bool isFull() const
         {
             return full;
         }
 
+        bool isEmpty() const
+        {
+            bool value;
+
+#ifdef __AVR__
+            ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+#endif
+            {
+                value = (!full && (head == tail));
+            }
+
+            return value;
+        }
+
+        bool insert(T data)
+        {
+            if (isFull())
+                return false;
+
+           buffer[head] = data;
+
+#ifdef __AVR__
+            ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+#endif
+            {
+                if (full)
+                    tail = (tail + 1) % bufferSize;
+
+                head = (head + 1) % bufferSize;
+
+                full = head == tail;
+            }
+
+            return true;
+        }
+
+        bool remove(T& result)
+        {
+            if (isEmpty())
+                return false;
+
+#ifdef __AVR__
+            ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+#endif
+            {
+                //Read data and advance the tail (we now have a free space)
+                result = buffer[tail];
+                full = false;
+                tail = (tail + 1) % bufferSize;
+            }
+
+            return true;
+        }
+
+        void reset()
+        {
+#ifdef __AVR__
+            ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+#endif
+            {
+                head = 0;
+                tail = 0;
+                full = false;
+            }
+        }
+
         size_t count() const
         {
-            size_t count_ = bufferSize;
+            size_t count_;
 
-            if (!full)
+#ifdef __AVR__
+            ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+#endif
             {
-                if (head >= tail)
-                    count_ = head - tail;
-                else
-                    count_ = bufferSize + head - tail;
+                count_ = bufferSize;
+
+                if (!full)
+                {
+                    if (head >= tail)
+                        count_ = head - tail;
+                    else
+                        count_ = bufferSize + head - tail;
+                }
             }
 
             return count_;
         }
 
         private:
-        T            buffer[size];
+        T            buffer[size] = {};
         size_t       head = 0;
         size_t       tail = 0;
         const size_t bufferSize = size;

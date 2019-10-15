@@ -19,10 +19,28 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#pragma once
+#ifndef __CORE_STM32_ATOMIC
+#define __CORE_STM32_ATOMIC
 
-#ifdef __AVR__
-#define CORE_ARCH avr
-#elif defined __ARM__
-#define CORE_ARCH arm
+#include "cmsis_compiler.h"
+
+static __inline__ uint8_t disableInterruptsRetVal(void)
+{
+    __disable_irq();
+    return 1;
+}
+
+static __inline__ void restoreInterrupts(const uint32_t* __s)
+{
+    //if the interrupts have been enabled (PRIMASK returns 0), restore them
+    if (!*__s)
+        __enable_irq();
+}
+
+#define ATOMIC_SECTION                                                                            \
+    for (uint32_t primask_save __attribute__((__cleanup__(restoreInterrupts))) = __get_PRIMASK(), \
+                               condition = disableInterruptsRetVal();                             \
+         condition;                                                                               \
+         condition = 0)
+
 #endif

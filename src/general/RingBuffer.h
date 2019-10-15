@@ -24,6 +24,7 @@
 
 #include <inttypes.h>
 #include <stddef.h>
+#include "Atomic.h"
 
 namespace core
 {
@@ -43,9 +44,7 @@ namespace core
         {
             bool value;
 
-#ifdef __AVR__
-            ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
-#endif
+            ATOMIC_SECTION
             {
                 value = (!full && (head == tail));
             }
@@ -60,9 +59,7 @@ namespace core
 
            buffer[head] = data;
 
-#ifdef __AVR__
-            ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
-#endif
+            ATOMIC_SECTION
             {
                 if (full)
                     tail = (tail + 1) % bufferSize;
@@ -80,9 +77,7 @@ namespace core
             if (isEmpty())
                 return false;
 
-#ifdef __AVR__
-            ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
-#endif
+            ATOMIC_SECTION
             {
                 //Read data and advance the tail (we now have a free space)
                 result = buffer[tail];
@@ -95,9 +90,7 @@ namespace core
 
         void reset()
         {
-#ifdef __AVR__
-            ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
-#endif
+            ATOMIC_SECTION
             {
                 head = 0;
                 tail = 0;
@@ -109,9 +102,7 @@ namespace core
         {
             size_t count_;
 
-#ifdef __AVR__
-            ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
-#endif
+            ATOMIC_SECTION
             {
                 count_ = bufferSize;
 

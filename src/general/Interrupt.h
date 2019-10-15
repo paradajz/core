@@ -19,23 +19,15 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef __CORE_GENERAL_BIT_MANIPULATION
-#define __CORE_GENERAL_BIT_MANIPULATION
+#ifndef __CORE_GENERAL_INTERRUPT
+#define __CORE_GENERAL_INTERRUPT
 
-///
-/// \brief Helper macros for easier byte/bit manipulation.
-/// \defgroup coreGeneralBitManipulation Bit manipulation
-/// \ingroup coreGeneral
-/// @{
-
-#define BIT_READ(value, bit)             (((value) >> (bit)) & 0x01)
-#define BIT_SET(value, bit)              ((value) |= (1UL << (bit)))
-#define BIT_CLEAR(value, bit)            ((value) &= ~(1UL << (bit)))
-#define BIT_WRITE(value, bit, bitvalue)  ((bitvalue) ? BIT_SET(value, bit) : BIT_CLEAR(value, bit))
-#define BYTE_INVERT(value)               ((value) ^ 0xFF)
-#define BYTE_LOW(value)                  ((value) & 0xFF)
-#define BYTE_HIGH(value)                 (((value) >> 8) & 0xFF)
-
-/// @}
+#ifdef __AVR__
+#include "../arch/avr/Interrupt.h"
+#elif defined __STM32__
+#include "../arch/stm32/Interrupt.h"
+#else
+#include "../arch/stub/Interrupt.h"
+#endif
 
 #endif

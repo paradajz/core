@@ -24,9 +24,11 @@
 
 #include <inttypes.h>
 #ifdef __AVR__
-#include <util/atomic.h>
 #include <util/delay.h>
+#elif defined __STM32__
+#include "stm32f4xx_hal.h"
 #endif
+#include "Atomic.h"
 
 namespace core
 {
@@ -49,12 +51,14 @@ namespace core
         ///
         inline void waitMs(uint32_t ms)
         {
+#ifdef __AVR__
             while (ms--)
             {
-#ifdef __AVR__
                 _delay_ms(1);
-#endif
             }
+#elif defined __STM32__
+                HAL_Delay(ms);
+#endif
         }
 
         ///
@@ -66,9 +70,7 @@ namespace core
         {
             uint32_t _rTime_mS;
 
-#ifdef __AVR__
-            ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
-#endif
+            ATOMIC_SECTION
             {
                 _rTime_mS = detail::rTime_ms;
             }

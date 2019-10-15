@@ -19,28 +19,23 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef __CORE_AVR_MISC
-#define __CORE_AVR_MISC
+#ifndef __CORE_STM32_RESET
+#define __CORE_STM32_RESET
 
-#include <inttypes.h>
-#include <avr/pgmspace.h>
-#include "../Arch.h"
+#include "stm32f4xx_hal.h"
 
 namespace core
 {
-    namespace avr
+    namespace reset
     {
         ///
-        /// \brief Helper function for easier retrieval of far PGM address.
+        /// \brief Initiates software MCU reset.
         ///
-        inline uint32_t pgmGetFarAddress(uint32_t address)
+        inline void mcuReset()
         {
-            static uint32_t temp;
-            temp = address;
-            pgm_get_far_address(temp);
-            return temp;
-        };
-    }    // namespace avr
+            NVIC_SystemReset();
+        }
+    }    // namespace reset
 }    // namespace core
 
 #endif

@@ -78,6 +78,42 @@
 ///
 #define GET_WORD(lsb,msb)               (msb << 8 | lsb)
 
+///
+/// \brief Helper macros for easier byte/bit manipulation.
+/// \defgroup coreGeneralBitManipulation Bit manipulation
+/// \ingroup coreGeneral
+/// @{
+
+#define BIT_READ(value, bit)             (((value) >> (bit)) & 0x01)
+#define BIT_SET(value, bit)              ((value) |= (1UL << (bit)))
+#define BIT_CLEAR(value, bit)            ((value) &= ~(1UL << (bit)))
+#define BIT_WRITE(value, bit, bitvalue)  ((bitvalue) ? BIT_SET(value, bit) : BIT_CLEAR(value, bit))
+#define BYTE_INVERT(value)               ((value) ^ 0xFF)
+#define BYTE_LOW(value)                  ((value) & 0xFF)
+#define BYTE_HIGH(value)                 (((value) >> 8) & 0xFF)
+
+/// @}
+
+//on AVRs, it is common to place strings or other constant data in program memory
+//however, that concept doesn't exist on other platforms
+//in that case, allow compiling the AVR code by re-defining certain functions/macros
+#ifdef __AVR__
+#include <avr/pgmspace.h>
+#define STRING_PROGMEM_ARRAY(name)  const char* const name[] PROGMEM
+#define READ_PROGMEM_ARRAY(string)  (PGM_P)pgm_read_word(&(string))
+#define READ_PROGMEM_BYTE(address)  pgm_read_byte(&address)
+#define READ_PROGMEM_WORD(address)  pgm_read_word(&address)
+#else
+#define PGM_P const char*
+#define strcpy_P strcpy
+#define STRING_PROGMEM_ARRAY(name)  const char* name[]
+#define READ_PROGMEM_BYTE(address)  address
+#define READ_PROGMEM_WORD(address)  address
+#define PROGMEM
+#define READ_PROGMEM_ARRAY(string)  (const char*)((string))
+#endif
+
+#ifdef __cplusplus
 namespace core
 {
     namespace misc
@@ -138,5 +174,6 @@ namespace core
         }
     }    // namespace misc
 }    // namespace core
+#endif
 
 #endif

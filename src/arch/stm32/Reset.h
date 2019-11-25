@@ -22,7 +22,11 @@
 #ifndef __CORE_STM32_RESET
 #define __CORE_STM32_RESET
 
+#ifdef STM32F407xx
 #include "stm32f4xx_hal.h"
+#elif defined(STM32F031x6)
+#include "stm32f0xx_hal.h"
+#endif
 
 namespace core
 {

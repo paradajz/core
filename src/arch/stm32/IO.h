@@ -23,7 +23,12 @@
 #define __CORE_STM32_IO
 
 #include <inttypes.h>
+
+#ifdef STM32F407xx
 #include "stm32f4xx_hal.h"
+#elif defined(STM32F031x6)
+#include "stm32f0xx_hal.h"
+#endif
 
 ///
 /// \brief I/O macros and functions.
@@ -84,46 +89,98 @@ namespace core
 
 inline void CORE_IO_CLOCK_ENABLE(GPIO_TypeDef* port)
 {
+#ifdef GPIOA
     if (port == GPIOA)
         __HAL_RCC_GPIOA_CLK_ENABLE();
-    else if (port == GPIOB)
+#endif
+
+#ifdef GPIOB
+    if (port == GPIOB)
         __HAL_RCC_GPIOB_CLK_ENABLE();
-    else if (port == GPIOC)
+#endif
+
+#ifdef GPIOC
+    if (port == GPIOC)
         __HAL_RCC_GPIOC_CLK_ENABLE();
-    else if (port == GPIOD)
+#endif
+
+#ifdef GPIOD
+    if (port == GPIOD)
         __HAL_RCC_GPIOD_CLK_ENABLE();
-    else if (port == GPIOE)
+#endif
+
+#ifdef GPIOE
+    if (port == GPIOE)
         __HAL_RCC_GPIOE_CLK_ENABLE();
-    else if (port == GPIOF)
+#endif
+
+#ifdef GPIOF
+    if (port == GPIOF)
         __HAL_RCC_GPIOF_CLK_ENABLE();
-    else if (port == GPIOG)
+#endif
+
+#ifdef GPIOG
+    if (port == GPIOG)
         __HAL_RCC_GPIOG_CLK_ENABLE();
-    else if (port == GPIOH)
+#endif
+
+#ifdef GPIOH
+    if (port == GPIOH)
         __HAL_RCC_GPIOH_CLK_ENABLE();
-    else if (port == GPIOI)
+#endif
+
+#ifdef GPIOI
+    if (port == GPIOI)
         __HAL_RCC_GPIOI_CLK_ENABLE();
+#endif
 }
 
 inline void CORE_IO_CLOCK_DISABLE(GPIO_TypeDef* port)
 {
+#ifdef GPIOA
     if (port == GPIOA)
         __HAL_RCC_GPIOA_CLK_DISABLE();
-    else if (port == GPIOB)
+#endif
+
+#ifdef GPIOB
+    if (port == GPIOB)
         __HAL_RCC_GPIOB_CLK_DISABLE();
-    else if (port == GPIOC)
+#endif
+
+#ifdef GPIOC
+    if (port == GPIOC)
         __HAL_RCC_GPIOC_CLK_DISABLE();
-    else if (port == GPIOD)
+#endif
+
+#ifdef GPIOD
+    if (port == GPIOD)
         __HAL_RCC_GPIOD_CLK_DISABLE();
-    else if (port == GPIOE)
+#endif
+
+#ifdef GPIOE
+    if (port == GPIOE)
         __HAL_RCC_GPIOE_CLK_DISABLE();
-    else if (port == GPIOF)
+#endif
+
+#ifdef GPIOF
+    if (port == GPIOF)
         __HAL_RCC_GPIOF_CLK_DISABLE();
-    else if (port == GPIOG)
+#endif
+
+#ifdef GPIOG
+    if (port == GPIOG)
         __HAL_RCC_GPIOG_CLK_DISABLE();
-    else if (port == GPIOH)
+#endif
+
+#ifdef GPIOH
+    if (port == GPIOH)
         __HAL_RCC_GPIOH_CLK_DISABLE();
-    else if (port == GPIOI)
+#endif
+
+#ifdef GPIOI
+    if (port == GPIOI)
         __HAL_RCC_GPIOI_CLK_DISABLE();
+#endif
 }
 
 inline void CORE_IO_CONFIG(core::io::mcuPin_t pin)

@@ -26,7 +26,11 @@
 #ifdef __AVR__
 #include <util/delay.h>
 #elif defined __STM32__
+#ifdef STM32F407xx
 #include "stm32f4xx_hal.h"
+#elif defined(STM32F031x6)
+#include "stm32f0xx_hal.h"
+#endif
 #endif
 #include "Atomic.h"
 

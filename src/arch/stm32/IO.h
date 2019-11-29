@@ -41,12 +41,15 @@ namespace core
     {
         enum class pinMode_t : uint32_t
         {
-            input = 0x00000000U,        //Input Floating Mode
-            outputPP = 0x00000001U,     //Output Push Pull Mode
-            outputOD = 0x00000011U,     //Output Open Drain Mode
-            alternatePP = 0x00000002U,  //Alternate Function Push Pull Mode
-            alternateOD = 0x00000012U,  //Alternate Function Open Drain Mode
-            analog = 0x00000003U
+            input = 0x00000000U,            //Input Floating Mode
+            outputPP = 0x00000001U,         //Output Push Pull Mode
+            outputOD = 0x00000011U,         //Output Open Drain Mode
+            alternatePP = 0x00000002U,      //Alternate Function Push Pull Mode
+            alternateOD = 0x00000012U,      //Alternate Function Open Drain Mode
+            analog = 0x00000003U,
+            itRising = 0x10110000U,         //External Interrupt Mode with Rising edge trigger detection
+            itFalling = 0x10210000U,        //External Interrupt Mode with Falling edge trigger detection
+            itRisingFalling = 0x10310000U   //External Interrupt Mode with Rising/Falling edge trigger detection
         };
 
         enum class pullMode_t : uint32_t

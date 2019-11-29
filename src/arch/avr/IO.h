@@ -100,6 +100,14 @@ namespace core
 
 #define CORE_IO_SET_LOW(port, index)        ((port) &= ~(1 << (index)))
 #define CORE_IO_SET_HIGH(port, index)       ((port) |= (1 << (index)))
+#define CORE_IO_SET_STATE(port, index, state) do \
+{ \
+    if (state) \
+        CORE_IO_SET_HIGH(port, index); \
+    else \
+        CORE_IO_SET_LOW(port, index); \
+} while(0)
+
 #define CORE_IO_READ(port, index)           (((PIN(port)) >> (index)) & 0x01)
 
 ///

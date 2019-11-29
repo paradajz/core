@@ -197,9 +197,10 @@ inline void CORE_IO_CONFIG(core::io::mcuPin_t pin)
     HAL_GPIO_Init(pin.port, &gpioStruct);
 }
 
-#define CORE_IO_SET_LOW(port, index)   HAL_GPIO_WritePin(port, index, GPIO_PIN_RESET)
-#define CORE_IO_SET_HIGH(port, index)  HAL_GPIO_WritePin(port, index, GPIO_PIN_SET)
-#define CORE_IO_READ(port, index)      HAL_GPIO_ReadPin(port, index)
+#define CORE_IO_SET_LOW(port, index)            HAL_GPIO_WritePin(port, index, GPIO_PIN_RESET)
+#define CORE_IO_SET_HIGH(port, index)           HAL_GPIO_WritePin(port, index, GPIO_PIN_SET)
+#define CORE_IO_SET_STATE(port, index, state)   HAL_GPIO_WritePin(port, index, static_cast<GPIO_PinState>(state))
+#define CORE_IO_READ(port, index)               HAL_GPIO_ReadPin(port, index)
 
 ///
 /// \brief Convenience macro to easily create  mcuPin_t instances.

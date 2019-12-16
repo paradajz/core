@@ -1,3 +1,4 @@
+
 /*
     Copyright 2017-2019 Igor Petrovic
 
@@ -37,7 +38,14 @@ namespace core
 
         bool isFull() const
         {
-            return full;
+            bool value;
+
+            ATOMIC_SECTION
+            {
+                value = count_ >= bufferSize;
+            }
+
+            return value;
         }
 
         bool isEmpty() const
@@ -46,7 +54,7 @@ namespace core
 
             ATOMIC_SECTION
             {
-                value = (!full && (head == tail));
+                value = !count_;
             }
 
             return value;
@@ -57,16 +65,11 @@ namespace core
             if (isFull())
                 return false;
 
-           buffer[head] = data;
-
             ATOMIC_SECTION
             {
-                if (full)
-                    tail = (tail + 1) % bufferSize;
-
-                head = (head + 1) % bufferSize;
-
-                full = head == tail;
+                buffer[head] = data;
+                head         = (head + 1) % bufferSize;
+                count_++;
             }
 
             return true;
@@ -79,10 +82,9 @@ namespace core
 
             ATOMIC_SECTION
             {
-                //Read data and advance the tail (we now have a free space)
-                result = buffer[tail];
-                full = false;
-                tail = (tail + 1) % bufferSize;
+                size_t tail = (head + (bufferSize - count_)) % bufferSize;
+                result      = buffer[tail];
+                count_--;
             }
 
             return true;
@@ -92,38 +94,28 @@ namespace core
         {
             ATOMIC_SECTION
             {
-                head = 0;
-                tail = 0;
-                full = false;
+                head   = 0;
+                count_ = 0;
             }
         }
 
         size_t count() const
         {
-            size_t count_;
+            size_t retVal;
 
             ATOMIC_SECTION
             {
-                count_ = bufferSize;
-
-                if (!full)
-                {
-                    if (head >= tail)
-                        count_ = head - tail;
-                    else
-                        count_ = bufferSize + head - tail;
-                }
+                retVal = count_;
             }
 
-            return count_;
+            return retVal;
         }
 
         private:
         T            buffer[size] = {};
-        size_t       head = 0;
-        size_t       tail = 0;
-        const size_t bufferSize = size;
-        bool         full = false;
+        size_t       head         = 0;
+        const size_t bufferSize   = size;
+        size_t       count_       = 0;
     };
 }    // namespace core
 

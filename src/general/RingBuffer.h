@@ -90,6 +90,20 @@ namespace core
             return true;
         }
 
+        bool peek(T& result)
+        {
+            if (isEmpty())
+                return false;
+
+            ATOMIC_SECTION
+            {
+                size_t tail = (head + (bufferSize - count_)) % bufferSize;
+                result      = buffer[tail];
+            }
+
+            return true;
+        }
+
         void reset()
         {
             ATOMIC_SECTION

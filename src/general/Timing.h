@@ -41,10 +41,16 @@ namespace core
         namespace detail
         {
             ///
-            /// \brief Definition of variable holding current MCU run time.
+            /// \brief Definition of variable holding current MCU run time in milliseconds.
             /// Must be implemented externally in order to use core::timing::currentRunTimeMs() function correctly.
             ///
             extern volatile uint32_t rTime_ms;
+
+            ///
+            /// \brief Definition of variable holding current MCU run time in microseconds.
+            /// Must be implemented externally in order to use core::timing::currentRunTimeUs() function correctly.
+            ///
+            extern volatile uint32_t rTime_us;
         }    // namespace detail
 
         ///
@@ -80,6 +86,23 @@ namespace core
             }
 
             return _rTime_mS;
+        }
+
+        ///
+        /// \brief Returns amount of time MCU has been running in milliseconds.
+        /// Actual incrementation of rTime_ms must be done externally.
+        /// \returns Runtime in milliseconds.
+        ///
+        inline uint32_t currentRunTimeUs()
+        {
+            uint32_t _rTime_uS;
+
+            ATOMIC_SECTION
+            {
+                _rTime_uS = detail::rTime_us;
+            }
+
+            return _rTime_uS;
         }
     }    // namespace timing
 }    // namespace core

@@ -211,6 +211,7 @@ inline void CORE_IO_CONFIG(core::io::mcuPin_t pin)
 } while(0)
 
 #define CORE_IO_READ(port, index)               (port->IDR & index)
+#define CORE_IO_READ_PORT(port)                 (port->IDR)
 
 ///
 /// \brief Convenience macro to easily create  mcuPin_t instances.

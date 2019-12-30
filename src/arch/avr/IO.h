@@ -109,6 +109,7 @@ namespace core
 } while(0)
 
 #define CORE_IO_READ(port, index)           (((PIN(port)) >> (index)) & 0x01)
+#define CORE_IO_READ_PORT(port)             (PIN(port))
 
 ///
 /// \brief Convenience macro to easily create  mcuPin_t instances.

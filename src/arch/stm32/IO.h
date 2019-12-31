@@ -210,6 +210,8 @@ inline void CORE_IO_CONFIG(core::io::mcuPin_t pin)
         CORE_IO_SET_LOW(port, index); \
 } while(0)
 
+#define CORE_IO_SET_PORT_STATE(port, state)     (port->ODR = state)
+
 #define CORE_IO_READ(port, index)               (port->IDR & index)
 #define CORE_IO_READ_PORT(port)                 (port->IDR)
 

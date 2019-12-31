@@ -108,6 +108,8 @@ namespace core
         CORE_IO_SET_LOW(port, index); \
 } while(0)
 
+#define CORE_IO_SET_PORT_STATE(port, state) ((port) = (state))
+
 #define CORE_IO_READ(port, index)           (((PIN(port)) >> (index)) & 0x01)
 #define CORE_IO_READ_PORT(port)             (PIN(port))
 

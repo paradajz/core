@@ -90,6 +90,24 @@ namespace core
             return true;
         }
 
+        bool clearLast()
+        {
+            if (isEmpty())
+                return false;
+
+            ATOMIC_SECTION
+            {
+                if (!head)
+                    head = bufferSize - 1;
+                else
+                    head--;
+
+                count_--;
+            }
+
+            return true;
+        }
+
         bool peek(T& result)
         {
             if (isEmpty())

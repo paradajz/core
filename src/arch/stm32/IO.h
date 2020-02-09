@@ -210,6 +210,14 @@ inline void CORE_IO_CONFIG(core::io::mcuPin_t pin)
         CORE_IO_SET_LOW(port, index); \
 } while(0)
 
+#define CORE_IO_TOGGLE(port, pin) do \
+{ \
+    if ((port->ODR & pin) == pin) \
+        port->BSRR = static_cast<uint32_t>(pin) << 16U; \
+    else \
+        port->BSRR = pin; \
+} while(0)
+
 #define CORE_IO_SET_PORT_STATE(port, state)     (port->ODR = state)
 
 #define CORE_IO_READ(port, index)               (port->IDR & index)

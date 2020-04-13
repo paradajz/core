@@ -24,7 +24,7 @@
 
 #include <inttypes.h>
 
-#ifdef STM32F407xx
+#if defined(STM32F407xx) || defined(STM32F405xx)
 #include "stm32f4xx_hal.h"
 #elif defined(STM32F031x6)
 #include "stm32f0xx_hal.h"

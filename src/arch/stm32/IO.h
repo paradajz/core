@@ -226,7 +226,7 @@ inline void CORE_IO_CONFIG(core::io::mcuPin_t pin)
 ///
 /// \brief Convenience macro to easily create  mcuPin_t instances.
 ///
-#define CORE_IO_MCU_PIN_DEF(stmPort, stmPinIndex) { .port = &stmPort, .index = stmPinIndex }
+#define CORE_IO_MCU_PIN_DEF(stmPort, stmPinIndex) { .port = stmPort, .index = stmPinIndex }
 
 ///
 /// \brief Macros used to retrieve either port or pin from mcuPin_t structure.

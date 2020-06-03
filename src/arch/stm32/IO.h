@@ -200,6 +200,15 @@ inline void CORE_IO_CONFIG(core::io::mcuPin_t pin)
     HAL_GPIO_Init(pin.port, &gpioStruct);
 }
 
+///
+/// \brief Convenience macros for portable GPIO port/pin definitions across various toolchains.
+/// @{
+
+#define CORE_IO_PORT(port)        GPIO##port
+#define CORE_IO_PORT_INDEX(index) GPIO_PIN_##index
+
+/// @}
+
 #define CORE_IO_SET_LOW(port, index)            (port->BSRR = (uint32_t)index << 16U)
 #define CORE_IO_SET_HIGH(port, index)           (port->BSRR = index)
 #define CORE_IO_SET_STATE(port, index, state) do \

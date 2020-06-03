@@ -75,6 +75,15 @@ namespace core
 }    // namespace core
 
 ///
+/// \brief Convenience macros for portable GPIO port/pin definitions across various toolchains.
+/// @{
+
+#define CORE_IO_PORT(port)        PORT##port
+#define CORE_IO_PORT_INDEX(index) index
+
+/// @}
+
+///
 /// \brief Workaround to avoid using DDR and PIN registers.
 /// On most AVR models, DDR register is used to define pin direction within port (input or output),
 /// and PIN port is used to read state of pin within port. To avoid defining DDR, PORT and PIN register for each

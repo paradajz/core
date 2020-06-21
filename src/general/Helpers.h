@@ -172,6 +172,22 @@ namespace core
 
             return 10;    //max size
         }
+
+        inline uint8_t maskToIndex(uint32_t mask)
+        {
+            if (!mask)
+                return 0;
+
+            for (size_t i = 0; i < 32; i++)
+            {
+                if ((mask >> i) & 0x01)
+                {
+                    return i;
+                }
+            }
+
+            return 0;
+        }
     }    // namespace misc
 }    // namespace core
 #endif

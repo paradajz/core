@@ -36,14 +36,17 @@ namespace core
             output
         };
 
+        using gpioPinPort_t  = volatile uint8_t*;
+        using gpioPinIndex_t = uint8_t;
+
         ///
         /// \brief Structure used to define single MCU pin.
         ///
         typedef struct
         {
-            volatile uint8_t* port;
-            uint8_t           index;
-            pinMode_t         mode;
+            gpioPinPort_t  port;
+            gpioPinIndex_t index;
+            pinMode_t      mode;
         } mcuPin_t;
 
         ///

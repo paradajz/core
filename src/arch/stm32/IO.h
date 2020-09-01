@@ -53,6 +53,9 @@ namespace core
             itRisingFalling = 0x10310000U   //External Interrupt Mode with Rising/Falling edge trigger detection
         };
 
+        using gpioPinPort_t  = GPIO_TypeDef*;
+        using gpioPinIndex_t = uint16_t;
+
         enum class pullMode_t : uint32_t
         {
             none = 0x00000000U,
@@ -73,12 +76,12 @@ namespace core
         ///
         typedef struct
         {
-            GPIO_TypeDef* port;
-            uint16_t      index;
-            pinMode_t     mode;
-            pullMode_t    pull;
-            gpioSpeed_t   speed;
-            uint32_t      alternate;
+            gpioPinPort_t  port;
+            gpioPinIndex_t index;
+            pinMode_t      mode;
+            pullMode_t     pull;
+            gpioSpeed_t    speed;
+            uint32_t       alternate;
         } mcuPin_t;
 
         ///

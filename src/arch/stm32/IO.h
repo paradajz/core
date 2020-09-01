@@ -23,6 +23,7 @@
 #define __CORE_STM32_IO
 
 #include <inttypes.h>
+#include "../../general/Helpers.h"
 
 #if defined(STM32F407xx) || defined(STM32F405xx)
 #include "stm32f4xx_hal.h"
@@ -218,6 +219,24 @@ inline void CORE_IO_CONFIG(core::io::mcuPin_t pin)
     else \
         CORE_IO_SET_LOW(port, index); \
 } while(0)
+
+inline void CORE_IO_SET_STATE_MULTIPLE(GPIO_TypeDef* port, uint16_t bitsToChange, uint16_t value)
+{
+    uint32_t bssrValue = 0;
+
+    for (size_t i = 0; i < 16; i++)
+    {
+        if (!BIT_READ(bitsToChange, i))
+            continue;
+
+        if (BIT_READ(value, i))
+            BIT_SET(bssrValue, i);
+        else
+            BIT_SET(bssrValue, i + 16);
+    }
+
+    port->BSRR = bssrValue;
+}
 
 #define CORE_IO_TOGGLE(port, pin) do \
 { \

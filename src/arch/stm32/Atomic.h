@@ -24,23 +24,12 @@
 
 #include "cmsis_compiler.h"
 
-static __inline__ uint8_t disableInterruptsRetVal(void)
+static inline void __int_restore_irq(const uint32_t* __primask)
 {
-    __disable_irq();
-    return 1;
-}
-
-static __inline__ void restoreInterrupts(const uint32_t* __s)
-{
-    //if the interrupts have been enabled (PRIMASK returns 0), restore them
-    if (!*__s)
+    if (!*__primask)
         __enable_irq();
 }
 
-#define ATOMIC_SECTION                                                                            \
-    for (uint32_t primask_save __attribute__((__cleanup__(restoreInterrupts))) = __get_PRIMASK(), \
-                               condition = disableInterruptsRetVal();                             \
-         condition;                                                                               \
-         condition = 0)
+#define ATOMIC_SECTION for (uint32_t primask_save __attribute__((unused, __cleanup__(__int_restore_irq))) = __get_PRIMASK(), __ToDo = 1; __ToDo; __ToDo = 0)
 
 #endif

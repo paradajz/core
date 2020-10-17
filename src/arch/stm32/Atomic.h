@@ -1,5 +1,5 @@
 /*
-    Copyright 2017-2019 Igor Petrovic
+    Copyright 2017-2020 Igor Petrovic
 
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the "Software"),
@@ -24,12 +24,23 @@
 
 #include "cmsis_compiler.h"
 
-static inline void __int_restore_irq(const uint32_t* __primask)
+static inline uint32_t disableInterruptsRetVal(void)
 {
-    if (!*__primask)
+    __disable_irq();
+    return 1;
+}
+
+static inline void restoreInterrupts(const uint32_t* __s)
+{
+    //if the interrupts have been enabled (PRIMASK returns 0), restore them
+    if (!*__s)
         __enable_irq();
 }
 
-#define ATOMIC_SECTION for (uint32_t primask_save __attribute__((unused, __cleanup__(__int_restore_irq))) = __get_PRIMASK(), __ToDo = 1; __ToDo; __ToDo = 0)
+#define ATOMIC_SECTION                                                                                    \
+    for (uint32_t primask_save __attribute__((unused, __cleanup__(restoreInterrupts))) = __get_PRIMASK(), \
+                               condition = disableInterruptsRetVal();                                     \
+         condition;                                                                                       \
+         condition = 0)
 
 #endif

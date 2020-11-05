@@ -110,32 +110,45 @@ namespace core
             DDR(port) |= (1 << (index));        \
     } while (0)
 
-#define CORE_IO_SET_LOW(port, index)        ((port) &= ~(1 << (index)))
-#define CORE_IO_SET_HIGH(port, index)       ((port) |= (1 << (index)))
-#define CORE_IO_SET_STATE(port, index, state) do \
-{ \
-    if (state) \
-        CORE_IO_SET_HIGH(port, index); \
-    else \
-        CORE_IO_SET_LOW(port, index); \
-} while(0)
+#define CORE_IO_SET_LOW(port, index)  ((port) &= ~(1 << (index)))
+#define CORE_IO_SET_HIGH(port, index) ((port) |= (1 << (index)))
+#define CORE_IO_SET_STATE(port, index, state) \
+    do                                        \
+    {                                         \
+        if (state)                            \
+            CORE_IO_SET_HIGH(port, index);    \
+        else                                  \
+            CORE_IO_SET_LOW(port, index);     \
+    } while (0)
 
 #define CORE_IO_SET_PORT_STATE(port, state) ((port) = (state))
 
-#define CORE_IO_READ(port, index)           (((PIN(port)) >> (index)) & 0x01)
-#define CORE_IO_READ_PORT(port)             (PIN(port))
+#define CORE_IO_READ(port, index) (((PIN(port)) >> (index)) & 0x01)
+#define CORE_IO_READ_PORT(port)   (PIN(port))
+
+#define CORE_IO_TOGGLE(port, pin)        \
+    do                                   \
+    {                                    \
+        if (CORE_IO_READ(port, pin))     \
+            CORE_IO_SET_LOW(port, pin);  \
+        else                             \
+            CORE_IO_SET_HIGH(port, pin); \
+    } while (0)
 
 ///
 /// \brief Convenience macro to easily create  mcuPin_t instances.
 ///
-#define CORE_IO_MCU_PIN_DEF(avrPort, avrPinIndex) { .port = &avrPort, .index = avrPinIndex }
+#define CORE_IO_MCU_PIN_DEF(avrPort, avrPinIndex) \
+    {                                             \
+        .port = &avrPort, .index = avrPinIndex    \
+    }
 
 ///
 /// \brief Macros used to retrieve either pin port or pin index from mcuPin_t structure.
 /// @{
 
-#define CORE_IO_MCU_PIN_PORT(mcuPin)        *mcuPin.port
-#define CORE_IO_MCU_PIN_INDEX(mcuPin)       mcuPin.index
+#define CORE_IO_MCU_PIN_PORT(mcuPin)  *mcuPin.port
+#define CORE_IO_MCU_PIN_INDEX(mcuPin) mcuPin.index
 /// @}
 
 #endif

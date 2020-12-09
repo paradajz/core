@@ -24,6 +24,7 @@
 
 #include <stdlib.h>
 #include <inttypes.h>
+#include <string.h>
 
 ///
 /// \brief Calculates size of array.

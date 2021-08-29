@@ -137,6 +137,24 @@
 #define USART_UDRE_vect_0 USART_UDRE_vect
 #endif
 
+#ifdef USBS0
+#define USBS_0 USBS0
+#elif defined USBS1
+#define USBS_0 USBS1
+#endif
+
+#ifdef UPM00
+#define UPM0_0 UPM00
+#elif defined UPM10
+#define UPM0_0 UPM10
+#endif
+
+#ifdef UPM01
+#define UPM1_0 UPM01
+#elif defined UPM11
+#define UPM1_0 UPM11
+#endif
+
 #endif
 
 /// @}
@@ -281,6 +299,30 @@
 
 #if defined USART1_UDRE_vect
 #define USART_UDRE_vect_1 USART1_UDRE_vect
+#endif
+
+#ifdef USBS0
+#define USBS_0 USBS0
+#endif
+
+#ifdef USBS1
+#define USBS_1 USBS1
+#endif
+
+#ifdef UPM00
+#define UPM0_0 UPM00
+#endif
+
+#ifdef UPM01
+#define UPM1_0 UPM01
+#endif
+
+#ifdef UPM10
+#define UPM0_1 UPM10
+#endif
+
+#ifdef UPM11
+#define UPM1_1 UPM11
 #endif
 
 #endif

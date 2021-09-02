@@ -24,27 +24,52 @@
 
 #include <inttypes.h>
 
-#define CORE_IO_CONFIG(port, pin, mode)
-#define CORE_IO_SET_LOW(port, pin)
-#define CORE_IO_SET_HIGH(port, pin)
-#define CORE_IO_READ(port, pin) 0
-
 namespace core
 {
     namespace io
     {
-        ///
-        /// \brief Structure used to define single MCU pin.
-        ///
+        using gpioPinPort_t  = volatile uint8_t*;
+        using gpioPinIndex_t = uint8_t;
+
+        enum class pinMode_t : uint32_t
+        {
+            input,
+            output,
+            outputPP,
+            outputOD,
+            alternatePP,
+            alternateOD,
+            analog,
+            itRising,
+            itFalling,
+            itRisingFalling
+        };
+
+        enum class pullMode_t : uint32_t
+        {
+            none,
+            up,
+            down
+        };
+
+        enum class gpioSpeed_t : uint32_t
+        {
+            low,
+            medium,
+            high,
+            veryHigh
+        };
+
         typedef struct
         {
-            volatile uint16_t port;
-            uint16_t          pin;
+            gpioPinPort_t  port;
+            gpioPinIndex_t index;
+            pinMode_t      mode;
+            pullMode_t     pull;
+            gpioSpeed_t    speed;
+            uint32_t       alternate;
         } mcuPin_t;
 
-        ///
-        /// \brief Structure used to define single PWM channel.
-        ///
         typedef struct
         {
             volatile uint8_t* timer;
@@ -57,5 +82,16 @@ namespace core
         void pwmOn(pwmChannel_t pwm, uint16_t intensity) __attribute__((weak));
     }    // namespace io
 }    // namespace core
+
+#define CORE_IO_CONFIG(port, pin, mode)
+#define CORE_IO_SET_LOW(port, pin)
+#define CORE_IO_SET_HIGH(port, pin)
+#define CORE_IO_READ(port, pin)   0
+#define CORE_IO_PORT(port)        0
+#define CORE_IO_PORT_INDEX(index) index
+#define CORE_IO_MCU_PIN_DEF(...) \
+    {                            \
+        .port = 0, .index = 0    \
+    }
 
 #endif

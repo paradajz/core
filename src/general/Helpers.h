@@ -19,8 +19,8 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef __CORE_GENERAL_MISC
-#define __CORE_GENERAL_MISC
+#ifndef __CORE_GENERAL_HELPERS
+#define __CORE_GENERAL_HELPERS
 
 #include <stdlib.h>
 #include <inttypes.h>

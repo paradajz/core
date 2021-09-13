@@ -19,30 +19,15 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef __CORE_AVR_MISC
-#define __CORE_AVR_MISC
+#ifndef __CORE_GENERAL_MISC
+#define __CORE_GENERAL_MISC
 
-#include <inttypes.h>
-#include <avr/pgmspace.h>
-#include <avr/io.h>
-
-#define CORE_NOP() _NOP()
-
-namespace core
-{
-    namespace misc
-    {
-        ///
-        /// \brief Helper function for easier retrieval of far PGM address.
-        ///
-        inline uint32_t pgmGetFarAddress(uint32_t address)
-        {
-            static uint32_t temp;
-            temp = address;
-            pgm_get_far_address(temp);
-            return temp;
-        };
-    }    // namespace misc
-}    // namespace core
+#ifdef __AVR__
+#include "../arch/avr/Misc.h"
+#elif defined __STM32__
+#include "../arch/stm32/Misc.h"
+#else
+#include "../arch/stub/Misc.h"
+#endif
 
 #endif

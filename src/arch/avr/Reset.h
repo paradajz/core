@@ -123,6 +123,8 @@ namespace core
 //disable I2C
 #ifdef TWCR
             TWCR = 0;
+            TWSR = 0;
+            TWCR = 0;
 #endif
 
 //write low to all pins

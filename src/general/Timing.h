@@ -31,6 +31,8 @@
 #elif defined(STM32F031x6)
 #include "stm32f0xx_hal.h"
 #endif
+#elif defined __NRF52__
+#include "nrf_delay.h"
 #endif
 #include "Atomic.h"
 
@@ -67,7 +69,9 @@ namespace core
                 _delay_ms(1);
             }
 #elif defined __STM32__
-                HAL_Delay(ms);
+            HAL_Delay(ms);
+#elif defined __NRF52__
+            nrf_delay_ms(ms);
 #endif
         }
 

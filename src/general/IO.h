@@ -26,6 +26,8 @@
 #include "../arch/avr/IO.h"
 #elif defined __STM32__
 #include "../arch/arm/stm32/IO.h"
+#elif defined __NRF52__
+#include "../arch/arm/nrf52/IO.h"
 #else
 #include "../arch/stub/IO.h"
 #endif

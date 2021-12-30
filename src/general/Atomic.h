@@ -24,8 +24,8 @@
 
 #ifdef __AVR__
 #include "../arch/avr/Atomic.h"
-#elif defined __STM32__
-#include "../arch/stm32/Atomic.h"
+#elif defined __ARM__
+#include "../arch/arm/common/Atomic.h"
 #else
 #include "../arch/stub/Atomic.h"
 #endif

@@ -24,8 +24,8 @@
 
 #ifdef __AVR__
 #include "../arch/avr/Misc.h"
-#elif defined __STM32__
-#include "../arch/stm32/Misc.h"
+#elif defined __ARM__
+#include "../arch/arm/common/Misc.h"
 #else
 #include "../arch/stub/Misc.h"
 #endif

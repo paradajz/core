@@ -24,8 +24,8 @@
 
 #ifdef __AVR__
 #include "../arch/avr/Interrupt.h"
-#elif defined __STM32__
-#include "../arch/stm32/Interrupt.h"
+#elif defined __ARM__
+#include "../arch/arm/common/Interrupt.h"
 #else
 #include "../arch/stub/Interrupt.h"
 #endif

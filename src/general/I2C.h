@@ -24,8 +24,6 @@
 
 #ifdef __AVR__
 #include "../arch/avr/I2C.h"
-#elif defined __STM32__
-#include "../arch/stm32/I2C.h"
 #else
 #include "../arch/stub/I2C.h"
 #endif

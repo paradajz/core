@@ -24,8 +24,8 @@
 
 #ifdef __AVR__
 #include "../arch/avr/Reset.h"
-#elif defined __STM32__
-#include "../arch/stm32/Reset.h"
+#elif defined __ARM__
+#include "../arch/arm/common/Reset.h"
 #else
 #include "../arch/stub/Reset.h"
 #endif

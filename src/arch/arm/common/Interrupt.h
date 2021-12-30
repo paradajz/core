@@ -19,20 +19,12 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef __CORE_STM32_ADC
-#define __CORE_STM32_ADC
+#ifndef __CORE_ARM_COMMON_INTERRUPT
+#define __CORE_ARM_COMMON_INTERRUPT
 
-#include <inttypes.h>
+#include "cmsis_compiler.h"
 
-namespace core
-{
-    namespace adc
-    {
-        //user should provide these functions due to much more complex ADC peripheral than on AVR
-        void     startConversion() __attribute__((weak));
-        void     setChannel(uint32_t adcChannel) __attribute__((weak));
-        uint16_t read() __attribute__((weak));
-    }    // namespace adc
-}    // namespace core
+#define ENABLE_INTERRUPTS()  __enable_irq();
+#define DISABLE_INTERRUPTS() __disable_irq();
 
 #endif

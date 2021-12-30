@@ -24,8 +24,8 @@
 
 #ifdef __AVR__
 #include "../arch/avr/ADC.h"
-#elif defined __STM32__
-#include "../arch/stm32/ADC.h"
+#elif defined __ARM__
+#include "../arch/arm/common/ADC.h"
 #else
 #include "../arch/stub/ADC.h"
 #endif

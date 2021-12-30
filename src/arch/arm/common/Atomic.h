@@ -19,8 +19,8 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef __CORE_STM32_ATOMIC
-#define __CORE_STM32_ATOMIC
+#ifndef __CORE_ARM_COMMON_ATOMIC
+#define __CORE_ARM_COMMON_ATOMIC
 
 #include "cmsis_compiler.h"
 
@@ -32,15 +32,15 @@ static inline uint32_t disableInterruptsRetVal(void)
 
 static inline void restoreInterrupts(const uint32_t* __s)
 {
-    //if the interrupts have been enabled (PRIMASK returns 0), restore them
+    // if the interrupts have been enabled (PRIMASK returns 0), restore them
     if (!*__s)
         __enable_irq();
 }
 
-#define ATOMIC_SECTION                                                                                    \
-    for (uint32_t primask_save __attribute__((unused, __cleanup__(restoreInterrupts))) = __get_PRIMASK(), \
-                               condition = disableInterruptsRetVal();                                     \
-         condition;                                                                                       \
+#define ATOMIC_SECTION                                                                                              \
+    for (uint32_t primask_save __attribute__((unused, __cleanup__(restoreInterrupts))) = __get_PRIMASK(),           \
+                                                      condition                        = disableInterruptsRetVal(); \
+         condition;                                                                                                 \
          condition = 0)
 
 #endif

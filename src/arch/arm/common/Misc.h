@@ -19,8 +19,8 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef __CORE_STM32_MISC
-#define __CORE_STM32_MISC
+#ifndef __CORE_ARM_COMMON_MISC
+#define __CORE_ARM_COMMON_MISC
 
 #define CORE_NOP() __asm__ __volatile__("nop")
 

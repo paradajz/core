@@ -19,13 +19,13 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef __CORE_STM32_RESET
-#define __CORE_STM32_RESET
+#ifndef __CORE_ARM_COMMON_RESET
+#define __CORE_ARM_COMMON_RESET
 
-#if defined(STM32F407xx) || defined(STM32F405xx) || defined(STM32F401xE) || defined(STM32F411xE)
-#include "stm32f4xx_hal.h"
-#elif defined(STM32F031x6)
-#include "stm32f0xx_hal.h"
+#if defined(CORE_ARM_M4)
+#include "core_cm4.h"
+#else
+#error Invalid ARM core specified or not specified at all
 #endif
 
 namespace core

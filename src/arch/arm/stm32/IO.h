@@ -23,7 +23,7 @@
 #define __CORE_STM32_IO
 
 #include <inttypes.h>
-#include "../../general/Helpers.h"
+#include "../../../general/Helpers.h"
 
 #if defined(STM32F407xx) || defined(STM32F405xx) || defined(STM32F401xE) || defined(STM32F411xE)
 #include "stm32f4xx_hal.h"
@@ -42,15 +42,15 @@ namespace core
     {
         enum class pinMode_t : uint32_t
         {
-            input = 0x00000000U,            //Input Floating Mode
-            outputPP = 0x00000001U,         //Output Push Pull Mode
-            outputOD = 0x00000011U,         //Output Open Drain Mode
-            alternatePP = 0x00000002U,      //Alternate Function Push Pull Mode
-            alternateOD = 0x00000012U,      //Alternate Function Open Drain Mode
-            analog = 0x00000003U,
-            itRising = 0x10110000U,         //External Interrupt Mode with Rising edge trigger detection
-            itFalling = 0x10210000U,        //External Interrupt Mode with Falling edge trigger detection
-            itRisingFalling = 0x10310000U   //External Interrupt Mode with Rising/Falling edge trigger detection
+            input           = 0x00000000U,    // Input Floating Mode
+            outputPP        = 0x00000001U,    // Output Push Pull Mode
+            outputOD        = 0x00000011U,    // Output Open Drain Mode
+            alternatePP     = 0x00000002U,    // Alternate Function Push Pull Mode
+            alternateOD     = 0x00000012U,    // Alternate Function Open Drain Mode
+            analog          = 0x00000003U,
+            itRising        = 0x10110000U,    // External Interrupt Mode with Rising edge trigger detection
+            itFalling       = 0x10210000U,    // External Interrupt Mode with Falling edge trigger detection
+            itRisingFalling = 0x10310000U     // External Interrupt Mode with Rising/Falling edge trigger detection
         };
 
         using gpioPinPort_t  = GPIO_TypeDef*;
@@ -59,16 +59,16 @@ namespace core
         enum class pullMode_t : uint32_t
         {
             none = 0x00000000U,
-            up = 0x00000001U,
+            up   = 0x00000001U,
             down = 0x00000002U
         };
 
         enum class gpioSpeed_t : uint32_t
         {
-            low = 0x00000000U,          //IO works at 2 MHz
-            medium = 0x00000001U,       //range 12,5 MHz to 50 MHz
-            high = 0x00000002U,         //range 25 MHz to 100 MHz
-            veryHigh = 0x00000003U      //range 50 MHz to 200 MHz
+            low      = 0x00000000U,    // IO works at 2 MHz
+            medium   = 0x00000001U,    // range 12,5 MHz to 50 MHz
+            high     = 0x00000002U,    // range 25 MHz to 100 MHz
+            veryHigh = 0x00000003U     // range 50 MHz to 200 MHz
         };
 
         ///
@@ -83,14 +83,6 @@ namespace core
             gpioSpeed_t    speed;
             uint32_t       alternate;
         } mcuPin_t;
-
-        ///
-        /// \brief Structure used to define single PWM channel.
-        ///
-        typedef struct
-        {
-            uint16_t channel;
-        } pwmChannel_t;
     }    // namespace io
 }    // namespace core
 
@@ -195,11 +187,11 @@ inline void CORE_IO_CONFIG(core::io::mcuPin_t pin)
     CORE_IO_CLOCK_ENABLE(pin.port);
 
     GPIO_InitTypeDef gpioStruct = {};
-    gpioStruct.Pin = pin.index;
-    gpioStruct.Mode = static_cast<uint32_t>(pin.mode);
-    gpioStruct.Pull = static_cast<uint32_t>(pin.pull);
-    gpioStruct.Speed = static_cast<uint32_t>(pin.speed);
-    gpioStruct.Alternate = pin.alternate;
+    gpioStruct.Pin              = pin.index;
+    gpioStruct.Mode             = static_cast<uint32_t>(pin.mode);
+    gpioStruct.Pull             = static_cast<uint32_t>(pin.pull);
+    gpioStruct.Speed            = static_cast<uint32_t>(pin.speed);
+    gpioStruct.Alternate        = pin.alternate;
 
     HAL_GPIO_Init(pin.port, &gpioStruct);
 }
@@ -213,15 +205,16 @@ inline void CORE_IO_CONFIG(core::io::mcuPin_t pin)
 
 /// @}
 
-#define CORE_IO_SET_LOW(port, index)            (port->BSRR = (uint32_t)index << 16U)
-#define CORE_IO_SET_HIGH(port, index)           (port->BSRR = index)
-#define CORE_IO_SET_STATE(port, index, state) do \
-{ \
-    if (state) \
-        CORE_IO_SET_HIGH(port, index); \
-    else \
-        CORE_IO_SET_LOW(port, index); \
-} while(0)
+#define CORE_IO_SET_LOW(port, index)  (port->BSRR = (uint32_t)index << 16U)
+#define CORE_IO_SET_HIGH(port, index) (port->BSRR = index)
+#define CORE_IO_SET_STATE(port, index, state) \
+    do                                        \
+    {                                         \
+        if (state)                            \
+            CORE_IO_SET_HIGH(port, index);    \
+        else                                  \
+            CORE_IO_SET_LOW(port, index);     \
+    } while (0)
 
 inline void CORE_IO_SET_STATE_MULTIPLE(GPIO_TypeDef* port, uint16_t bitsToChange, uint16_t value)
 {
@@ -241,30 +234,34 @@ inline void CORE_IO_SET_STATE_MULTIPLE(GPIO_TypeDef* port, uint16_t bitsToChange
     port->BSRR = bssrValue;
 }
 
-#define CORE_IO_TOGGLE(port, pin) do \
-{ \
-    if ((port->ODR & pin) == pin) \
-        port->BSRR = static_cast<uint32_t>(pin) << 16U; \
-    else \
-        port->BSRR = pin; \
-} while(0)
+#define CORE_IO_TOGGLE(port, pin)                           \
+    do                                                      \
+    {                                                       \
+        if ((port->ODR & pin) == pin)                       \
+            port->BSRR = static_cast<uint32_t>(pin) << 16U; \
+        else                                                \
+            port->BSRR = pin;                               \
+    } while (0)
 
-#define CORE_IO_SET_PORT_STATE(port, state)     (port->ODR = state)
+#define CORE_IO_SET_PORT_STATE(port, state) (port->ODR = state)
 
-#define CORE_IO_READ(port, index)               (port->IDR & index)
-#define CORE_IO_READ_PORT(port)                 (port->IDR)
+#define CORE_IO_READ(port, index) (port->IDR & index)
+#define CORE_IO_READ_PORT(port)   (port->IDR)
 
 ///
 /// \brief Convenience macro to easily create  mcuPin_t instances.
 ///
-#define CORE_IO_MCU_PIN_DEF(stmPort, stmPinIndex) { .port = stmPort, .index = stmPinIndex }
+#define CORE_IO_MCU_PIN_DEF(_port, _index) \
+    {                                      \
+        .port = _port, .index = _index     \
+    }
 
 ///
 /// \brief Macros used to retrieve either port or pin from mcuPin_t structure.
 /// @{
 
-#define CORE_IO_MCU_PIN_PORT(mcuPin)    mcuPin.port
-#define CORE_IO_MCU_PIN_INDEX(mcuPin)   mcuPin.index
+#define CORE_IO_MCU_PIN_PORT(mcuPin)  mcuPin.port
+#define CORE_IO_MCU_PIN_INDEX(mcuPin) mcuPin.index
 
 /// @}
 

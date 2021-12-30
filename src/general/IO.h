@@ -25,7 +25,7 @@
 #ifdef __AVR__
 #include "../arch/avr/IO.h"
 #elif defined __STM32__
-#include "../arch/stm32/IO.h"
+#include "../arch/arm/stm32/IO.h"
 #else
 #include "../arch/stub/IO.h"
 #endif

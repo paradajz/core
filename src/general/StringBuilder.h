@@ -78,7 +78,7 @@ namespace core
             size_t strSize = strlen(buffer);
 
             if ((strSize + size) >= (bufferSize - 1))
-                return false;    //overflow
+                return false;    // overflow
 
             for (size_t i = 0; i < size; i++)
                 buffer[strSize + i] = ' ';

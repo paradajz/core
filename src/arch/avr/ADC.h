@@ -33,17 +33,17 @@ namespace core
         enum class prescaler_t : uint8_t
         {
             p128 = 128,
-            p64 = 64,
-            p32 = 32,
-            p16 = 16
+            p64  = 64,
+            p32  = 32,
+            p16  = 16
         };
 
         enum class vRef_t : uint8_t
         {
-            aref = 0,
-            avcc = 1,
+            aref    = 0,
+            avcc    = 1,
             int2v56 = 2,
-            int1v1 = 3
+            int1v1  = 3
         };
 
         ///
@@ -77,12 +77,11 @@ namespace core
         ///
         inline void setup(conf_t configuration)
         {
-            ADMUX = 0x00;
+            ADMUX  = 0x00;
             ADCSRA = 0x0;
 
             switch (configuration.prescaler)
             {
-            //setup adc prescaler
             case prescaler_t::p128:
                 ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
                 break;
@@ -100,7 +99,7 @@ namespace core
                 break;
 
             default:
-                //128 as an fallback
+                // 128 as an fallback
                 ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
                 break;
             }
@@ -108,7 +107,7 @@ namespace core
             switch (configuration.vref)
             {
             case vRef_t::aref:
-                //nothing, this is default setting
+                // nothing, this is default setting
                 break;
 
             case vRef_t::avcc:
@@ -124,11 +123,11 @@ namespace core
                 break;
 
             default:
-                //nothing
+                // nothing
                 break;
             }
 
-            //enable ADC
+            // enable ADC
             ADCSRA |= (1 << ADEN);
         }
 
@@ -139,10 +138,10 @@ namespace core
         ///
         inline uint16_t read()
         {
-            //single conversion mode
+            // single conversion mode
             ADCSRA |= (1 << ADSC);
 
-            //wait until ADC conversion is complete
+            // wait until ADC conversion is complete
             while (ADCSRA & (1 << ADSC))
                 ;
 
@@ -188,7 +187,7 @@ namespace core
             }
 #endif
 
-            //select ADC channel with safety mask
+            // select ADC channel with safety mask
             ADMUX = (ADMUX & 0xF0) | (adcChannel & 0x0F);
         }
     }    // namespace adc

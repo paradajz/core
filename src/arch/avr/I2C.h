@@ -41,43 +41,43 @@ namespace core
 
         inline void enable()
         {
-            //no prescaling
+            // no prescaling
             TWSR = 0x00;
 
-            //use formula as per datasheet
+            // use formula as per datasheet
             TWBR = ((F_CPU / I2C_CLOCK) - 16) / 2;
 
-            //enable i2c interface
+            // enable i2c interface
             TWCR = (1 << TWEN);
         }
 
         inline void disable(bool force)
         {
-            //disable i2c interface
+            // disable i2c interface
             TWCR = 0;
         }
 
         inline bool startComm(uint8_t address, transferType_t type)
         {
-            //enable interrupt flag
-            //enable start bit (set to master)
+            // enable interrupt flag
+            // enable start bit (set to master)
             TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
 
-            //wait for interrupt flag to be cleared
+            // wait for interrupt flag to be cleared
             while (!(TWCR & (1 << TWINT)))
                 ;
 
-            //check the value of TWI status register
+            // check the value of TWI status register
             uint8_t status = TW_STATUS & 0xF8;
 
             if ((status != TW_START) && (status != TW_REP_START))
                 return false;
 
-            //send device address
+            // send device address
             TWDR = address + (uint8_t)type;
             TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWSTA);
 
-            //wait for interrupt flag to be cleared
+            // wait for interrupt flag to be cleared
             while (!(TWCR & (1 << TWINT)))
                 ;
 
@@ -93,7 +93,7 @@ namespace core
         {
             if (TWCR & (1 << TWEN))
             {
-                //wait until all ongoing transmissions are stopped
+                // wait until all ongoing transmissions are stopped
                 TWCR |= (1 << TWSTO);
                 while (TWCR & (1 << TWSTO))
                     ;
@@ -105,7 +105,7 @@ namespace core
             TWDR = data;
             TWCR = (1 << TWINT) | (1 << TWEN);
 
-            //wait for interrupt flag to be cleared
+            // wait for interrupt flag to be cleared
             while (!(TWCR & (1 << TWINT)))
                 ;
 

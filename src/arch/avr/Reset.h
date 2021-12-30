@@ -40,27 +40,27 @@ namespace core
         ///
         inline void disablePeripherals()
         {
-            //disable eeprom
+            // disable eeprom
             EECR = 0;
 
-            //disable analog comparator
+            // disable analog comparator
             ACSR = 0;
 
-            //disable SPI
+            // disable SPI
             SPCR = 0;
 
-            //disable external interrupts
+            // disable external interrupts
             EIMSK = 0;
 
-            //disable pin change interrupts
+            // disable pin change interrupts
             PCICR = 0;
 
-//disable ADC
+// disable ADC
 #ifdef ADCSRA
             ADCSRA = 0;
 #endif
 
-//disable timers
+// disable timers
 #ifdef TIMSK0
             TIMSK0 = 0;
 #endif
@@ -80,7 +80,7 @@ namespace core
             TIMSK5 = 0;
 #endif
 
-//disable USART
+// disable USART
 #ifdef UCSR0A
             UCSR0A = 0;
 #endif
@@ -120,14 +120,14 @@ namespace core
             UCSR3C = 0;
 #endif
 
-//disable I2C
+// disable I2C
 #ifdef TWCR
             TWCR = 0;
             TWSR = 0;
             TWCR = 0;
 #endif
 
-//write low to all pins
+// write low to all pins
 #ifdef PORTA
             PORTA = 0;
 #endif
@@ -162,7 +162,7 @@ namespace core
             PORTL = 0;
 #endif
 
-//set all pins to inputs
+// set all pins to inputs
 #ifdef DDRA
             DDRA = 0;
 #endif
@@ -198,8 +198,8 @@ namespace core
 #endif
 
 #ifdef USBCON
-            //detach USB connection
-            UDCON  |=  (1 << DETACH);
+            // detach USB connection
+            UDCON |= (1 << DETACH);
 #endif
         }
 
@@ -209,7 +209,7 @@ namespace core
         inline void mcuReset()
         {
             cli();
-            //stop watchdog timer, if running
+            // stop watchdog timer, if running
             MCUSR &= ~(1 << WDFR);
             WDTCSR |= (1 << WDCE);
             WDTCSR = 0;

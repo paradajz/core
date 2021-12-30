@@ -45,5 +45,5 @@ namespace core
 
             return crc;
         }
-    }
-}
+    }    // namespace crc
+}    // namespace core

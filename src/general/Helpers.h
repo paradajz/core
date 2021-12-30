@@ -31,14 +31,14 @@
 /// @param [in] x   Array for which size is being calculated.
 /// \returns Array size in bytes.
 ///
-#define ARRAY_SIZE(x)                   (sizeof((x)) / sizeof((x)[0]))
+#define ARRAY_SIZE(x) (sizeof((x)) / sizeof((x)[0]))
 
 ///
 /// \brief Calculates size of char array.
 /// @param [in] x   Array for which size is being calculated.
 /// \returns Array size in bytes.
 ///
-#define ARRAY_SIZE_CHAR(x)              (sizeof(x) / sizeof(x[0]) -1)
+#define ARRAY_SIZE_CHAR(x) (sizeof(x) / sizeof(x[0]) - 1)
 
 ///
 /// \brief Constrains input value to defined range.
@@ -46,14 +46,14 @@
 /// @param [in] low     Lowest possible value.
 /// @param [in] high    Largest possible value.
 ///
-#define CONSTRAIN(input, low, high)     ((input) < (low) ? (low) : ((input) > (high) ? (high) : (input)))
+#define CONSTRAIN(input, low, high) ((input) < (low) ? (low) : ((input) > (high) ? (high) : (input)))
 
 ///
 /// \brief Definitions for active pin/signal logic.
 /// @{
 
-#define ACTIVE_HIGH                     1
-#define ACTIVE_LOW                      0
+#define ACTIVE_HIGH 1
+#define ACTIVE_LOW  0
 
 /// @}
 
@@ -62,14 +62,14 @@
 /// @param [in] value   Single word.
 /// \returns LSB from given word.
 ///
-#define LSB_WORD(value)                 (value & 0xFF)
+#define LSB_WORD(value) (value & 0xFF)
 
 ///
 /// \brief Used to retrieve most significant byte in a single word (2 bytes).
 /// @param [in] value   Single word.
 /// \returns MSB from given word.
 ///
-#define MSB_WORD(value)                 (value >> 8 & 0xFF)
+#define MSB_WORD(value) (value >> 8 & 0xFF)
 
 ///
 /// \brief Used to construct word from given most and least significant byte.
@@ -77,7 +77,7 @@
 /// @param [in] msb MSB in a word to construct.
 /// \returns Word from given LSB and MSB.
 ///
-#define GET_WORD(lsb,msb)               (msb << 8 | lsb)
+#define GET_WORD(lsb, msb) (msb << 8 | lsb)
 
 ///
 /// \brief Helper macros for easier byte/bit manipulation.
@@ -85,33 +85,33 @@
 /// \ingroup coreGeneral
 /// @{
 
-#define BIT_READ(value, bit)             (((value) >> (bit)) & 0x01)
-#define BIT_SET(value, bit)              ((value) |= (1UL << (bit)))
-#define BIT_CLEAR(value, bit)            ((value) &= ~(1UL << (bit)))
-#define BIT_WRITE(value, bit, bitvalue)  ((bitvalue) ? BIT_SET(value, bit) : BIT_CLEAR(value, bit))
-#define BYTE_INVERT(value)               ((value) ^ 0xFF)
-#define BYTE_LOW(value)                  ((value) & 0xFF)
-#define BYTE_HIGH(value)                 (((value) >> 8) & 0xFF)
+#define BIT_READ(value, bit)            (((value) >> (bit)) & 0x01)
+#define BIT_SET(value, bit)             ((value) |= (1UL << (bit)))
+#define BIT_CLEAR(value, bit)           ((value) &= ~(1UL << (bit)))
+#define BIT_WRITE(value, bit, bitvalue) ((bitvalue) ? BIT_SET(value, bit) : BIT_CLEAR(value, bit))
+#define BYTE_INVERT(value)              ((value) ^ 0xFF)
+#define BYTE_LOW(value)                 ((value)&(0xFF))
+#define BYTE_HIGH(value)                (((value) >> 8) & 0xFF)
 
 /// @}
 
-//on AVRs, it is common to place strings or other constant data in program memory
-//however, that concept doesn't exist on other platforms
-//in that case, allow compiling the AVR code by re-defining certain functions/macros
+// on AVRs, it is common to place strings or other constant data in program memory
+// however, that concept doesn't exist on other platforms
+// in that case, allow compiling the AVR code by re-defining certain functions/macros
 #ifdef __AVR__
 #include <avr/pgmspace.h>
-#define STRING_PROGMEM_ARRAY(name)  const char* const name[] PROGMEM
-#define READ_PROGMEM_ARRAY(string)  (PGM_P)pgm_read_word(&(string))
-#define READ_PROGMEM_BYTE(address)  pgm_read_byte(&address)
-#define READ_PROGMEM_WORD(address)  pgm_read_word(&address)
+#define STRING_PROGMEM_ARRAY(name) const char* const name[] PROGMEM
+#define READ_PROGMEM_ARRAY(string) (PGM_P) pgm_read_word(&(string))
+#define READ_PROGMEM_BYTE(address) pgm_read_byte(&address)
+#define READ_PROGMEM_WORD(address) pgm_read_word(&address)
 #else
-#define PGM_P const char*
-#define strcpy_P strcpy
-#define STRING_PROGMEM_ARRAY(name)  const char* name[]
-#define READ_PROGMEM_BYTE(address)  address
-#define READ_PROGMEM_WORD(address)  address
+#define PGM_P                      const char*
+#define strcpy_P                   strcpy
+#define STRING_PROGMEM_ARRAY(name) const char* name[]
+#define READ_PROGMEM_BYTE(address) address
+#define READ_PROGMEM_WORD(address) address
 #define PROGMEM
-#define READ_PROGMEM_ARRAY(string)  (const char*)((string))
+#define READ_PROGMEM_ARRAY(string) (const char*)((string))
 #endif
 
 #ifdef __cplusplus
@@ -125,15 +125,15 @@ namespace core
         template<typename T>
         inline T mapRange(T x, T in_min, T in_max, T out_min, T out_max)
         {
-            //don't bother with mapping in this case
+            // don't bother with mapping in this case
             if ((in_min == out_min) && (in_max == out_max))
                 return x;
 
-            //smaller input range to larger output range
+            // smaller input range to larger output range
             if ((in_max - in_min) > (out_max - out_min))
                 return (x - in_min) * (out_max - out_min + 1) / (in_max - in_min + 1) + out_min;
 
-            //larger input range to smaller output range
+            // larger input range to smaller output range
             return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
         };
 
@@ -144,7 +144,7 @@ namespace core
         ///
         inline uint8_t getNumberOfDigits(int32_t number)
         {
-            //make sure negative numbers are processed correctly
+            // make sure negative numbers are processed correctly
             number = abs(number);
 
             if (number < 10)
@@ -171,7 +171,7 @@ namespace core
             if (number < 1000000000)
                 return 9;
 
-            return 10;    //max size
+            return 10;    // max size
         }
 
         inline uint8_t maskToIndex(uint32_t mask)

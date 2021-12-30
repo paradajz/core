@@ -31,17 +31,17 @@ namespace core
         enum class prescaler_t : uint8_t
         {
             p128 = 128,
-            p64 = 64,
-            p32 = 32,
-            p16 = 16
+            p64  = 64,
+            p32  = 32,
+            p16  = 16
         };
 
         enum class vRef_t : uint8_t
         {
-            aref = 0,
-            avcc = 1,
+            aref    = 0,
+            avcc    = 1,
             int2v56 = 2,
-            int1v1 = 3
+            int1v1  = 3
         };
 
         ///

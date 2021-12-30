@@ -24,7 +24,7 @@
 
 #include <avr/interrupt.h>
 
-#define ENABLE_INTERRUPTS()     sei()
-#define DISABLE_INTERRUPTS()    cli()
+#define ENABLE_INTERRUPTS()  sei()
+#define DISABLE_INTERRUPTS() cli()
 
 #endif

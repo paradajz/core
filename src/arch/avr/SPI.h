@@ -26,9 +26,9 @@
 #include <util/atomic.h>
 #include "IO.h"
 
-#define SPI_CLOCK_MASK      0x03
-#define SPI_2XCLOCK_MASK    0x01
-#define SPI_MODE_MASK       0x0C
+#define SPI_CLOCK_MASK   0x03
+#define SPI_2XCLOCK_MASK 0x01
+#define SPI_MODE_MASK    0x0C
 
 namespace core
 {
@@ -44,12 +44,12 @@ namespace core
 
         enum class clockDiv_t : uint8_t
         {
-            div2 = 0x04,
-            div4 = 0x00,
-            div8 = 0x05,
-            div16 = 0x01,
-            div32 = 0x06,
-            div64 = 0x02,
+            div2   = 0x04,
+            div4   = 0x00,
+            div8   = 0x05,
+            div16  = 0x01,
+            div32  = 0x06,
+            div64  = 0x02,
             div128 = 0x03
         };
 
@@ -63,16 +63,16 @@ namespace core
         {
             ATOMIC_SECTION
             {
-                //SS, at90usb1286
+                // SS
                 setOutput(PORTB, 0);
                 setHigh(PORTB, 0);
 
                 SPCR |= (1 << MSTR);
                 SPCR |= (1 << SPE);
 
-                //clock, at90usb1286
+                // clock
                 setOutput(PORTB, 1);
-                //mosi, at90usb1286
+                // mosi
                 setOutput(PORTB, 2);
             }
         }

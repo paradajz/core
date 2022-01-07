@@ -90,7 +90,7 @@
 #define BIT_CLEAR(value, bit)           ((value) &= ~(1UL << (bit)))
 #define BIT_WRITE(value, bit, bitvalue) ((bitvalue) ? BIT_SET(value, bit) : BIT_CLEAR(value, bit))
 #define BYTE_INVERT(value)              ((value) ^ 0xFF)
-#define BYTE_LOW(value)                 ((value)&(0xFF))
+#define BYTE_LOW(value)                 ((value) & (0xFF))
 #define BYTE_HIGH(value)                (((value) >> 8) & 0xFF)
 
 /// @}

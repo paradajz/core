@@ -28,8 +28,8 @@ namespace core
 {
     namespace io
     {
-        using gpioPinPort_t  = volatile uint8_t*;
-        using gpioPinIndex_t = uint8_t;
+        using pinPort_t  = uint8_t;
+        using pinIndex_t = uint8_t;
 
         enum class pinMode_t : uint32_t
         {
@@ -62,12 +62,12 @@ namespace core
 
         typedef struct
         {
-            gpioPinPort_t  port;
-            gpioPinIndex_t index;
-            pinMode_t      mode;
-            pullMode_t     pull;
-            gpioSpeed_t    speed;
-            uint32_t       alternate;
+            pinPort_t   port;
+            pinIndex_t  index;
+            pinMode_t   mode;
+            pullMode_t  pull;
+            gpioSpeed_t speed;
+            uint32_t    alternate;
         } mcuPin_t;
 
         typedef struct
@@ -83,15 +83,26 @@ namespace core
     }    // namespace io
 }    // namespace core
 
-#define CORE_IO_CONFIG(port, pin, mode)
-#define CORE_IO_SET_LOW(port, pin)
-#define CORE_IO_SET_HIGH(port, pin)
-#define CORE_IO_READ(port, pin)   0
-#define CORE_IO_PORT(port)        0
-#define CORE_IO_PORT_INDEX(index) index
-#define CORE_IO_MCU_PIN_DEF(...) \
-    {                            \
-        .port = 0, .index = 0    \
+#define CORE_IO_CONFIG(port, index, mode)
+#define CORE_IO_SET_LOW(port, index)
+#define CORE_IO_SET_HIGH(port, index)
+#define CORE_IO_SET_STATE(port, index, state)
+#define CORE_IO_SET_PORT_STATE(port, state)
+#define CORE_IO_READ(port, index) 0
+#define CORE_IO_READ_PORT(port)   0
+#define CORE_IO_TOGGLE(port, pin)
+#define CORE_IO_PIN_PORT_DEF(port) 0
+#define CORE_IO_PIN_INDEX_DEF(index)
+#define CORE_IO_PIN_PORT_VAR(port)       0
+#define CORE_IO_PIN_INDEX_VAR(index)     0
+#define CORE_IO_PIN_PORT_VAR_GET(port)   0
+#define CORE_IO_PIN_INDEX_VAR_GET(index) 0
+#define CORE_IO_MCU_PIN_VAR(_port, _index)     \
+    {                                          \
+        .port  = CORE_IO_PIN_PORT_VAR(_port),  \
+        .index = CORE_IO_PIN_INDEX_VAR(_index) \
     }
+#define CORE_IO_MCU_PIN_VAR_PORT_GET(mcuPin) 0
+#define CORE_IO_MCU_PIN_VAR_PIN_GET(mcuPin)  0
 
 #endif

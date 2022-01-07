@@ -53,8 +53,8 @@ namespace core
             itRisingFalling = 0x10310000U     // External Interrupt Mode with Rising/Falling edge trigger detection
         };
 
-        using gpioPinPort_t  = GPIO_TypeDef*;
-        using gpioPinIndex_t = uint16_t;
+        using pinPort_t  = GPIO_TypeDef*;
+        using pinIndex_t = uint16_t;
 
         enum class pullMode_t : uint32_t
         {
@@ -76,12 +76,12 @@ namespace core
         ///
         typedef struct
         {
-            gpioPinPort_t  port;
-            gpioPinIndex_t index;
-            pinMode_t      mode;
-            pullMode_t     pull;
-            gpioSpeed_t    speed;
-            uint32_t       alternate;
+            pinPort_t   port;
+            pinIndex_t  index;
+            pinMode_t   mode;
+            pullMode_t  pull;
+            gpioSpeed_t speed;
+            uint32_t    alternate;
         } mcuPin_t;
     }    // namespace io
 }    // namespace core
@@ -196,15 +196,6 @@ inline void CORE_IO_CONFIG(core::io::mcuPin_t pin)
     HAL_GPIO_Init(pin.port, &gpioStruct);
 }
 
-///
-/// \brief Convenience macros for portable GPIO port/pin definitions across various toolchains.
-/// @{
-
-#define CORE_IO_PORT(port)        GPIO##port
-#define CORE_IO_PORT_INDEX(index) GPIO_PIN_##index
-
-/// @}
-
 #define CORE_IO_SET_LOW(port, index)  (port->BSRR = (uint32_t)index << 16U)
 #define CORE_IO_SET_HIGH(port, index) (port->BSRR = index)
 #define CORE_IO_SET_STATE(port, index, state) \
@@ -215,6 +206,8 @@ inline void CORE_IO_CONFIG(core::io::mcuPin_t pin)
         else                                  \
             CORE_IO_SET_LOW(port, index);     \
     } while (0)
+
+#define CORE_IO_SET_PORT_STATE(port, state) (port->ODR = state)
 
 inline void CORE_IO_SET_STATE_MULTIPLE(GPIO_TypeDef* port, uint16_t bitsToChange, uint16_t value)
 {
@@ -234,6 +227,9 @@ inline void CORE_IO_SET_STATE_MULTIPLE(GPIO_TypeDef* port, uint16_t bitsToChange
     port->BSRR = bssrValue;
 }
 
+#define CORE_IO_READ(port, index) (port->IDR & index)
+#define CORE_IO_READ_PORT(port)   (port->IDR)
+
 #define CORE_IO_TOGGLE(port, pin)                           \
     do                                                      \
     {                                                       \
@@ -243,25 +239,50 @@ inline void CORE_IO_SET_STATE_MULTIPLE(GPIO_TypeDef* port, uint16_t bitsToChange
             port->BSRR = pin;                               \
     } while (0)
 
-#define CORE_IO_SET_PORT_STATE(port, state) (port->ODR = state)
+///
+/// \brief Convenience macros for portable GPIO port/pin definitions across various toolchains.
+/// @{
 
-#define CORE_IO_READ(port, index) (port->IDR & index)
-#define CORE_IO_READ_PORT(port)   (port->IDR)
+#define CORE_IO_PIN_PORT_DEF(port)   (GPIO##port)
+#define CORE_IO_PIN_INDEX_DEF(index) (GPIO_PIN_##index)
+
+/// @}
 
 ///
-/// \brief Convenience macro to easily create  mcuPin_t instances.
+/// \brief Convenience macro used to create pinPort_t variable.
 ///
-#define CORE_IO_MCU_PIN_DEF(_port, _index) \
-    {                                      \
-        .port = _port, .index = _index     \
+#define CORE_IO_PIN_PORT_VAR(port) (port)
+
+///
+/// \brief Convenience macro used to create pinIndex_t variable.
+///
+#define CORE_IO_PIN_INDEX_VAR(index) (index)
+
+///
+/// \brief Convenience macro used to retrieve port from pinPort_t variable.
+///
+#define CORE_IO_PIN_PORT_VAR_GET(port) (port)
+
+///
+/// \brief Convenience macro used to retrieve pin index from pinIndex_t variable.
+///
+#define CORE_IO_PIN_INDEX_VAR_GET(index) (index)
+
+///
+/// \brief Convenience macro used to create mcuPin_t structure.
+///
+#define CORE_IO_MCU_PIN_VAR(_port, _index)     \
+    {                                          \
+        .port  = CORE_IO_PIN_PORT_VAR(_port),  \
+        .index = CORE_IO_PIN_INDEX_VAR(_index) \
     }
 
 ///
-/// \brief Macros used to retrieve either port or pin from mcuPin_t structure.
+/// \brief Macros used to retrieve either pin port or pin index from mcuPin_t structure.
 /// @{
 
-#define CORE_IO_MCU_PIN_PORT(mcuPin)  mcuPin.port
-#define CORE_IO_MCU_PIN_INDEX(mcuPin) mcuPin.index
+#define CORE_IO_MCU_PIN_VAR_PORT_GET(mcuPin) CORE_IO_PIN_PORT_VAR_GET(mcuPin.port)
+#define CORE_IO_MCU_PIN_VAR_PIN_GET(mcuPin)  CORE_IO_PIN_INDEX_VAR_GET(mcuPin.index)
 
 /// @}
 

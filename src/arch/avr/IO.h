@@ -36,17 +36,17 @@ namespace core
             output
         };
 
-        using gpioPinPort_t  = volatile uint8_t*;
-        using gpioPinIndex_t = uint8_t;
+        using pinPort_t  = volatile uint8_t*;
+        using pinIndex_t = uint8_t;
 
         ///
         /// \brief Structure used to define single MCU pin.
         ///
         typedef struct
         {
-            gpioPinPort_t  port;
-            gpioPinIndex_t index;
-            pinMode_t      mode;
+            pinPort_t  port;
+            pinIndex_t index;
+            pinMode_t  mode;
         } mcuPin_t;
 
         ///
@@ -76,15 +76,6 @@ namespace core
         }
     }    // namespace io
 }    // namespace core
-
-///
-/// \brief Convenience macros for portable GPIO port/pin definitions across various toolchains.
-/// @{
-
-#define CORE_IO_PORT(port)        PORT##port
-#define CORE_IO_PORT_INDEX(index) index
-
-/// @}
 
 ///
 /// \brief Workaround to avoid using DDR and PIN registers.
@@ -136,19 +127,50 @@ namespace core
     } while (0)
 
 ///
-/// \brief Convenience macro to easily create  mcuPin_t instances.
+/// \brief Convenience macros for portable GPIO port/pin definitions across various toolchains.
+/// @{
+
+#define CORE_IO_PIN_PORT_DEF(port)   (PORT##port)
+#define CORE_IO_PIN_INDEX_DEF(index) (index)
+
+/// @}
+
 ///
-#define CORE_IO_MCU_PIN_DEF(avrPort, avrPinIndex) \
-    {                                             \
-        .port = &avrPort, .index = avrPinIndex    \
+/// \brief Convenience macro used to create pinPort_t variable.
+///
+#define CORE_IO_PIN_PORT_VAR(port) (&port)
+
+///
+/// \brief Convenience macro used to create pinIndex_t variable.
+///
+#define CORE_IO_PIN_INDEX_VAR(index) (index)
+
+///
+/// \brief Convenience macro used to retrieve port from pinPort_t variable.
+///
+#define CORE_IO_PIN_PORT_VAR_GET(port) (*port)
+
+///
+/// \brief Convenience macro used to retrieve pin index from pinIndex_t variable.
+///
+#define CORE_IO_PIN_INDEX_VAR_GET(index) (index)
+
+///
+/// \brief Convenience macro used to create mcuPin_t structure.
+///
+#define CORE_IO_MCU_PIN_VAR(_port, _index)     \
+    {                                          \
+        .port  = CORE_IO_PIN_PORT_VAR(_port),  \
+        .index = CORE_IO_PIN_INDEX_VAR(_index) \
     }
 
 ///
 /// \brief Macros used to retrieve either pin port or pin index from mcuPin_t structure.
 /// @{
 
-#define CORE_IO_MCU_PIN_PORT(mcuPin)  *mcuPin.port
-#define CORE_IO_MCU_PIN_INDEX(mcuPin) mcuPin.index
+#define CORE_IO_MCU_PIN_VAR_PORT_GET(mcuPin) CORE_IO_PIN_PORT_VAR_GET(mcuPin.port)
+#define CORE_IO_MCU_PIN_VAR_PIN_GET(mcuPin)  CORE_IO_PIN_INDEX_VAR_GET(mcuPin.index)
+
 /// @}
 
 #endif

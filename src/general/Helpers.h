@@ -174,20 +174,16 @@ namespace core
             return 10;    // max size
         }
 
-        inline uint8_t maskToIndex(uint32_t mask)
+        constexpr uint8_t maskToIndex(uint32_t mask)
         {
-            if (!mask)
-                return 0;
+            uint8_t index = 0;
 
-            for (size_t i = 0; i < 32; i++)
+            while (mask >>= 1)
             {
-                if ((mask >> i) & 0x01)
-                {
-                    return i;
-                }
+                index++;
             }
 
-            return 0;
+            return index;
         }
     }    // namespace misc
 }    // namespace core

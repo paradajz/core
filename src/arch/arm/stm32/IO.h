@@ -25,7 +25,7 @@
 #include <inttypes.h>
 #include "../../../general/Helpers.h"
 
-#if defined(STM32F407xx) || defined(STM32F405xx) || defined(STM32F401xE) || defined(STM32F411xE)
+#if defined(STM32F407xx) || defined(STM32F405xx) || defined(STM32F401xE) || defined(STM32F401xC) || defined(STM32F411xE)
 #include "stm32f4xx_hal.h"
 #elif defined(STM32F031x6)
 #include "stm32f0xx_hal.h"

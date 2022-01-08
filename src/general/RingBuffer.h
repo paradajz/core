@@ -32,45 +32,46 @@ namespace core
     template<typename T, size_t size>
     class RingBuffer
     {
+        static_assert(size && !(size & (size - 1)), "Ring buffer size must be a power of two.");
+
         public:
         RingBuffer()
         {}
 
-        bool isFull() const
+        size_t count() const
         {
-            bool value;
+            size_t result = 0;
 
             ATOMIC_SECTION
             {
-                value = count_ >= bufferSize;
+                if (head >= tail)
+                    result = head - tail;
+                else
+                    result = bufferSize + head - tail;
             }
 
-            return value;
+            return result;
         }
 
         bool isEmpty() const
         {
-            bool value;
+            return head == tail;
+        }
 
-            ATOMIC_SECTION
-            {
-                value = !count_;
-            }
-
-            return value;
+        bool isFull() const
+        {
+            return count() == (bufferSize - 1);
         }
 
         bool insert(T data)
         {
-            if (isFull())
+            size_t next = (head + 1) & (bufferSize - 1);
+
+            if (tail == next)
                 return false;
 
-            ATOMIC_SECTION
-            {
-                buffer[head] = data;
-                head         = (head + 1) % bufferSize;
-                count_++;
-            }
+            buffer[next] = data;
+            head         = next;
 
             return true;
         }
@@ -80,74 +81,27 @@ namespace core
             if (isEmpty())
                 return false;
 
-            ATOMIC_SECTION
-            {
-                size_t tail = (head + (bufferSize - count_)) % bufferSize;
-                result      = buffer[tail];
-                count_--;
-            }
+            size_t next = tail + 1;
 
-            return true;
-        }
+            if (next >= bufferSize)
+                next = 0;
 
-        bool clearLast()
-        {
-            if (isEmpty())
-                return false;
-
-            ATOMIC_SECTION
-            {
-                if (!head)
-                    head = bufferSize - 1;
-                else
-                    head--;
-
-                count_--;
-            }
-
-            return true;
-        }
-
-        bool peek(T& result)
-        {
-            if (isEmpty())
-                return false;
-
-            ATOMIC_SECTION
-            {
-                size_t tail = (head + (bufferSize - count_)) % bufferSize;
-                result      = buffer[tail];
-            }
+            result = buffer[next];
+            tail   = next;
 
             return true;
         }
 
         void reset()
         {
-            ATOMIC_SECTION
-            {
-                head   = 0;
-                count_ = 0;
-            }
-        }
-
-        size_t count() const
-        {
-            size_t retVal;
-
-            ATOMIC_SECTION
-            {
-                retVal = count_;
-            }
-
-            return retVal;
+            head = tail;
         }
 
         private:
-        T            buffer[size] = {};
-        size_t       head         = 0;
-        const size_t bufferSize   = size;
-        size_t       count_       = 0;
+        volatile T      buffer[size] = {};
+        volatile size_t head         = 0;
+        volatile size_t tail         = 0;
+        const size_t    bufferSize   = size;
     };
 }    // namespace core
 

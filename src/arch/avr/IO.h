@@ -48,32 +48,6 @@ namespace core
             pinIndex_t index;
             pinMode_t  mode;
         } mcuPin_t;
-
-        ///
-        /// \brief Structure used to define single PWM channel.
-        ///
-        typedef struct
-        {
-            volatile uint8_t* controlRegister;
-            volatile uint8_t* compareValueL;
-            volatile uint8_t* compareValueH;
-            uint8_t           compareOutMode;
-        } pwmChannel_t;
-
-        inline void pwmOff(pwmChannel_t pwm)
-        {
-            *pwm.controlRegister &= ~pwm.compareOutMode;
-        }
-
-        inline void pwmOn(pwmChannel_t pwm, uint16_t intensity)
-        {
-            *pwm.compareValueL = intensity & 0xFF;
-
-            if (pwm.compareValueH != nullptr)
-                *pwm.compareValueH = (intensity >> 8) & 0xFF;
-
-            *pwm.controlRegister |= pwm.compareOutMode;
-        }
     }    // namespace io
 }    // namespace core
 

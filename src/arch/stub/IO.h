@@ -70,16 +70,6 @@ namespace core
             uint32_t    alternate;
         } mcuPin_t;
 
-        typedef struct
-        {
-            volatile uint8_t* timer;
-            volatile uint8_t* compareL;
-            volatile uint8_t* compareH;
-            uint8_t           channel;
-        } pwmChannel_t;
-
-        void pwmOff(pwmChannel_t pwm) __attribute__((weak));
-        void pwmOn(pwmChannel_t pwm, uint16_t intensity) __attribute__((weak));
     }    // namespace io
 }    // namespace core
 

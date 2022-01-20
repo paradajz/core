@@ -75,7 +75,7 @@ namespace core
     }    // namespace io
 }    // namespace core
 
-inline void CORE_IO_CONFIG(core::io::mcuPin_t pin)
+inline void CORE_IO_INIT(core::io::mcuPin_t pin)
 {
     uint32_t strength;
     uint32_t direction    = NRF_GPIO_PIN_DIR_INPUT;

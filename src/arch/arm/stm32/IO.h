@@ -53,8 +53,9 @@ namespace core
             itRisingFalling = 0x10310000U     // External Interrupt Mode with Rising/Falling edge trigger detection
         };
 
-        using pinPort_t  = GPIO_TypeDef*;
-        using pinIndex_t = uint16_t;
+        using pinPort_t   = uint32_t;
+        using pinIndex_t  = uint16_t;
+        using portWidth_t = pinIndex_t;
 
         enum class pullMode_t : uint32_t
         {
@@ -86,118 +87,12 @@ namespace core
     }    // namespace io
 }    // namespace core
 
-inline void CORE_IO_CLOCK_ENABLE(GPIO_TypeDef* port)
-{
-#ifdef GPIOA
-    if (port == GPIOA)
-        __HAL_RCC_GPIOA_CLK_ENABLE();
-#endif
-
-#ifdef GPIOB
-    if (port == GPIOB)
-        __HAL_RCC_GPIOB_CLK_ENABLE();
-#endif
-
-#ifdef GPIOC
-    if (port == GPIOC)
-        __HAL_RCC_GPIOC_CLK_ENABLE();
-#endif
-
-#ifdef GPIOD
-    if (port == GPIOD)
-        __HAL_RCC_GPIOD_CLK_ENABLE();
-#endif
-
-#ifdef GPIOE
-    if (port == GPIOE)
-        __HAL_RCC_GPIOE_CLK_ENABLE();
-#endif
-
-#ifdef GPIOF
-    if (port == GPIOF)
-        __HAL_RCC_GPIOF_CLK_ENABLE();
-#endif
-
-#ifdef GPIOG
-    if (port == GPIOG)
-        __HAL_RCC_GPIOG_CLK_ENABLE();
-#endif
-
-#ifdef GPIOH
-    if (port == GPIOH)
-        __HAL_RCC_GPIOH_CLK_ENABLE();
-#endif
-
-#ifdef GPIOI
-    if (port == GPIOI)
-        __HAL_RCC_GPIOI_CLK_ENABLE();
-#endif
-}
-
-inline void CORE_IO_CLOCK_DISABLE(GPIO_TypeDef* port)
-{
-#ifdef GPIOA
-    if (port == GPIOA)
-        __HAL_RCC_GPIOA_CLK_DISABLE();
-#endif
-
-#ifdef GPIOB
-    if (port == GPIOB)
-        __HAL_RCC_GPIOB_CLK_DISABLE();
-#endif
-
-#ifdef GPIOC
-    if (port == GPIOC)
-        __HAL_RCC_GPIOC_CLK_DISABLE();
-#endif
-
-#ifdef GPIOD
-    if (port == GPIOD)
-        __HAL_RCC_GPIOD_CLK_DISABLE();
-#endif
-
-#ifdef GPIOE
-    if (port == GPIOE)
-        __HAL_RCC_GPIOE_CLK_DISABLE();
-#endif
-
-#ifdef GPIOF
-    if (port == GPIOF)
-        __HAL_RCC_GPIOF_CLK_DISABLE();
-#endif
-
-#ifdef GPIOG
-    if (port == GPIOG)
-        __HAL_RCC_GPIOG_CLK_DISABLE();
-#endif
-
-#ifdef GPIOH
-    if (port == GPIOH)
-        __HAL_RCC_GPIOH_CLK_DISABLE();
-#endif
-
-#ifdef GPIOI
-    if (port == GPIOI)
-        __HAL_RCC_GPIOI_CLK_DISABLE();
-#endif
-}
-
-inline void CORE_IO_CONFIG(core::io::mcuPin_t pin)
-{
-    CORE_IO_CLOCK_ENABLE(pin.port);
-
-    GPIO_InitTypeDef gpioStruct = {};
-    gpioStruct.Pin              = pin.index;
-    gpioStruct.Mode             = static_cast<uint32_t>(pin.mode);
-    gpioStruct.Pull             = static_cast<uint32_t>(pin.pull);
-    gpioStruct.Speed            = static_cast<uint32_t>(pin.speed);
-    gpioStruct.Alternate        = pin.alternate;
-
-    HAL_GPIO_Init(pin.port, &gpioStruct);
-}
-
-#define CORE_IO_SET_LOW(port, index)  (port->BSRR = (uint32_t)index << 16U)
-#define CORE_IO_SET_HIGH(port, index) (port->BSRR = index)
+#define PORT_TO_MEM(port)                   (reinterpret_cast<GPIO_TypeDef*>(port))
+#define CORE_IO_SET_LOW(port, index)        (PORT_TO_MEM(port)->BSRR = (uint32_t)index << 16U)
+#define CORE_IO_SET_HIGH(port, index)       (PORT_TO_MEM(port)->BSRR = index)
+#define CORE_IO_SET_PORT_STATE(port, state) (PORT_TO_MEM(port)->ODR = state)
+#define CORE_IO_READ(port, index)           (PORT_TO_MEM(port)->IDR & index)
+#define CORE_IO_READ_PORT(port)             (PORT_TO_MEM(port)->IDR)
 #define CORE_IO_SET_STATE(port, index, state) \
     do                                        \
     {                                         \
@@ -207,84 +102,210 @@ inline void CORE_IO_CONFIG(core::io::mcuPin_t pin)
             CORE_IO_SET_LOW(port, index);     \
     } while (0)
 
-#define CORE_IO_SET_PORT_STATE(port, state) (port->ODR = state)
-
-inline void CORE_IO_SET_STATE_MULTIPLE(GPIO_TypeDef* port, uint16_t bitsToChange, uint16_t value)
-{
-    uint32_t bssrValue = 0;
-
-    for (size_t i = 0; i < 16; i++)
-    {
-        if (!BIT_READ(bitsToChange, i))
-            continue;
-
-        if (BIT_READ(value, i))
-            BIT_SET(bssrValue, i);
-        else
-            BIT_SET(bssrValue, i + 16);
-    }
-
-    port->BSRR = bssrValue;
-}
-
-#define CORE_IO_READ(port, index) (port->IDR & index)
-#define CORE_IO_READ_PORT(port)   (port->IDR)
-
-#define CORE_IO_TOGGLE(port, pin)                           \
-    do                                                      \
-    {                                                       \
-        if ((port->ODR & pin) == pin)                       \
-            port->BSRR = static_cast<uint32_t>(pin) << 16U; \
-        else                                                \
-            port->BSRR = pin;                               \
+#define CORE_IO_TOGGLE(port, pin)                                        \
+    do                                                                   \
+    {                                                                    \
+        if ((PORT_TO_MEM(port)->ODR & pin) == pin)                       \
+            PORT_TO_MEM(port)->BSRR = static_cast<uint32_t>(pin) << 16U; \
+        else                                                             \
+            PORT_TO_MEM(port)->BSRR = pin;                               \
     } while (0)
 
 ///
 /// \brief Convenience macros for portable GPIO port/pin definitions across various toolchains.
 /// @{
 
-#define CORE_IO_PIN_PORT_DEF(port)   (GPIO##port)
+#define CORE_IO_PIN_PORT_DEF(port)   (GPIO##port##_BASE)
 #define CORE_IO_PIN_INDEX_DEF(index) (GPIO_PIN_##index)
 
 /// @}
 
 ///
-/// \brief Convenience macro used to create pinPort_t variable.
-///
-#define CORE_IO_PIN_PORT_VAR(port) (port)
-
-///
-/// \brief Convenience macro used to create pinIndex_t variable.
-///
-#define CORE_IO_PIN_INDEX_VAR(index) (index)
-
-///
-/// \brief Convenience macro used to retrieve port from pinPort_t variable.
-///
-#define CORE_IO_PIN_PORT_VAR_GET(port) (port)
-
-///
-/// \brief Convenience macro used to retrieve pin index from pinIndex_t variable.
-///
-#define CORE_IO_PIN_INDEX_VAR_GET(index) (index)
-
-///
 /// \brief Convenience macro used to create mcuPin_t structure.
 ///
-#define CORE_IO_MCU_PIN_VAR(_port, _index)     \
-    {                                          \
-        .port  = CORE_IO_PIN_PORT_VAR(_port),  \
-        .index = CORE_IO_PIN_INDEX_VAR(_index) \
+#define CORE_IO_MCU_PIN_VAR(_port, _index) \
+    {                                      \
+        .port  = _port,                    \
+        .index = _index                    \
     }
 
 ///
 /// \brief Macros used to retrieve either pin port or pin index from mcuPin_t structure.
 /// @{
 
-#define CORE_IO_MCU_PIN_VAR_PORT_GET(mcuPin) CORE_IO_PIN_PORT_VAR_GET(mcuPin.port)
-#define CORE_IO_MCU_PIN_VAR_PIN_GET(mcuPin)  CORE_IO_PIN_INDEX_VAR_GET(mcuPin.index)
+#define CORE_IO_MCU_PIN_PORT(mcuPin)  mcuPin.port
+#define CORE_IO_MCU_PIN_INDEX(mcuPin) mcuPin.index
 
 /// @}
+
+inline void CORE_IO_CLOCK_ENABLE(core::io::mcuPin_t pin)
+{
+#ifdef GPIOA
+    if (PORT_TO_MEM(CORE_IO_MCU_PIN_PORT(pin)) == GPIOA)
+    {
+        __HAL_RCC_GPIOA_CLK_ENABLE();
+        return;
+    }
+#endif
+
+#ifdef GPIOB
+    if (PORT_TO_MEM(CORE_IO_MCU_PIN_PORT(pin)) == GPIOB)
+    {
+        __HAL_RCC_GPIOB_CLK_ENABLE();
+        return;
+    }
+#endif
+
+#ifdef GPIOC
+    if (PORT_TO_MEM(CORE_IO_MCU_PIN_PORT(pin)) == GPIOC)
+    {
+        __HAL_RCC_GPIOC_CLK_ENABLE();
+        return;
+    }
+#endif
+
+#ifdef GPIOD
+    if (PORT_TO_MEM(CORE_IO_MCU_PIN_PORT(pin)) == GPIOD)
+    {
+        __HAL_RCC_GPIOD_CLK_ENABLE();
+        return;
+    }
+#endif
+
+#ifdef GPIOE
+    if (PORT_TO_MEM(CORE_IO_MCU_PIN_PORT(pin)) == GPIOE)
+    {
+        __HAL_RCC_GPIOE_CLK_ENABLE();
+        return;
+    }
+#endif
+
+#ifdef GPIOF
+    if (PORT_TO_MEM(CORE_IO_MCU_PIN_PORT(pin)) == GPIOF)
+    {
+        __HAL_RCC_GPIOF_CLK_ENABLE();
+        return;
+    }
+#endif
+
+#ifdef GPIOG
+    if (PORT_TO_MEM(CORE_IO_MCU_PIN_PORT(pin)) == GPIOG)
+    {
+        __HAL_RCC_GPIOG_CLK_ENABLE();
+        return;
+    }
+#endif
+
+#ifdef GPIOH
+    if (PORT_TO_MEM(CORE_IO_MCU_PIN_PORT(pin)) == GPIOH)
+    {
+        __HAL_RCC_GPIOH_CLK_ENABLE();
+        return;
+    }
+#endif
+
+#ifdef GPIOI
+    if (PORT_TO_MEM(CORE_IO_MCU_PIN_PORT(pin)) == GPIOI)
+    {
+        __HAL_RCC_GPIOI_CLK_ENABLE();
+        return;
+    }
+#endif
+}
+
+inline void CORE_IO_CLOCK_DISABLE(core::io::mcuPin_t pin)
+{
+#ifdef GPIOA
+    if (PORT_TO_MEM(CORE_IO_MCU_PIN_PORT(pin)) == GPIOA)
+    {
+        __HAL_RCC_GPIOA_CLK_DISABLE();
+        return;
+    }
+#endif
+
+#ifdef GPIOB
+    if (PORT_TO_MEM(CORE_IO_MCU_PIN_PORT(pin)) == GPIOB)
+    {
+        __HAL_RCC_GPIOB_CLK_DISABLE();
+        return;
+    }
+#endif
+
+#ifdef GPIOC
+    if (PORT_TO_MEM(CORE_IO_MCU_PIN_PORT(pin)) == GPIOC)
+    {
+        __HAL_RCC_GPIOC_CLK_DISABLE();
+        return;
+    }
+#endif
+
+#ifdef GPIOD
+    if (PORT_TO_MEM(CORE_IO_MCU_PIN_PORT(pin)) == GPIOD)
+    {
+        __HAL_RCC_GPIOD_CLK_DISABLE();
+        return;
+    }
+#endif
+
+#ifdef GPIOE
+    if (PORT_TO_MEM(CORE_IO_MCU_PIN_PORT(pin)) == GPIOE)
+    {
+        __HAL_RCC_GPIOE_CLK_DISABLE();
+        return;
+    }
+#endif
+
+#ifdef GPIOF
+    if (PORT_TO_MEM(CORE_IO_MCU_PIN_PORT(pin)) == GPIOF)
+    {
+        __HAL_RCC_GPIOF_CLK_DISABLE();
+        return;
+    }
+#endif
+
+#ifdef GPIOG
+    if (PORT_TO_MEM(CORE_IO_MCU_PIN_PORT(pin)) == GPIOG)
+    {
+        __HAL_RCC_GPIOG_CLK_DISABLE();
+        return;
+    }
+#endif
+
+#ifdef GPIOH
+    if (PORT_TO_MEM(CORE_IO_MCU_PIN_PORT(pin)) == GPIOH)
+    {
+        __HAL_RCC_GPIOH_CLK_DISABLE();
+        return;
+    }
+#endif
+
+#ifdef GPIOI
+    if (PORT_TO_MEM(CORE_IO_MCU_PIN_PORT(pin)) == GPIOI)
+    {
+        __HAL_RCC_GPIOI_CLK_DISABLE();
+        return;
+    }
+#endif
+}
+
+inline void CORE_IO_INIT(core::io::mcuPin_t pin)
+{
+    CORE_IO_CLOCK_ENABLE(pin);
+
+    GPIO_InitTypeDef gpioStruct = {};
+    gpioStruct.Pin              = CORE_IO_MCU_PIN_INDEX(pin);
+    gpioStruct.Mode             = static_cast<uint32_t>(pin.mode);
+    gpioStruct.Pull             = static_cast<uint32_t>(pin.pull);
+    gpioStruct.Speed            = static_cast<uint32_t>(pin.speed);
+    gpioStruct.Alternate        = pin.alternate;
+
+    HAL_GPIO_Init(PORT_TO_MEM(CORE_IO_MCU_PIN_PORT(pin)), &gpioStruct);
+}
+
+inline void CORE_IO_DEINIT(core::io::mcuPin_t pin)
+{
+    HAL_GPIO_DeInit(PORT_TO_MEM(CORE_IO_MCU_PIN_PORT(pin)), CORE_IO_MCU_PIN_INDEX(pin));
+}
 
 /// @}
 

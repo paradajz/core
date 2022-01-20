@@ -36,8 +36,9 @@ namespace core
             output
         };
 
-        using pinPort_t  = volatile uint8_t*;
-        using pinIndex_t = uint8_t;
+        using pinPort_t   = uint16_t;
+        using pinIndex_t  = uint8_t;
+        using portWidth_t = pinIndex_t;
 
         ///
         /// \brief Structure used to define single MCU pin.
@@ -51,6 +52,22 @@ namespace core
     }    // namespace io
 }    // namespace core
 
+// redefine port symbols so they can be stored as integers instead of pointers
+// do not use directly!
+#define PORT_A (0x02 + __SFR_OFFSET)
+#define PORT_B (0x05 + __SFR_OFFSET)
+#define PORT_C (0x08 + __SFR_OFFSET)
+#define PORT_D (0x0B + __SFR_OFFSET)
+#define PORT_E (0x0E + __SFR_OFFSET)
+#define PORT_F (0x11 + __SFR_OFFSET)
+#define PORT_G (0x14 + __SFR_OFFSET)
+#define PORT_H (0x102)
+#define PORT_J (0x105)
+#define PORT_K (0x108)
+#define PORT_L (0x10B)
+
+#define PORT_TO_MEM(port) (*reinterpret_cast<volatile uint8_t*>(port))
+
 ///
 /// \brief Workaround to avoid using DDR and PIN registers.
 /// On most AVR models, DDR register is used to define pin direction within port (input or output),
@@ -61,22 +78,16 @@ namespace core
 /// @param [in] port    AVR Port.
 /// @{
 
-#define DDR(port) (*(&port - 1))
-#define PIN(port) (*(&port - 2))
+#define DDR(port) (port - 1)
+#define PIN(port) (port - 2)
 
 /// @}
 
-#define CORE_IO_CONFIG(port, index, mode)       \
-    do                                          \
-    {                                           \
-        if (mode == core::io::pinMode_t::input) \
-            DDR(port) &= ~(1 << (index));       \
-        else                                    \
-            DDR(port) |= (1 << (index));        \
-    } while (0)
-
-#define CORE_IO_SET_LOW(port, index)  ((port) &= ~(1 << (index)))
-#define CORE_IO_SET_HIGH(port, index) ((port) |= (1 << (index)))
+#define CORE_IO_SET_LOW(port, index)        ((PORT_TO_MEM(port)) &= ~(1 << (index)))
+#define CORE_IO_SET_HIGH(port, index)       ((PORT_TO_MEM(port)) |= (1 << (index)))
+#define CORE_IO_SET_PORT_STATE(port, state) ((PORT_TO_MEM(port)) = (state))
+#define CORE_IO_READ(port, index)           (((PORT_TO_MEM(PIN(port))) >> (index)) & 0x01)
+#define CORE_IO_READ_PORT(port)             (PORT_TO_MEM(PIN(port)))
 #define CORE_IO_SET_STATE(port, index, state) \
     do                                        \
     {                                         \
@@ -85,11 +96,6 @@ namespace core
         else                                  \
             CORE_IO_SET_LOW(port, index);     \
     } while (0)
-
-#define CORE_IO_SET_PORT_STATE(port, state) ((port) = (state))
-
-#define CORE_IO_READ(port, index) (((PIN(port)) >> (index)) & 0x01)
-#define CORE_IO_READ_PORT(port)   (PIN(port))
 
 #define CORE_IO_TOGGLE(port, pin)        \
     do                                   \
@@ -104,47 +110,36 @@ namespace core
 /// \brief Convenience macros for portable GPIO port/pin definitions across various toolchains.
 /// @{
 
-#define CORE_IO_PIN_PORT_DEF(port)   (PORT##port)
+#define CORE_IO_PIN_PORT_DEF(port)   (PORT_##port)
 #define CORE_IO_PIN_INDEX_DEF(index) (index)
 
 /// @}
 
 ///
-/// \brief Convenience macro used to create pinPort_t variable.
-///
-#define CORE_IO_PIN_PORT_VAR(port) (&port)
-
-///
-/// \brief Convenience macro used to create pinIndex_t variable.
-///
-#define CORE_IO_PIN_INDEX_VAR(index) (index)
-
-///
-/// \brief Convenience macro used to retrieve port from pinPort_t variable.
-///
-#define CORE_IO_PIN_PORT_VAR_GET(port) (*port)
-
-///
-/// \brief Convenience macro used to retrieve pin index from pinIndex_t variable.
-///
-#define CORE_IO_PIN_INDEX_VAR_GET(index) (index)
-
-///
 /// \brief Convenience macro used to create mcuPin_t structure.
 ///
-#define CORE_IO_MCU_PIN_VAR(_port, _index)     \
-    {                                          \
-        .port  = CORE_IO_PIN_PORT_VAR(_port),  \
-        .index = CORE_IO_PIN_INDEX_VAR(_index) \
+#define CORE_IO_MCU_PIN_VAR(_port, _index) \
+    {                                      \
+        .port  = _port,                    \
+        .index = _index                    \
     }
 
 ///
 /// \brief Macros used to retrieve either pin port or pin index from mcuPin_t structure.
 /// @{
 
-#define CORE_IO_MCU_PIN_VAR_PORT_GET(mcuPin) CORE_IO_PIN_PORT_VAR_GET(mcuPin.port)
-#define CORE_IO_MCU_PIN_VAR_PIN_GET(mcuPin)  CORE_IO_PIN_INDEX_VAR_GET(mcuPin.index)
+#define CORE_IO_MCU_PIN_PORT(mcuPin)  mcuPin.port
+#define CORE_IO_MCU_PIN_INDEX(mcuPin) mcuPin.index
 
 /// @}
+
+#define CORE_IO_INIT(port, index, mode)                \
+    do                                                 \
+    {                                                  \
+        if (mode == core::io::pinMode_t::input)        \
+            PORT_TO_MEM(DDR(port)) &= ~(1 << (index)); \
+        else                                           \
+            PORT_TO_MEM(DDR(port)) |= (1 << (index));  \
+    } while (0)
 
 #endif

@@ -32,7 +32,8 @@
 #include "stm32f0xx_hal.h"
 #endif
 #elif defined __NRF52__
-#include "nrf_delay.h"
+#include <drivers/nrfx_common.h>
+#include "nrfx_glue.h"
 #endif
 #include "Atomic.h"
 
@@ -71,7 +72,10 @@ namespace core
 #elif defined __STM32__
             HAL_Delay(ms);
 #elif defined __NRF52__
-            nrf_delay_ms(ms);
+            while (ms--)
+            {
+                NRFX_DELAY_US(1000);
+            }
 #endif
         }
 

@@ -83,27 +83,27 @@ inline void CORE_IO_INIT(core::io::mcuPin_t pin)
 
     switch (pin.mode)
     {
-    case pinMode_t::input:
+    case core::io::pinMode_t::input:
     {
         // Standard '0', standard '1'
         strength = NRF_GPIO_PIN_S0S1;
     }
     break;
 
-    case pinMode_t::outputPP:
+    case core::io::pinMode_t::outputPP:
     {
         // Standard '0', high-drive '1'
         strength = GPIO_PIN_CNF_DRIVE_S0H1;
     }
     break;
 
-    case pinMode_t::outputOD:
+    case core::io::pinMode_t::outputOD:
     {
         strength = GPIO_PIN_CNF_DRIVE_S0D1;
     }
     break;
 
-    case pinMode_t::outputCS:
+    case core::io::pinMode_t::outputCS:
     default:
     {
         // Standard '0', disconnect '1'

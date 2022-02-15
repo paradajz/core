@@ -98,7 +98,7 @@
 // on AVRs, it is common to place strings or other constant data in program memory
 // however, that concept doesn't exist on other platforms
 // in that case, allow compiling the AVR code by re-defining certain functions/macros
-#ifdef __AVR__
+#ifdef CORE_ARCH_AVR
 #include <avr/pgmspace.h>
 #define STRING_PROGMEM_ARRAY(name) const char* const name[] PROGMEM
 #define READ_PROGMEM_ARRAY(string) (PGM_P) pgm_read_word(&(string))

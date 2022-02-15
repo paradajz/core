@@ -19,15 +19,27 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef __CORE_GENERAL_INTERRUPT
-#define __CORE_GENERAL_INTERRUPT
+#ifndef __CORE_ARM_NORDIC_TIMING
+#define __CORE_ARM_NORDIC_TIMING
 
-#ifdef CORE_ARCH_AVR
-#include "../arch/avr/Interrupt.h"
-#elif defined CORE_ARCH_ARM
-#include "../arch/arm/common/Interrupt.h"
-#else
-#include "../arch/stub/Interrupt.h"
-#endif
+#include <drivers/nrfx_common.h>
+#include "nrfx_glue.h"
+
+namespace core::timing
+{
+    ///
+    /// \brief Delays for desired time interval in milliseconds.
+    /// This function makes use of built-in _delay_ms function. Function is called repeatedly with argument 1 until
+    /// ms parameter reaches 0, since _delay_ms accepts only constant known at compile-time.
+    /// @param [in] ms  Delay time in milliseconds.
+    ///
+    inline void waitMs(uint32_t ms)
+    {
+        while (ms--)
+        {
+            NRFX_DELAY_US(1000);
+        }
+    }
+}    // namespace core::timing
 
 #endif

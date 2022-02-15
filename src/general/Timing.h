@@ -23,96 +23,69 @@
 #define __CORE_GENERAL_TIMING
 
 #include <inttypes.h>
-#ifdef __AVR__
-#include <util/delay.h>
-#elif defined __STM32__
-#if defined(STM32F407xx) || defined(STM32F405xx) || defined(STM32F401xE) || defined(STM32F401xC) || defined(STM32F411xE)
-#include "stm32f4xx_hal.h"
-#elif defined(STM32F031x6)
-#include "stm32f0xx_hal.h"
+#ifdef CORE_ARCH_AVR
+#include "../arch/avr/Timing.h"
+#elif defined(CORE_ARCH_ARM)
+#ifdef CORE_VENDOR_ST
+#include "../arch/arm/st/Timing.h"
+#elif defined CORE_VENDOR_NORDIC
+#include "../arch/arm/nordic/Timing.h"
 #endif
-#elif defined __NRF52__
-#include <drivers/nrfx_common.h>
-#include "nrfx_glue.h"
+#else
+#include "../arch/stub/Timing.h"
 #endif
 #include "Atomic.h"
 
-namespace core
+namespace core::timing
 {
-    namespace timing
+    namespace detail
     {
-        namespace detail
-        {
-            ///
-            /// \brief Definition of variable holding current MCU run time in milliseconds.
-            /// Must be implemented externally in order to use core::timing::currentRunTimeMs() function correctly.
-            ///
-            extern volatile uint32_t rTime_ms;
-
-            ///
-            /// \brief Definition of variable holding current MCU run time in microseconds.
-            /// Must be implemented externally in order to use core::timing::currentRunTimeUs() function correctly.
-            ///
-            extern volatile uint32_t rTime_us;
-        }    // namespace detail
+        ///
+        /// \brief Definition of variable holding current MCU run time in milliseconds.
+        /// Must be implemented externally in order to use core::timing::currentRunTimeMs() function correctly.
+        ///
+        extern volatile uint32_t rTime_ms;
 
         ///
-        /// \brief Delays for desired time interval in milliseconds.
-        /// This function makes use of built-in _delay_ms function. Function is called repeatedly with argument 1 until
-        /// ms parameter reaches 0, since _delay_ms accepts only constant known at compile-time.
-        /// @param [in] ms  Delay time in milliseconds.
+        /// \brief Definition of variable holding current MCU run time in microseconds.
+        /// Must be implemented externally in order to use core::timing::currentRunTimeUs() function correctly.
         ///
-        inline void waitMs(uint32_t ms)
+        extern volatile uint32_t rTime_us;
+    }    // namespace detail
+
+    ///
+    /// \brief Returns amount of time MCU has been running in milliseconds.
+    /// Actual incrementation of rTime_ms must be done externally.
+    /// \returns Runtime in milliseconds.
+    ///
+    inline uint32_t currentRunTimeMs()
+    {
+        uint32_t _rTime_mS;
+
+        ATOMIC_SECTION
         {
-#ifdef __AVR__
-            while (ms--)
-            {
-                _delay_ms(1);
-            }
-#elif defined __STM32__
-            HAL_Delay(ms);
-#elif defined __NRF52__
-            while (ms--)
-            {
-                NRFX_DELAY_US(1000);
-            }
-#endif
+            _rTime_mS = detail::rTime_ms;
         }
 
-        ///
-        /// \brief Returns amount of time MCU has been running in milliseconds.
-        /// Actual incrementation of rTime_ms must be done externally.
-        /// \returns Runtime in milliseconds.
-        ///
-        inline uint32_t currentRunTimeMs()
+        return _rTime_mS;
+    }
+
+    ///
+    /// \brief Returns amount of time MCU has been running in milliseconds.
+    /// Actual incrementation of rTime_ms must be done externally.
+    /// \returns Runtime in milliseconds.
+    ///
+    inline uint32_t currentRunTimeUs()
+    {
+        uint32_t _rTime_uS;
+
+        ATOMIC_SECTION
         {
-            uint32_t _rTime_mS;
-
-            ATOMIC_SECTION
-            {
-                _rTime_mS = detail::rTime_ms;
-            }
-
-            return _rTime_mS;
+            _rTime_uS = detail::rTime_us;
         }
 
-        ///
-        /// \brief Returns amount of time MCU has been running in milliseconds.
-        /// Actual incrementation of rTime_ms must be done externally.
-        /// \returns Runtime in milliseconds.
-        ///
-        inline uint32_t currentRunTimeUs()
-        {
-            uint32_t _rTime_uS;
-
-            ATOMIC_SECTION
-            {
-                _rTime_uS = detail::rTime_us;
-            }
-
-            return _rTime_uS;
-        }
-    }    // namespace timing
-}    // namespace core
+        return _rTime_uS;
+    }
+}    // namespace core::timing
 
 #endif

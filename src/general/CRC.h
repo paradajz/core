@@ -19,7 +19,8 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#pragma once
+#ifndef __CORE_GENERAL_CRC
+#define __CORE_GENERAL_CRC
 
 #include <inttypes.h>
 
@@ -47,3 +48,5 @@ namespace core
         }
     }    // namespace crc
 }    // namespace core
+
+#endif

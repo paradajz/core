@@ -22,9 +22,9 @@
 #ifndef __CORE_GENERAL_ADC
 #define __CORE_GENERAL_ADC
 
-#ifdef __AVR__
+#ifdef CORE_ARCH_AVR
 #include "../arch/avr/ADC.h"
-#elif defined __ARM__
+#elif defined CORE_ARCH_ARM
 #include "../arch/arm/common/ADC.h"
 #else
 #include "../arch/stub/ADC.h"

@@ -22,9 +22,9 @@
 #ifndef __CORE_GENERAL_RESET
 #define __CORE_GENERAL_RESET
 
-#ifdef __AVR__
+#ifdef CORE_ARCH_AVR
 #include "../arch/avr/Reset.h"
-#elif defined __ARM__
+#elif defined CORE_ARCH_ARM
 #include "../arch/arm/common/Reset.h"
 #else
 #include "../arch/stub/Reset.h"

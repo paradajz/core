@@ -22,9 +22,9 @@
 #ifndef __CORE_GENERAL_ATOMIC
 #define __CORE_GENERAL_ATOMIC
 
-#ifdef __AVR__
+#ifdef CORE_ARCH_AVR
 #include "../arch/avr/Atomic.h"
-#elif defined __ARM__
+#elif defined CORE_ARCH_ARM
 #include "../arch/arm/common/Atomic.h"
 #else
 #include "../arch/stub/Atomic.h"

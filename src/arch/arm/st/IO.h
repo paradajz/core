@@ -19,8 +19,8 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef __CORE_STM32_IO
-#define __CORE_STM32_IO
+#ifndef __CORE_ARM_ST_IO
+#define __CORE_ARM_ST_IO
 
 #include <inttypes.h>
 #include "../../../general/Helpers.h"

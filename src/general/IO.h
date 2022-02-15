@@ -22,12 +22,16 @@
 #ifndef __CORE_GENERAL_IO
 #define __CORE_GENERAL_IO
 
-#ifdef __AVR__
+#ifdef CORE_ARCH_AVR
 #include "../arch/avr/IO.h"
-#elif defined __STM32__
-#include "../arch/arm/stm32/IO.h"
-#elif defined __NRF52__
-#include "../arch/arm/nrf52/IO.h"
+#elif defined(CORE_ARCH_ARM)
+#ifdef CORE_VENDOR_ST
+#include "../arch/arm/st/IO.h"
+#elif defined CORE_VENDOR_NORDIC
+#include "../arch/arm/nordic/IO.h"
+#else
+#include "../arch/stub/IO.h"
+#endif
 #else
 #include "../arch/stub/IO.h"
 #endif

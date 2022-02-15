@@ -22,7 +22,7 @@
 #ifndef __CORE_GENERAL_I2C
 #define __CORE_GENERAL_I2C
 
-#ifdef __AVR__
+#ifdef CORE_ARCH_AVR
 #include "../arch/avr/I2C.h"
 #else
 #include "../arch/stub/I2C.h"

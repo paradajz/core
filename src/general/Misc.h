@@ -22,9 +22,9 @@
 #ifndef __CORE_GENERAL_MISC
 #define __CORE_GENERAL_MISC
 
-#ifdef __AVR__
+#ifdef CORE_ARCH_AVR
 #include "../arch/avr/Misc.h"
-#elif defined __ARM__
+#elif defined CORE_ARCH_ARM
 #include "../arch/arm/common/Misc.h"
 #else
 #include "../arch/stub/Misc.h"

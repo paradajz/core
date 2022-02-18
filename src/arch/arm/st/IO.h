@@ -77,12 +77,12 @@ namespace core
         ///
         typedef struct
         {
-            pinPort_t   port;
-            pinIndex_t  index;
-            pinMode_t   mode;
-            pullMode_t  pull;
-            gpioSpeed_t speed;
-            uint32_t    alternate;
+            pinPort_t   port      = 0;
+            pinIndex_t  index     = 0;
+            pinMode_t   mode      = pinMode_t::input;
+            pullMode_t  pull      = pullMode_t::none;
+            gpioSpeed_t speed     = gpioSpeed_t::medium;
+            uint32_t    alternate = 0;
         } mcuPin_t;
     }    // namespace io
 }    // namespace core

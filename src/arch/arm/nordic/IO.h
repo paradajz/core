@@ -40,7 +40,7 @@ namespace core
             input,       // Input Floating Mode
             outputPP,    // Output Push Pull Mode
             outputOD,    // Output Open Drain Mode
-            outputCS     // Output custom drive strength
+            analog       // Just de-init the pin with this option
         };
 
         enum class interrupt_t : uint32_t
@@ -50,8 +50,9 @@ namespace core
             high = NRF_GPIO_PIN_SENSE_HIGH
         };
 
-        using pinPort_t  = NRF_GPIO_Type*;
-        using pinIndex_t = uint16_t;
+        using pinPort_t   = uint32_t;
+        using pinIndex_t  = uint8_t;
+        using portWidth_t = uint32_t;
 
         enum class pullMode_t : uint32_t
         {
@@ -65,7 +66,7 @@ namespace core
         ///
         typedef struct
         {
-            pinPort_t   port      = NULL;
+            pinPort_t   port      = 0;
             pinIndex_t  index     = 0;
             pinMode_t   mode      = pinMode_t::input;
             pullMode_t  pull      = pullMode_t::none;
@@ -75,54 +76,13 @@ namespace core
     }    // namespace io
 }    // namespace core
 
-inline void CORE_IO_INIT(core::io::mcuPin_t pin)
-{
-    uint32_t strength;
-    uint32_t direction    = NRF_GPIO_PIN_DIR_INPUT;
-    uint32_t inputConnect = NRF_GPIO_PIN_INPUT_CONNECT;
-
-    switch (pin.mode)
-    {
-    case core::io::pinMode_t::input:
-    {
-        // Standard '0', standard '1'
-        strength = NRF_GPIO_PIN_S0S1;
-    }
-    break;
-
-    case core::io::pinMode_t::outputPP:
-    {
-        // Standard '0', high-drive '1'
-        strength = GPIO_PIN_CNF_DRIVE_S0H1;
-    }
-    break;
-
-    case core::io::pinMode_t::outputOD:
-    {
-        strength = GPIO_PIN_CNF_DRIVE_S0D1;
-    }
-    break;
-
-    case core::io::pinMode_t::outputCS:
-    default:
-    {
-        // Standard '0', disconnect '1'
-        strength     = pin.strength;
-        direction    = NRF_GPIO_PIN_DIR_OUTPUT;
-        inputConnect = NRF_GPIO_PIN_INPUT_DISCONNECT;
-    }
-    break;
-    }
-
-    pin.port->PIN_CNF[pin.index] = (direction << GPIO_PIN_CNF_DIR_Pos) |
-                                   (inputConnect << GPIO_PIN_CNF_INPUT_Pos) |
-                                   (static_cast<uint32_t>(pin.pull) << GPIO_PIN_CNF_PULL_Pos) |
-                                   (strength << GPIO_PIN_CNF_DRIVE_Pos) |
-                                   (static_cast<uint32_t>(pin.interrupt) << GPIO_PIN_CNF_SENSE_Pos);
-}
-
-#define CORE_IO_SET_LOW(port, index)  (port->OUTCLR = 1UL << index)
-#define CORE_IO_SET_HIGH(port, index) (port->OUTSET = 1UL << index)
+#define PORT_TO_MEM(port)                   (reinterpret_cast<NRF_GPIO_Type*>(port))
+#define CORE_IO_SET_LOW(port, index)        (PORT_TO_MEM(port)->OUTCLR = 1UL << index)
+#define CORE_IO_SET_HIGH(port, index)       (PORT_TO_MEM(port)->OUTSET = 1UL << index)
+#define CORE_IO_SET_PORT_STATE(port, state) (PORT_TO_MEM(port)->OUT = state)
+#define CORE_IO_READ_OUT_PORT(port)         (PORT_TO_MEM(port)->OUT)
+#define CORE_IO_READ_IN_PORT(port)          (PORT_TO_MEM(port)->IN)
+#define CORE_IO_READ(port, index)           (CORE_IO_READ_PORT(port) >> index & 0x01)
 #define CORE_IO_SET_STATE(port, index, state) \
     do                                        \
     {                                         \
@@ -132,54 +92,84 @@ inline void CORE_IO_INIT(core::io::mcuPin_t pin)
             CORE_IO_SET_LOW(port, index);     \
     } while (0)
 
-#define CORE_IO_READ(port, index) (port->IN & index)
-
 ///
 /// \brief Convenience macros for portable GPIO port/pin definitions across various toolchains.
 /// @{
-
-#define CORE_IO_PIN_PORT_DEF(port)   (NRF_P##port)
+#define CORE_IO_PIN_PORT_DEF(port)   (NRF_P##port##_BASE)
 #define CORE_IO_PIN_INDEX_DEF(index) (index)
 
 /// @}
 
 ///
-/// \brief Convenience macro used to create pinPort_t variable.
-///
-#define CORE_IO_PIN_PORT_VAR(port) (port)
-
-///
-/// \brief Convenience macro used to create pinIndex_t variable.
-///
-#define CORE_IO_PIN_INDEX_VAR(index) (index)
-
-///
-/// \brief Convenience macro used to retrieve port from pinPort_t variable.
-///
-#define CORE_IO_PIN_PORT_VAR_GET(port) (port)
-
-///
-/// \brief Convenience macro used to retrieve pin index from pinIndex_t variable.
-///
-#define CORE_IO_PIN_INDEX_VAR_GET(index) (index)
-
-///
 /// \brief Convenience macro used to create mcuPin_t structure.
 ///
-#define CORE_IO_MCU_PIN_VAR(_port, _index)     \
-    {                                          \
-        .port  = CORE_IO_PIN_PORT_VAR(_port),  \
-        .index = CORE_IO_PIN_INDEX_VAR(_index) \
+#define CORE_IO_MCU_PIN_VAR(_port, _index) \
+    {                                      \
+        .port  = _port,                    \
+        .index = _index                    \
     }
 
 ///
 /// \brief Macros used to retrieve either pin port or pin index from mcuPin_t structure.
 /// @{
 
-#define CORE_IO_MCU_PIN_VAR_PORT_GET(mcuPin) CORE_IO_PIN_PORT_VAR_GET(mcuPin.port)
-#define CORE_IO_MCU_PIN_VAR_PIN_GET(mcuPin)  CORE_IO_PIN_INDEX_VAR_GET(mcuPin.index)
+#define CORE_IO_MCU_PIN_PORT(mcuPin)  mcuPin.port
+#define CORE_IO_MCU_PIN_INDEX(mcuPin) mcuPin.index
 
 /// @}
+
+inline void CORE_IO_DEINIT(core::io::mcuPin_t pin)
+{
+    PORT_TO_MEM(pin.port)->PIN_CNF[pin.index] = (NRF_GPIO_PIN_DIR_INPUT << GPIO_PIN_CNF_DIR_Pos) |
+                                                (NRF_GPIO_PIN_INPUT_DISCONNECT << GPIO_PIN_CNF_INPUT_Pos) |
+                                                (static_cast<uint32_t>(core::io::pullMode_t::none) << GPIO_PIN_CNF_PULL_Pos) |
+                                                (NRF_GPIO_PIN_S0S1 << GPIO_PIN_CNF_DRIVE_Pos) |
+                                                (static_cast<uint32_t>(core::io::interrupt_t::none) << GPIO_PIN_CNF_SENSE_Pos);
+}
+
+inline void CORE_IO_INIT(core::io::mcuPin_t pin)
+{
+    uint32_t direction    = NRF_GPIO_PIN_DIR_INPUT;
+    uint32_t inputConnect = NRF_GPIO_PIN_INPUT_CONNECT;
+
+    switch (pin.mode)
+    {
+    case core::io::pinMode_t::input:
+    {
+        // nothing to do
+    }
+    break;
+
+    case core::io::pinMode_t::outputPP:
+    {
+        direction    = NRF_GPIO_PIN_DIR_OUTPUT;
+        inputConnect = NRF_GPIO_PIN_INPUT_DISCONNECT;
+    }
+    break;
+
+    case core::io::pinMode_t::outputOD:
+    {
+        direction    = NRF_GPIO_PIN_DIR_OUTPUT;
+        inputConnect = NRF_GPIO_PIN_INPUT_DISCONNECT;
+        pin.strength = GPIO_PIN_CNF_DRIVE_S0D1;
+    }
+    break;
+
+    case core::io::pinMode_t::analog:
+    default:
+    {
+        CORE_IO_DEINIT(pin);
+        return;
+    }
+    break;
+    }
+
+    PORT_TO_MEM(pin.port)->PIN_CNF[pin.index] = (direction << GPIO_PIN_CNF_DIR_Pos) |
+                                                (inputConnect << GPIO_PIN_CNF_INPUT_Pos) |
+                                                (static_cast<uint32_t>(pin.pull) << GPIO_PIN_CNF_PULL_Pos) |
+                                                (pin.strength << GPIO_PIN_CNF_DRIVE_Pos) |
+                                                (static_cast<uint32_t>(pin.interrupt) << GPIO_PIN_CNF_SENSE_Pos);
+}
 
 /// @}
 

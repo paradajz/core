@@ -77,8 +77,9 @@ namespace core
 #define CORE_IO_SET_LOW(port, index)
 #define CORE_IO_SET_HIGH(port, index)
 #define CORE_IO_SET_PORT_STATE(port, state)
-#define CORE_IO_READ(port, index) 0
-#define CORE_IO_READ_PORT(port)   0
+#define CORE_IO_READ(port, index)   0
+#define CORE_IO_READ_OUT_PORT(port) 0
+#define CORE_IO_READ_IN_PORT(port)  0
 #define CORE_IO_SET_STATE(port, index, state)
 #define CORE_IO_TOGGLE(port, pin)
 #define CORE_IO_PIN_PORT_DEF(port)    0

@@ -92,7 +92,8 @@ namespace core
 #define CORE_IO_SET_HIGH(port, index)       (PORT_TO_MEM(port)->BSRR = index)
 #define CORE_IO_SET_PORT_STATE(port, state) (PORT_TO_MEM(port)->ODR = state)
 #define CORE_IO_READ(port, index)           (PORT_TO_MEM(port)->IDR & index)
-#define CORE_IO_READ_PORT(port)             (PORT_TO_MEM(port)->IDR)
+#define CORE_IO_READ_OUT_PORT(port)         (PORT_TO_MEM(port)->ODR)
+#define CORE_IO_READ_IN_PORT(port)          (PORT_TO_MEM(port)->IDR)
 #define CORE_IO_SET_STATE(port, index, state) \
     do                                        \
     {                                         \

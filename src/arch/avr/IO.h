@@ -87,7 +87,8 @@ namespace core
 #define CORE_IO_SET_HIGH(port, index)       ((PORT_TO_MEM(port)) |= (1 << (index)))
 #define CORE_IO_SET_PORT_STATE(port, state) ((PORT_TO_MEM(port)) = (state))
 #define CORE_IO_READ(port, index)           (((PORT_TO_MEM(PIN(port))) >> (index)) & 0x01)
-#define CORE_IO_READ_PORT(port)             (PORT_TO_MEM(PIN(port)))
+#define CORE_IO_READ_OUT_PORT(port)         (PORT_TO_MEM(PIN(port)))
+#define CORE_IO_READ_IN_PORT(port)          (CORE_IO_READ_OUT_PORT(port))
 #define CORE_IO_SET_STATE(port, index, state) \
     do                                        \
     {                                         \

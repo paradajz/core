@@ -30,28 +30,28 @@ namespace core
     {
         enum class prescaler_t : uint8_t
         {
-            p128 = 128,
-            p64  = 64,
-            p32  = 32,
-            p16  = 16
+            P128 = 128,
+            P64  = 64,
+            P32  = 32,
+            P16  = 16
         };
 
         enum class vRef_t : uint8_t
         {
-            aref    = 0,
-            avcc    = 1,
-            int2v56 = 2,
-            int1v1  = 3
+            AREF     = 0,
+            AVCC     = 1,
+            INT_2v56 = 2,
+            INT_1v1  = 3
         };
 
         ///
         /// \brief Structure holding ADC prescaler and voltage reference settings.
         ///
-        typedef struct
+        struct conf_t
         {
             prescaler_t prescaler;
             vRef_t      vref;
-        } conf_t;
+        };
 
         void     startConversion() __attribute__((weak));
         void     enableInterrupt() __attribute__((weak));

@@ -115,78 +115,95 @@
 #endif
 
 #ifdef __cplusplus
-namespace core
+namespace core::misc
 {
-    namespace misc
+    ///
+    /// \brief Used to map one range of numbers to another one.
+    ///
+    template<typename T>
+    inline T mapRange(T x, T in_min, T in_max, T out_min, T out_max)
     {
-        ///
-        /// \brief Used to map one range of numbers to another one.
-        ///
-        template<typename T>
-        inline T mapRange(T x, T in_min, T in_max, T out_min, T out_max)
+        // don't bother with mapping in this case
+        if ((in_min == out_min) && (in_max == out_max))
         {
-            // don't bother with mapping in this case
-            if ((in_min == out_min) && (in_max == out_max))
-                return x;
-
-            // smaller input range to larger output range
-            if ((in_max - in_min) > (out_max - out_min))
-                return (x - in_min) * (out_max - out_min + 1) / (in_max - in_min + 1) + out_min;
-
-            // larger input range to smaller output range
-            return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-        };
-
-        ///
-        /// \brief Checks number of digits for requested value.
-        /// @param[in] number   Number for which number if digits is being calculated.
-        /// \returns Number of digits.
-        ///
-        inline uint8_t getNumberOfDigits(int32_t number)
-        {
-            // make sure negative numbers are processed correctly
-            number = abs(number);
-
-            if (number < 10)
-                return 1;
-
-            if (number < 100)
-                return 2;
-
-            if (number < 1000)
-                return 3;
-
-            if (number < 10000)
-                return 4;
-
-            if (number < 1000000)
-                return 6;
-
-            if (number < 10000000)
-                return 7;
-
-            if (number < 100000000)
-                return 8;
-
-            if (number < 1000000000)
-                return 9;
-
-            return 10;    // max size
+            return x;
         }
 
-        constexpr uint8_t maskToIndex(uint32_t mask)
+        // smaller input range to larger output range
+        if ((in_max - in_min) > (out_max - out_min))
         {
-            uint8_t index = 0;
-
-            while (mask >>= 1)
-            {
-                index++;
-            }
-
-            return index;
+            return (x - in_min) * (out_max - out_min + 1) / (in_max - in_min + 1) + out_min;
         }
-    }    // namespace misc
-}    // namespace core
+
+        // larger input range to smaller output range
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    };
+
+    ///
+    /// \brief Checks number of digits for requested value.
+    /// @param[in] number   Number for which number if digits is being calculated.
+    /// \returns Number of digits.
+    ///
+    inline uint8_t getNumberOfDigits(int32_t number)
+    {
+        // make sure negative numbers are processed correctly
+        number = abs(number);
+
+        if (number < 10)
+        {
+            return 1;
+        }
+
+        if (number < 100)
+        {
+            return 2;
+        }
+
+        if (number < 1000)
+        {
+            return 3;
+        }
+
+        if (number < 10000)
+        {
+            return 4;
+        }
+
+        if (number < 1000000)
+        {
+            return 6;
+        }
+
+        if (number < 10000000)
+        {
+            return 7;
+        }
+
+        if (number < 100000000)
+        {
+            return 8;
+        }
+
+        if (number < 1000000000)
+        {
+            return 9;
+        }
+
+        return 10;    // max size
+    }
+
+    constexpr uint8_t maskToIndex(uint32_t mask)
+    {
+        uint8_t index = 0;
+
+        while (mask >>= 1)
+        {
+            index++;
+        }
+
+        return index;
+    }
+}    // namespace core::misc
 #endif
 
 #endif

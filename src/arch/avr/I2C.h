@@ -35,8 +35,8 @@ namespace core
     {
         enum class transferType_t : uint8_t
         {
-            write,
-            read
+            WRITE,
+            READ
         };
 
         inline void enable()
@@ -71,20 +71,26 @@ namespace core
             uint8_t status = TW_STATUS & 0xF8;
 
             if ((status != TW_START) && (status != TW_REP_START))
+            {
                 return false;
+            }
 
             // send device address
-            TWDR = address + (uint8_t)type;
+            TWDR = address + static_cast<uint8_t>(type);
             TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWSTA);
 
             // wait for interrupt flag to be cleared
             while (!(TWCR & (1 << TWINT)))
+            {
                 ;
+            }
 
             status = TW_STATUS & 0xF8;
 
             if ((status != TW_MT_SLA_ACK) && (status != TW_MR_SLA_ACK))
+            {
                 return false;
+            }
 
             return true;
         }
@@ -95,8 +101,11 @@ namespace core
             {
                 // wait until all ongoing transmissions are stopped
                 TWCR |= (1 << TWSTO);
+
                 while (TWCR & (1 << TWSTO))
+                {
                     ;
+                }
             }
         }
 
@@ -107,10 +116,14 @@ namespace core
 
             // wait for interrupt flag to be cleared
             while (!(TWCR & (1 << TWINT)))
+            {
                 ;
+            }
 
             if ((TW_STATUS & 0xF8) != TW_MT_DATA_ACK)
+            {
                 return false;
+            }
 
             return true;
         }
@@ -118,8 +131,11 @@ namespace core
         inline void read(uint8_t& data)
         {
             TWCR = (1 << TWINT) | (1 << TWEA) | (1 << TWEN);
+
             while (!(TWCR & (1 << TWINT)))
+            {
                 ;
+            }
 
             data = TWDR;
         }

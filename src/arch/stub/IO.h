@@ -34,34 +34,34 @@ namespace core
 
         enum class pinMode_t : uint32_t
         {
-            input,
-            output,
-            outputPP,
-            outputOD,
-            alternatePP,
-            alternateOD,
-            analog,
-            itRising,
-            itFalling,
-            itRisingFalling
+            INPUT,
+            OUTPUT,
+            OUTPUT_PP,
+            OUTPUT_OD,
+            ALTERNATE_PP,
+            ALTERNATE_OD,
+            ANALOG,
+            IT_RISING,
+            IT_FALLING,
+            IT_RISING_FALLING
         };
 
         enum class pullMode_t : uint32_t
         {
-            none,
-            up,
-            down
+            NONE,
+            UP,
+            DOWN
         };
 
         enum class gpioSpeed_t : uint32_t
         {
-            low,
-            medium,
-            high,
-            veryHigh
+            LOW,
+            MEDIUM,
+            HIGH,
+            VERY_HIGH
         };
 
-        typedef struct
+        struct mcuPin_t
         {
             pinPort_t   port;
             pinIndex_t  index;
@@ -69,7 +69,7 @@ namespace core
             pullMode_t  pull;
             gpioSpeed_t speed;
             uint32_t    alternate;
-        } mcuPin_t;
+        };
 
     }    // namespace io
 }    // namespace core

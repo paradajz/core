@@ -36,7 +36,7 @@ namespace core
     class StringBuilder
     {
         public:
-        StringBuilder() {}
+        StringBuilder() = default;
 
         ///
         /// \brief Returns current string.
@@ -44,7 +44,7 @@ namespace core
         ///
         const char* string()
         {
-            return buffer;
+            return _buffer;
         }
 
         ///
@@ -54,7 +54,7 @@ namespace core
         {
             va_list args;
             va_start(args, text);
-            vsnprintf(buffer, sizeof(buffer), text, args);
+            vsnprintf(_buffer, sizeof(_buffer), text, args);
             va_end(args);
         }
 
@@ -65,7 +65,7 @@ namespace core
         {
             va_list args;
             va_start(args, text);
-            vsnprintf(&buffer[strlen(buffer)], sizeof(buffer), text, args);
+            vsnprintf(&_buffer[strlen(_buffer)], sizeof(_buffer), text, args);
             va_end(args);
         }
 
@@ -75,16 +75,20 @@ namespace core
         ///
         bool fillUntil(size_t size)
         {
-            size_t strSize = strlen(buffer);
+            size_t strSize = strlen(_buffer);
 
-            if ((strSize + size) >= (bufferSize - 1))
+            if ((strSize + size) >= (BUFFER_SIZE - 1))
+            {
                 return false;    // overflow
+            }
 
             for (size_t i = 0; i < size; i++)
-                buffer[strSize + i] = ' ';
+            {
+                _buffer[strSize + i] = ' ';
+            }
 
             strSize += size;
-            buffer[strSize] = '\0';
+            _buffer[strSize] = '\0';
 
             return true;
         }
@@ -93,12 +97,12 @@ namespace core
         ///
         /// \brief Holds the maximum string size.
         ///
-        const size_t bufferSize = stringSize;
+        static constexpr size_t BUFFER_SIZE = stringSize;
 
         ///
         /// \brief Internal string buffer.
         ///
-        char buffer[stringSize];
+        char _buffer[BUFFER_SIZE];
     };
 }    // namespace core
 

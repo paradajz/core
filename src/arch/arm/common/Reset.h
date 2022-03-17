@@ -28,18 +28,15 @@
 #error Invalid ARM core specified or not specified at all
 #endif
 
-namespace core
+namespace core::reset
 {
-    namespace reset
+    ///
+    /// \brief Initiates software MCU reset.
+    ///
+    inline void mcuReset()
     {
-        ///
-        /// \brief Initiates software MCU reset.
-        ///
-        inline void mcuReset()
-        {
-            NVIC_SystemReset();
-        }
-    }    // namespace reset
-}    // namespace core
+        NVIC_SystemReset();
+    }
+}    // namespace core::reset
 
 #endif

@@ -19,6 +19,9 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#ifndef __CORE_AVR_TIMING
+#define __CORE_AVR_TIMING
+
 #include <util/delay.h>
 
 namespace core::timing
@@ -37,3 +40,5 @@ namespace core::timing
         }
     }
 }    // namespace core::timing
+
+#endif

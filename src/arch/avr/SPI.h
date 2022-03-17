@@ -30,80 +30,85 @@
 #define SPI_2XCLOCK_MASK 0x01
 #define SPI_MODE_MASK    0x0C
 
-namespace core
+namespace core::spi
 {
-    namespace spi
+    enum class mode_t : uint8_t
     {
-        enum class mode_t : uint8_t
+        MODE_0 = 0x00,
+        MODE_1 = 0x04,
+        MODE_2 = 0x08,
+        MODE_3 = 0x0C
+    };
+
+    enum class clockDiv_t : uint8_t
+    {
+        DIV_2   = 0x04,
+        DIV_4   = 0x00,
+        DIV_8   = 0x05,
+        DIV_16  = 0x01,
+        DIV_32  = 0x06,
+        DIV_64  = 0x02,
+        DIV_128 = 0x03
+    };
+
+    enum class bitOrder_t : uint8_t
+    {
+        LSB,
+        MSB
+    };
+
+    void init()
+    {
+        ATOMIC_SECTION
         {
-            mode0 = 0x00,
-            mode1 = 0x04,
-            mode2 = 0x08,
-            mode3 = 0x0C
-        };
+            // SS
+            setOutput(PORTB, 0);
+            setHigh(PORTB, 0);
 
-        enum class clockDiv_t : uint8_t
+            SPCR |= (1 << MSTR);
+            SPCR |= (1 << SPE);
+
+            // clock
+            setOutput(PORTB, 1);
+            // mosi
+            setOutput(PORTB, 2);
+        }
+    }
+
+    uint8_t spiTransfer(uint8_t data)
+    {
+        SPDR = data;
+
+        while (!(SPSR & (1 << SPIF)))
         {
-            div2   = 0x04,
-            div4   = 0x00,
-            div8   = 0x05,
-            div16  = 0x01,
-            div32  = 0x06,
-            div64  = 0x02,
-            div128 = 0x03
-        };
-
-        enum class bitOrder_t : uint8_t
-        {
-            lsb,
-            msb
-        };
-
-        void init()
-        {
-            ATOMIC_SECTION
-            {
-                // SS
-                setOutput(PORTB, 0);
-                setHigh(PORTB, 0);
-
-                SPCR |= (1 << MSTR);
-                SPCR |= (1 << SPE);
-
-                // clock
-                setOutput(PORTB, 1);
-                // mosi
-                setOutput(PORTB, 2);
-            }
+            ;
         }
 
-        uint8_t spiTransfer(uint8_t data)
-        {
-            SPDR = data;
-            while (!(SPSR & (1 << SPIF)))
-                ;
-            return SPDR;
-        }
+        return SPDR;
+    }
 
-        void setBitOrder(bitOrder_t bitOrder)
+    void setBitOrder(bitOrder_t bitOrder)
+    {
+        if (bitOrder == bitOrder_t::LSB)
         {
-            if (bitOrder == bitOrder_t::lsb)
-                SPCR |= _BV(DORD);
-            else
-                SPCR &= ~(_BV(DORD));
+            SPCR |= _BV(DORD);
         }
+        else
+        {
+            SPCR &= ~(_BV(DORD));
+        }
+    }
 
-        void setClockDivider(clockDiv_t clockDiv)
-        {
-            SPCR = (SPCR & ~SPI_CLOCK_MASK) | ((uint8_t)clockDiv & SPI_CLOCK_MASK);
-            SPSR = (SPSR & ~SPI_2XCLOCK_MASK) | (((uint8_t)clockDiv >> 2) & SPI_2XCLOCK_MASK);
-        }
+    void setClockDivider(clockDiv_t clockDiv)
+    {
+        SPCR = (SPCR & ~SPI_CLOCK_MASK) | (static_cast<uint8_t>(clockDiv) & SPI_CLOCK_MASK);
+        SPSR = (SPSR & ~SPI_2XCLOCK_MASK) | ((static_cast<uint8_t>(clockDiv) >> 2) & SPI_2XCLOCK_MASK);
+    }
 
-        void setDataMode(mode_t dataMode)
-        {
-            SPCR = (SPCR & ~SPI_MODE_MASK) | (uint8_t)dataMode;
-        }
-    }    // namespace spi
-}    // namespace core
+    void setDataMode(mode_t dataMode)
+    {
+        SPCR = (SPCR & ~SPI_MODE_MASK) | static_cast<uint8_t>(dataMode);
+    }
+}    // namespace core::spi
 
 #endif

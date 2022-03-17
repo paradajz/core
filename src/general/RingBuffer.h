@@ -35,8 +35,7 @@ namespace core
         static_assert(size && !(size & (size - 1)), "Ring buffer size must be a power of two.");
 
         public:
-        RingBuffer()
-        {}
+        RingBuffer() = default;
 
         size_t count() const
         {
@@ -44,10 +43,14 @@ namespace core
 
             ATOMIC_SECTION
             {
-                if (head >= tail)
-                    result = head - tail;
+                if (_head >= _tail)
+                {
+                    result = _head - _tail;
+                }
                 else
-                    result = bufferSize + head - tail;
+                {
+                    result = BUFFER_SIZE + _head - _tail;
+                }
             }
 
             return result;
@@ -55,23 +58,25 @@ namespace core
 
         bool isEmpty() const
         {
-            return head == tail;
+            return _head == _tail;
         }
 
         bool isFull() const
         {
-            return count() == (bufferSize - 1);
+            return count() == (BUFFER_SIZE - 1);
         }
 
         bool insert(T data)
         {
-            size_t next = (head + 1) & (bufferSize - 1);
+            size_t next = (_head + 1) & (BUFFER_SIZE - 1);
 
-            if (tail == next)
+            if (_tail == next)
+            {
                 return false;
+            }
 
-            buffer[next] = data;
-            head         = next;
+            _buffer[next] = data;
+            _head         = next;
 
             return true;
         }
@@ -79,29 +84,33 @@ namespace core
         bool remove(T& result)
         {
             if (isEmpty())
+            {
                 return false;
+            }
 
-            size_t next = tail + 1;
+            size_t next = _tail + 1;
 
-            if (next >= bufferSize)
+            if (next >= BUFFER_SIZE)
+            {
                 next = 0;
+            }
 
-            result = buffer[next];
-            tail   = next;
+            result = _buffer[next];
+            _tail  = next;
 
             return true;
         }
 
         void reset()
         {
-            head = tail;
+            _head = _tail;
         }
 
         private:
-        volatile T      buffer[size] = {};
-        volatile size_t head         = 0;
-        volatile size_t tail         = 0;
-        const size_t    bufferSize   = size;
+        static constexpr size_t BUFFER_SIZE   = size;
+        volatile T              _buffer[size] = {};
+        volatile size_t         _head         = 0;
+        volatile size_t         _tail         = 0;
     };
 }    // namespace core
 

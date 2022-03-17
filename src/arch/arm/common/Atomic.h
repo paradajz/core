@@ -24,7 +24,7 @@
 
 #include "cmsis_compiler.h"
 
-static inline uint32_t disableInterruptsRetVal(void)
+static inline uint32_t disableInterruptsRetVal()
 {
     __disable_irq();
     return 1;
@@ -34,7 +34,9 @@ static inline void restoreInterrupts(const uint32_t* __s)
 {
     // if the interrupts have been enabled (PRIMASK returns 0), restore them
     if (!*__s)
+    {
         __enable_irq();
+    }
 }
 
 #define ATOMIC_SECTION                                                                                              \

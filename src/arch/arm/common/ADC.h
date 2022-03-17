@@ -24,15 +24,12 @@
 
 #include <inttypes.h>
 
-namespace core
+namespace core::adc
 {
-    namespace adc
-    {
-        // user should provide these functions due to much more complex ADC peripheral than on AVR
-        void     startConversion() __attribute__((weak));
-        void     setChannel(uint32_t adcChannel) __attribute__((weak));
-        uint16_t read() __attribute__((weak));
-    }    // namespace adc
-}    // namespace core
+    // user should provide these functions due to much more complex ADC peripheral than on AVR
+    void     startConversion() __attribute__((weak));
+    void     setChannel(uint32_t adcChannel) __attribute__((weak));
+    uint16_t read() __attribute__((weak));
+}    // namespace core::adc
 
 #endif

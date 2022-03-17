@@ -32,8 +32,8 @@ namespace core
     {
         enum class pinMode_t : uint8_t
         {
-            input,
-            output
+            INPUT,
+            OUTPUT
         };
 
         using pinPort_t   = uint16_t;
@@ -43,12 +43,12 @@ namespace core
         ///
         /// \brief Structure used to define single MCU pin.
         ///
-        typedef struct
+        struct mcuPin_t
         {
             pinPort_t  port;
             pinIndex_t index;
             pinMode_t  mode;
-        } mcuPin_t;
+        };
     }    // namespace io
 }    // namespace core
 
@@ -93,18 +93,26 @@ namespace core
     do                                        \
     {                                         \
         if (state)                            \
+        {                                     \
             CORE_IO_SET_HIGH(port, index);    \
+        }                                     \
         else                                  \
+        {                                     \
             CORE_IO_SET_LOW(port, index);     \
+        }                                     \
     } while (0)
 
 #define CORE_IO_TOGGLE(port, pin)        \
     do                                   \
     {                                    \
         if (CORE_IO_READ(port, pin))     \
+        {                                \
             CORE_IO_SET_LOW(port, pin);  \
+        }                                \
         else                             \
+        {                                \
             CORE_IO_SET_HIGH(port, pin); \
+        }                                \
     } while (0)
 
 ///
@@ -137,10 +145,14 @@ namespace core
 #define CORE_IO_INIT(port, index, mode)                \
     do                                                 \
     {                                                  \
-        if (mode == core::io::pinMode_t::input)        \
+        if (mode == core::io::pinMode_t::INPUT)        \
+        {                                              \
             PORT_TO_MEM(DDR(port)) &= ~(1 << (index)); \
+        }                                              \
         else                                           \
+        {                                              \
             PORT_TO_MEM(DDR(port)) |= (1 << (index));  \
+        }                                              \
     } while (0)
 
 #endif

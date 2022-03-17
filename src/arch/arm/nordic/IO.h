@@ -37,17 +37,17 @@ namespace core
     {
         enum class pinMode_t : uint32_t
         {
-            input,       // Input Floating Mode
-            outputPP,    // Output Push Pull Mode
-            outputOD,    // Output Open Drain Mode
-            analog       // Just de-init the pin with this option
+            INPUT,        // Input Floating Mode
+            OUTPUT_PP,    // Output Push Pull Mode
+            OUTPUT_OD,    // Output Open Drain Mode
+            ANALOG        // Just de-init the pin with this option
         };
 
         enum class interrupt_t : uint32_t
         {
-            none = NRF_GPIO_PIN_NOSENSE,
-            low  = NRF_GPIO_PIN_SENSE_LOW,
-            high = NRF_GPIO_PIN_SENSE_HIGH
+            NONE = NRF_GPIO_PIN_NOSENSE,
+            LOW  = NRF_GPIO_PIN_SENSE_LOW,
+            HIGH = NRF_GPIO_PIN_SENSE_HIGH
         };
 
         using pinPort_t   = uint32_t;
@@ -56,23 +56,23 @@ namespace core
 
         enum class pullMode_t : uint32_t
         {
-            none = 0x00000000U,
-            down = 0x00000001U,
-            up   = 0x00000003U,
+            NONE = 0x00000000U,
+            DOWN = 0x00000001U,
+            UP   = 0x00000003U,
         };
 
         ///
         /// \brief Structure used to define single MCU pin.
         ///
-        typedef struct
+        struct mcuPin_t
         {
             pinPort_t   port      = 0;
             pinIndex_t  index     = 0;
-            pinMode_t   mode      = pinMode_t::input;
-            pullMode_t  pull      = pullMode_t::none;
+            pinMode_t   mode      = pinMode_t::INPUT;
+            pullMode_t  pull      = pullMode_t::NONE;
             uint32_t    strength  = NRF_GPIO_PIN_S0S1;
-            interrupt_t interrupt = interrupt_t::none;
-        } mcuPin_t;
+            interrupt_t interrupt = interrupt_t::NONE;
+        };
     }    // namespace io
 }    // namespace core
 
@@ -87,9 +87,13 @@ namespace core
     do                                        \
     {                                         \
         if (state)                            \
+        {                                     \
             CORE_IO_SET_HIGH(port, index);    \
+        }                                     \
         else                                  \
+        {                                     \
             CORE_IO_SET_LOW(port, index);     \
+        }                                     \
     } while (0)
 
 ///
@@ -122,9 +126,9 @@ inline void CORE_IO_DEINIT(core::io::mcuPin_t pin)
 {
     PORT_TO_MEM(pin.port)->PIN_CNF[pin.index] = (NRF_GPIO_PIN_DIR_INPUT << GPIO_PIN_CNF_DIR_Pos) |
                                                 (NRF_GPIO_PIN_INPUT_DISCONNECT << GPIO_PIN_CNF_INPUT_Pos) |
-                                                (static_cast<uint32_t>(core::io::pullMode_t::none) << GPIO_PIN_CNF_PULL_Pos) |
+                                                (static_cast<uint32_t>(core::io::pullMode_t::NONE) << GPIO_PIN_CNF_PULL_Pos) |
                                                 (NRF_GPIO_PIN_S0S1 << GPIO_PIN_CNF_DRIVE_Pos) |
-                                                (static_cast<uint32_t>(core::io::interrupt_t::none) << GPIO_PIN_CNF_SENSE_Pos);
+                                                (static_cast<uint32_t>(core::io::interrupt_t::NONE) << GPIO_PIN_CNF_SENSE_Pos);
 }
 
 inline void CORE_IO_INIT(core::io::mcuPin_t pin)
@@ -134,20 +138,20 @@ inline void CORE_IO_INIT(core::io::mcuPin_t pin)
 
     switch (pin.mode)
     {
-    case core::io::pinMode_t::input:
+    case core::io::pinMode_t::INPUT:
     {
         // nothing to do
     }
     break;
 
-    case core::io::pinMode_t::outputPP:
+    case core::io::pinMode_t::OUTPUT_PP:
     {
         direction    = NRF_GPIO_PIN_DIR_OUTPUT;
         inputConnect = NRF_GPIO_PIN_INPUT_DISCONNECT;
     }
     break;
 
-    case core::io::pinMode_t::outputOD:
+    case core::io::pinMode_t::OUTPUT_OD:
     {
         direction    = NRF_GPIO_PIN_DIR_OUTPUT;
         inputConnect = NRF_GPIO_PIN_INPUT_DISCONNECT;
@@ -155,7 +159,7 @@ inline void CORE_IO_INIT(core::io::mcuPin_t pin)
     }
     break;
 
-    case core::io::pinMode_t::analog:
+    case core::io::pinMode_t::ANALOG:
     default:
     {
         CORE_IO_DEINIT(pin);

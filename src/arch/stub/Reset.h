@@ -22,14 +22,11 @@
 #ifndef __CORE_STUB_RESET
 #define __CORE_STUB_RESET
 
-namespace core
+namespace core::reset
 {
-    namespace reset
+    inline void mcuReset()
     {
-        inline void mcuReset()
-        {
-        }
-    }    // namespace reset
-}    // namespace core
+    }
+}    // namespace core::reset
 
 #endif

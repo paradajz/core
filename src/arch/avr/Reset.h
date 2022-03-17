@@ -31,196 +31,195 @@
 #define WDFR 3
 #endif
 
-namespace core
+namespace core::reset
 {
-    namespace reset
+    ///
+    /// \brief Disables all peripherals present on MCU.
+    ///
+    inline void disablePeripherals()
     {
-        ///
-        /// \brief Disables all peripherals present on MCU.
-        ///
-        inline void disablePeripherals()
-        {
-            // disable eeprom
-            EECR = 0;
+        // disable eeprom
+        EECR = 0;
 
-            // disable analog comparator
-            ACSR = 0;
+        // disable analog comparator
+        ACSR = 0;
 
-            // disable SPI
-            SPCR = 0;
+        // disable SPI
+        SPCR = 0;
 
-            // disable external interrupts
-            EIMSK = 0;
+        // disable external interrupts
+        EIMSK = 0;
 
-            // disable pin change interrupts
-            PCICR = 0;
+        // disable pin change interrupts
+        PCICR = 0;
 
 // disable ADC
 #ifdef ADCSRA
-            ADCSRA = 0;
+        ADCSRA = 0;
 #endif
 
 // disable timers
 #ifdef TIMSK0
-            TIMSK0 = 0;
+        TIMSK0 = 0;
 #endif
 #ifdef TIMSK1
-            TIMSK1 = 0;
+        TIMSK1 = 0;
 #endif
 #ifdef TIMSK2
-            TIMSK2 = 0;
+        TIMSK2 = 0;
 #endif
 #ifdef TIMSK3
-            TIMSK3 = 0;
+        TIMSK3 = 0;
 #endif
 #ifdef TIMSK4
-            TIMSK4 = 0;
+        TIMSK4 = 0;
 #endif
 #ifdef TIMSK5
-            TIMSK5 = 0;
+        TIMSK5 = 0;
 #endif
 
 // disable USART
 #ifdef UCSR0A
-            UCSR0A = 0;
+        UCSR0A = 0;
 #endif
 #ifdef UCSR1A
-            UCSR1A = 0;
+        UCSR1A = 0;
 #endif
 #ifdef UCSR2A
-            UCSR2A = 0;
+        UCSR2A = 0;
 #endif
 #ifdef UCSR3A
-            UCSR3A = 0;
+        UCSR3A = 0;
 #endif
 
 #ifdef UCSR0B
-            UCSR0B = 0;
+        UCSR0B = 0;
 #endif
 #ifdef UCSR1B
-            UCSR1B = 0;
+        UCSR1B = 0;
 #endif
 #ifdef UCSR2B
-            UCSR2B = 0;
+        UCSR2B = 0;
 #endif
 #ifdef UCSR3B
-            UCSR3B = 0;
+        UCSR3B = 0;
 #endif
 
 #ifdef UCSR0C
-            UCSR0C = 0;
+        UCSR0C = 0;
 #endif
 #ifdef UCSR1C
-            UCSR1C = 0;
+        UCSR1C = 0;
 #endif
 #ifdef UCSR2C
-            UCSR2C = 0;
+        UCSR2C = 0;
 #endif
 #ifdef UCSR3C
-            UCSR3C = 0;
+        UCSR3C = 0;
 #endif
 
 // disable I2C
 #ifdef TWCR
-            TWCR = 0;
-            TWSR = 0;
-            TWCR = 0;
+        TWCR = 0;
+        TWSR = 0;
+        TWCR = 0;
 #endif
 
 // write low to all pins
 #ifdef PORTA
-            PORTA = 0;
+        PORTA = 0;
 #endif
 #ifdef PORTB
-            PORTB = 0;
+        PORTB = 0;
 #endif
 #ifdef PORTC
-            PORTC = 0;
+        PORTC = 0;
 #endif
 #ifdef PORTD
-            PORTD = 0;
+        PORTD = 0;
 #endif
 #ifdef PORTE
-            PORTE = 0;
+        PORTE = 0;
 #endif
 #ifdef PORTF
-            PORTF = 0;
+        PORTF = 0;
 #endif
 #ifdef PORTG
-            PORTG = 0;
+        PORTG = 0;
 #endif
 #ifdef PORTH
-            PORTH = 0;
+        PORTH = 0;
 #endif
 #ifdef PORTJ
-            PORTJ = 0;
+        PORTJ = 0;
 #endif
 #ifdef PORTK
-            PORTK = 0;
+        PORTK = 0;
 #endif
 #ifdef PORTL
-            PORTL = 0;
+        PORTL = 0;
 #endif
 
 // set all pins to inputs
 #ifdef DDRA
-            DDRA = 0;
+        DDRA = 0;
 #endif
 #ifdef DDRB
-            DDRB = 0;
+        DDRB = 0;
 #endif
 #ifdef DDRC
-            DDRC = 0;
+        DDRC = 0;
 #endif
 #ifdef DDRD
-            DDRD = 0;
+        DDRD = 0;
 #endif
 #ifdef DDRE
-            DDRE = 0;
+        DDRE = 0;
 #endif
 #ifdef DDRF
-            DDRF = 0;
+        DDRF = 0;
 #endif
 #ifdef DDRG
-            DDRG = 0;
+        DDRG = 0;
 #endif
 #ifdef DDRH
-            DDRH = 0;
+        DDRH = 0;
 #endif
 #ifdef DDRJ
-            DDRJ = 0;
+        DDRJ = 0;
 #endif
 #ifdef DDRK
-            DDRK = 0;
+        DDRK = 0;
 #endif
 #ifdef DDRL
-            DDRL = 0;
+        DDRL = 0;
 #endif
 
 #ifdef USBCON
-            // detach USB connection
-            UDCON |= (1 << DETACH);
+        // detach USB connection
+        UDCON |= (1 << DETACH);
 #endif
-        }
+    }
 
-        ///
-        /// \brief Initiates software MCU reset by setting watch-dog timeout and waiting until watchdog is activated.
-        ///
-        inline void mcuReset()
+    ///
+    /// \brief Initiates software MCU reset by setting watch-dog timeout and waiting until watchdog is activated.
+    ///
+    inline void mcuReset()
+    {
+        cli();
+        // stop watchdog timer, if running
+        MCUSR &= ~(1 << WDFR);
+        WDTCSR |= (1 << WDCE);
+        WDTCSR = 0;
+        _delay_ms(5);
+        disablePeripherals();
+        wdt_enable(WDTO_15MS);
+
+        while (1)
         {
-            cli();
-            // stop watchdog timer, if running
-            MCUSR &= ~(1 << WDFR);
-            WDTCSR |= (1 << WDCE);
-            WDTCSR = 0;
-            _delay_ms(5);
-            disablePeripherals();
-
-            wdt_enable(WDTO_15MS);
-            while (1)
-                ;
+            ;
         }
-    }    // namespace reset
-}    // namespace core
+    }
+}    // namespace core::reset
 
 #endif

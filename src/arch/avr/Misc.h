@@ -28,21 +28,19 @@
 
 #define CORE_NOP() _NOP()
 
-namespace core
+namespace core::misc
 {
-    namespace misc
+    ///
+    /// \brief Helper function for easier retrieval of far PGM address.
+    ///
+    inline uint32_t pgmGetFarAddress(uint32_t address)
     {
-        ///
-        /// \brief Helper function for easier retrieval of far PGM address.
-        ///
-        inline uint32_t pgmGetFarAddress(uint32_t address)
-        {
-            static uint32_t temp;
-            temp = address;
-            pgm_get_far_address(temp);
-            return temp;
-        };
-    }    // namespace misc
-}    // namespace core
+        static uint32_t temp;
+        temp = address;
+        pgm_get_far_address(temp);
+
+        return temp;
+    };
+}    // namespace core::misc
 
 #endif

@@ -42,15 +42,15 @@ namespace core
     {
         enum class pinMode_t : uint32_t
         {
-            input           = 0x00000000U,    // Input Floating Mode
-            outputPP        = 0x00000001U,    // Output Push Pull Mode
-            outputOD        = 0x00000011U,    // Output Open Drain Mode
-            alternatePP     = 0x00000002U,    // Alternate Function Push Pull Mode
-            alternateOD     = 0x00000012U,    // Alternate Function Open Drain Mode
-            analog          = 0x00000003U,
-            itRising        = 0x10110000U,    // External Interrupt Mode with Rising edge trigger detection
-            itFalling       = 0x10210000U,    // External Interrupt Mode with Falling edge trigger detection
-            itRisingFalling = 0x10310000U     // External Interrupt Mode with Rising/Falling edge trigger detection
+            INPUT             = 0x00000000U,    // Input Floating Mode
+            OUTPUT_PP         = 0x00000001U,    // Output Push Pull Mode
+            OUTPUT_OD         = 0x00000011U,    // Output Open Drain Mode
+            ALTERNATE_PP      = 0x00000002U,    // Alternate Function Push Pull Mode
+            ALTERNATE_OD      = 0x00000012U,    // Alternate Function Open Drain Mode
+            ANALOG            = 0x00000003U,
+            IT_RISING         = 0x10110000U,    // External Interrupt Mode with Rising edge trigger detection
+            IT_FALLING        = 0x10210000U,    // External Interrupt Mode with Falling edge trigger detection
+            IT_RISING_FALLING = 0x10310000U     // External Interrupt Mode with Rising/Falling edge trigger detection
         };
 
         using pinPort_t   = uint32_t;
@@ -59,31 +59,31 @@ namespace core
 
         enum class pullMode_t : uint32_t
         {
-            none = 0x00000000U,
-            up   = 0x00000001U,
-            down = 0x00000002U
+            NONE = 0x00000000U,
+            UP   = 0x00000001U,
+            DOWN = 0x00000002U
         };
 
         enum class gpioSpeed_t : uint32_t
         {
-            low      = 0x00000000U,    // IO works at 2 MHz
-            medium   = 0x00000001U,    // range 12,5 MHz to 50 MHz
-            high     = 0x00000002U,    // range 25 MHz to 100 MHz
-            veryHigh = 0x00000003U     // range 50 MHz to 200 MHz
+            LOW       = 0x00000000U,    // IO works at 2 MHz
+            MEDIUM    = 0x00000001U,    // range 12,5 MHz to 50 MHz
+            HIGH      = 0x00000002U,    // range 25 MHz to 100 MHz
+            VERY_HIGH = 0x00000003U     // range 50 MHz to 200 MHz
         };
 
         ///
         /// \brief Structure used to define single MCU pin.
         ///
-        typedef struct
+        struct mcuPin_t
         {
             pinPort_t   port      = 0;
             pinIndex_t  index     = 0;
-            pinMode_t   mode      = pinMode_t::input;
-            pullMode_t  pull      = pullMode_t::none;
-            gpioSpeed_t speed     = gpioSpeed_t::medium;
+            pinMode_t   mode      = pinMode_t::INPUT;
+            pullMode_t  pull      = pullMode_t::NONE;
+            gpioSpeed_t speed     = gpioSpeed_t::MEDIUM;
             uint32_t    alternate = 0;
-        } mcuPin_t;
+        };
     }    // namespace io
 }    // namespace core
 
@@ -98,18 +98,26 @@ namespace core
     do                                        \
     {                                         \
         if (state)                            \
+        {                                     \
             CORE_IO_SET_HIGH(port, index);    \
+        }                                     \
         else                                  \
+        {                                     \
             CORE_IO_SET_LOW(port, index);     \
+        }                                     \
     } while (0)
 
 #define CORE_IO_TOGGLE(port, pin)                                        \
     do                                                                   \
     {                                                                    \
         if ((PORT_TO_MEM(port)->ODR & pin) == pin)                       \
+        {                                                                \
             PORT_TO_MEM(port)->BSRR = static_cast<uint32_t>(pin) << 16U; \
+        }                                                                \
         else                                                             \
+        {                                                                \
             PORT_TO_MEM(port)->BSRR = pin;                               \
+        }                                                                \
     } while (0)
 
 ///

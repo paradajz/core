@@ -24,29 +24,26 @@
 
 #include <inttypes.h>
 
-namespace core
+namespace core::crc
 {
-    namespace crc
+    inline uint16_t xmodem(uint16_t crc, uint8_t data)
     {
-        inline uint16_t xmodem(uint16_t crc, uint8_t data)
+        crc = crc ^ (static_cast<uint16_t>(data) << 8);
+
+        for (int i = 0; i < 8; i++)
         {
-            crc = crc ^ (static_cast<uint16_t>(data) << 8);
-
-            for (int i = 0; i < 8; i++)
+            if (crc & 0x8000)
             {
-                if (crc & 0x8000)
-                {
-                    crc = (crc << 1) ^ 0x1021;
-                }
-                else
-                {
-                    crc <<= 1;
-                }
+                crc = (crc << 1) ^ 0x1021;
             }
-
-            return crc;
+            else
+            {
+                crc <<= 1;
+            }
         }
-    }    // namespace crc
-}    // namespace core
+
+        return crc;
+    }
+}    // namespace core::crc
 
 #endif

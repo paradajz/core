@@ -19,6 +19,9 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#ifndef __CORE_AVR_UART
+#define __CORE_AVR_UART
+
 #include <avr/io.h>
 
 ///
@@ -481,6 +484,8 @@
 
 #ifdef UPM31
 #define UPM1_3 UPM31
+#endif
+
 #endif
 
 #endif

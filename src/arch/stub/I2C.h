@@ -24,23 +24,20 @@
 
 #include <inttypes.h>
 
-namespace core
+namespace core::i2c
 {
-    namespace i2c
+    enum class transferType_t : uint8_t
     {
-        enum class transferType_t : uint8_t
-        {
-            write,
-            read
-        };
+        WRITE,
+        READ
+    };
 
-        void enable() __attribute__((weak));
-        void disable(bool force) __attribute__((weak));
-        bool startComm(uint8_t address, transferType_t type) __attribute__((weak));
-        void stopComm() __attribute__((weak));
-        bool write(uint8_t data) __attribute__((weak));
-        void read(uint8_t& data) __attribute__((weak));
-    }    // namespace i2c
-}    // namespace core
+    void enable() __attribute__((weak));
+    void disable(bool force) __attribute__((weak));
+    bool startComm(uint8_t address, transferType_t type) __attribute__((weak));
+    void stopComm() __attribute__((weak));
+    bool write(uint8_t data) __attribute__((weak));
+    void read(uint8_t& data) __attribute__((weak));
+}    // namespace core::i2c
 
 #endif

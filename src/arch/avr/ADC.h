@@ -32,28 +32,28 @@ namespace core
     {
         enum class prescaler_t : uint8_t
         {
-            p128 = 128,
-            p64  = 64,
-            p32  = 32,
-            p16  = 16
+            P128 = 128,
+            P64  = 64,
+            P32  = 32,
+            P16  = 16
         };
 
         enum class vRef_t : uint8_t
         {
-            aref    = 0,
-            avcc    = 1,
-            int2v56 = 2,
-            int1v1  = 3
+            AREF     = 0,
+            AVCC     = 1,
+            INT_2V56 = 2,
+            INT_1V1  = 3
         };
 
         ///
         /// \brief Structure holding ADC prescaler and voltage reference settings.
         ///
-        typedef struct
+        struct conf_t
         {
             prescaler_t prescaler;
             vRef_t      vref;
-        } conf_t;
+        };
 
         ///
         /// \brief Starts ADC conversion by setting ADSC bit in ADCSRA register.
@@ -82,48 +82,54 @@ namespace core
 
             switch (configuration.prescaler)
             {
-            case prescaler_t::p128:
-                ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
-                break;
-
-            case prescaler_t::p64:
+            case prescaler_t::P64:
+            {
                 ADCSRA |= (1 << ADPS2) | (1 << ADPS1);
-                break;
+            }
+            break;
 
-            case prescaler_t::p32:
+            case prescaler_t::P32:
+            {
                 ADCSRA |= (1 << ADPS2) | (1 << ADPS0);
-                break;
+            }
+            break;
 
-            case prescaler_t::p16:
+            case prescaler_t::P16:
+            {
                 ADCSRA |= (1 << ADPS2);
-                break;
+            }
+            break;
 
+            case prescaler_t::P128:
             default:
-                // 128 as an fallback
+            {
                 ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
-                break;
+            }
+            break;
             }
 
             switch (configuration.vref)
             {
-            case vRef_t::aref:
-                // nothing, this is default setting
-                break;
-
-            case vRef_t::avcc:
+            case vRef_t::AVCC:
+            {
                 ADMUX |= (1 << REFS0);
-                break;
+            }
+            break;
 
-            case vRef_t::int2v56:
+            case vRef_t::INT_2V56:
+            {
                 ADMUX |= (1 << REFS0) | (1 << REFS1);
-                break;
+            }
+            break;
 
-            case vRef_t::int1v1:
+            case vRef_t::INT_1V1:
+            {
                 ADMUX |= (1 << REFS1);
-                break;
+            }
+            break;
 
+            case vRef_t::AREF:
             default:
-                // nothing
                 break;
             }
 
@@ -143,7 +149,9 @@ namespace core
 
             // wait until ADC conversion is complete
             while (ADCSRA & (1 << ADSC))
+            {
                 ;
+            }
 
             return ADC;
         }

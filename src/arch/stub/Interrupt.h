@@ -24,5 +24,8 @@
 
 #define ENABLE_INTERRUPTS()
 #define DISABLE_INTERRUPTS()
+#define ISR(vector, ...)                      \
+    extern "C" void vector(void) __VA_ARGS__; \
+    void            vector(void)
 
 #endif

@@ -24,6 +24,29 @@
 
 #include <inttypes.h>
 
+#define TWCR            (*(volatile uint32_t*)(1))
+#define TWDR            (*(volatile uint32_t*)(1))
+#define TW_STATUS       (*(volatile uint32_t*)(1))
+#define TWBR            (*(volatile uint32_t*)(1))
+#define TWSR            (*(volatile uint32_t*)(1))
+#define TW_MT_SLA_ACK   0
+#define TWINT           1
+#define TWSTA           2
+#define TWIE            3
+#define TWEN            3
+#define TW_MR_SLA_NACK  4
+#define TW_MT_SLA_NACK  5
+#define TW_MT_DATA_NACK 6
+#define TW_MT_ARB_LOST  7
+#define TW_BUS_ERROR    8
+#define TW_NO_INFO      9
+#define TW_MT_DATA_ACK  10
+#define TWEA            11
+#define TW_START        12
+#define TW_REP_START    13
+#define TWSTO           14
+#define TW_MR_SLA_ACK   15
+
 namespace core::i2c
 {
     enum class transferType_t : uint8_t

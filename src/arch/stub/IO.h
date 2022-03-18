@@ -74,9 +74,11 @@ namespace core
     }    // namespace io
 }    // namespace core
 
-#define CORE_IO_SET_LOW(port, index)
-#define CORE_IO_SET_HIGH(port, index)
-#define CORE_IO_SET_PORT_STATE(port, state)
+#define CORE_IO_SET_LOW(port, index)  (void)0
+#define CORE_IO_SET_HIGH(port, index) (void)1
+#define CORE_IO_SET_PORT_STATE(port, state) \
+    (void)port;                             \
+    (void)state
 #define CORE_IO_READ(port, index)   0
 #define CORE_IO_READ_OUT_PORT(port) 0
 #define CORE_IO_READ_IN_PORT(port)  0
@@ -84,9 +86,11 @@ namespace core
 #define CORE_IO_TOGGLE(port, pin)
 #define CORE_IO_PIN_PORT_DEF(port)    0
 #define CORE_IO_PIN_INDEX_DEF(index)  0
-#define CORE_IO_MCU_PIN_PORT(mcuPin)  0
-#define CORE_IO_MCU_PIN_INDEX(mcuPin) 0
-#define CORE_IO_INIT(port, index, mode)
+#define CORE_IO_MCU_PIN_PORT(mcuPin)  (void)mcuPin
+#define CORE_IO_MCU_PIN_INDEX(mcuPin) (void)mcuPin
+#define CORE_IO_INIT(port, index, mode) \
+    (void)port;                         \
+    (void)index
 #define CORE_IO_MCU_PIN_VAR(_port, _index) \
     {                                      \
         .port  = _port,                    \

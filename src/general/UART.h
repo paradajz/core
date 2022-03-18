@@ -19,17 +19,13 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef __CORE_STUB_RESET
-#define __CORE_STUB_RESET
+#ifndef __CORE_GENERAL_UART
+#define __CORE_GENERAL_UART
 
-namespace core::reset
-{
-    inline void mcuReset()
-    {
-    }
-}    // namespace core::reset
-
-inline void wdt_disable()
-{}
+#ifdef CORE_ARCH_AVR
+#include "../arch/avr/UART.h"
+#else
+#include "../arch/stub/UART.h"
+#endif
 
 #endif

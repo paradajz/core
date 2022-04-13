@@ -1,0 +1,17 @@
+---
+  arch: "avr"
+  mcuFamily: "avr8"
+  vendor: "atmel"
+  define-symbol: "__AVR_ATmega16U2__"
+  uid-bits: 80
+  adc-bits: 10
+  flash:
+    flash-start: 0x00
+    app-metadata-offset: 0x74
+    page-size: 0x80
+    size: 0x4000
+  eeprom:
+    size: 0x200
+  peripherals:
+    uart: 1
+    i2c: 0

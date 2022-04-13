@@ -19,8 +19,7 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef __CORE_ARM_COMMON_ATOMIC
-#define __CORE_ARM_COMMON_ATOMIC
+#pragma once
 
 #include "cmsis_compiler.h"
 
@@ -39,10 +38,8 @@ static inline void restoreInterrupts(const uint32_t* __s)
     }
 }
 
-#define ATOMIC_SECTION                                                                                              \
+#define CORE_MCU_ATOMIC_SECTION                                                                                     \
     for (uint32_t primask_save __attribute__((unused, __cleanup__(restoreInterrupts))) = __get_PRIMASK(),           \
                                                       condition                        = disableInterruptsRetVal(); \
          condition;                                                                                                 \
          condition = 0)
-
-#endif

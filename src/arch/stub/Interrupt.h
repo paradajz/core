@@ -19,13 +19,10 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef __CORE_STUB_INTERRUPT
-#define __CORE_STUB_INTERRUPT
+#pragma once
 
-#define ENABLE_INTERRUPTS()
-#define DISABLE_INTERRUPTS()
+#define CORE_MCU_ENABLE_INTERRUPTS()
+#define CORE_MCU_DISABLE_INTERRUPTS()
 #define ISR(vector, ...)                      \
     extern "C" void vector(void) __VA_ARGS__; \
     void            vector(void)
-
-#endif

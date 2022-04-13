@@ -19,20 +19,11 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef __CORE_STUB_TIMING
-#define __CORE_STUB_TIMING
+#pragma once
 
 namespace core::timing
 {
-    ///
-    /// \brief Delays for desired time interval in milliseconds.
-    /// This function makes use of built-in _delay_ms function. Function is called repeatedly with argument 1 until
-    /// ms parameter reaches 0, since _delay_ms accepts only constant known at compile-time.
-    /// @param [in] ms  Delay time in milliseconds.
-    ///
     inline void waitMs(uint32_t ms)
     {
     }
 }    // namespace core::timing
-
-#endif

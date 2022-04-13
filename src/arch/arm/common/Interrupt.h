@@ -19,12 +19,9 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef __CORE_ARM_COMMON_INTERRUPT
-#define __CORE_ARM_COMMON_INTERRUPT
+#pragma once
 
 #include "cmsis_compiler.h"
 
-#define ENABLE_INTERRUPTS()  __enable_irq();
-#define DISABLE_INTERRUPTS() __disable_irq();
-
-#endif
+#define CORE_MCU_ENABLE_INTERRUPTS()  __enable_irq();
+#define CORE_MCU_DISABLE_INTERRUPTS() __disable_irq();

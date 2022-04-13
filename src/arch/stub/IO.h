@@ -19,81 +19,79 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef __CORE_STUB_IO
-#define __CORE_STUB_IO
+#pragma once
 
 #include <inttypes.h>
 
-namespace core
+namespace core::mcu::io
 {
-    namespace io
+    using pinPort_t   = uint8_t;
+    using pinIndex_t  = uint8_t;
+    using portWidth_t = pinIndex_t;
+
+    enum class pinMode_t : uint32_t
     {
-        using pinPort_t   = uint8_t;
-        using pinIndex_t  = uint8_t;
-        using portWidth_t = pinIndex_t;
+        INPUT,
+        OUTPUT,
+        OUTPUT_PP,
+        OUTPUT_OD,
+        ALTERNATE_PP,
+        ALTERNATE_OD,
+        ANALOG,
+        IT_RISING,
+        IT_FALLING,
+        IT_RISING_FALLING
+    };
 
-        enum class pinMode_t : uint32_t
-        {
-            INPUT,
-            OUTPUT,
-            OUTPUT_PP,
-            OUTPUT_OD,
-            ALTERNATE_PP,
-            ALTERNATE_OD,
-            ANALOG,
-            IT_RISING,
-            IT_FALLING,
-            IT_RISING_FALLING
-        };
+    enum class pullMode_t : uint32_t
+    {
+        NONE,
+        UP,
+        DOWN
+    };
 
-        enum class pullMode_t : uint32_t
-        {
-            NONE,
-            UP,
-            DOWN
-        };
+    enum class gpioSpeed_t : uint32_t
+    {
+        LOW,
+        MEDIUM,
+        HIGH,
+        VERY_HIGH
+    };
 
-        enum class gpioSpeed_t : uint32_t
-        {
-            LOW,
-            MEDIUM,
-            HIGH,
-            VERY_HIGH
-        };
+    struct pin_t
+    {
+        pinPort_t   port;
+        pinIndex_t  index;
+        pinMode_t   mode;
+        pullMode_t  pull;
+        gpioSpeed_t speed;
+        uint32_t    alternate;
+    };
 
-        struct mcuPin_t
-        {
-            pinPort_t   port;
-            pinIndex_t  index;
-            pinMode_t   mode;
-            pullMode_t  pull;
-            gpioSpeed_t speed;
-            uint32_t    alternate;
-        };
+}    // namespace core::mcu::io
 
-    }    // namespace io
-}    // namespace core
-
-#define CORE_IO_SET_LOW(port, index)  (void)0
-#define CORE_IO_SET_HIGH(port, index) (void)1
-#define CORE_IO_SET_PORT_STATE(port, state) \
-    (void)port;                             \
+#define CORE_MCU_IO_SET_LOW(port, index)  (void)0
+#define CORE_MCU_IO_SET_HIGH(port, index) (void)1
+#define CORE_MCU_IO_SET_PORT_STATE(port, state) \
+    (void)port;                                 \
     (void)state
-#define CORE_IO_READ(port, index)   0
-#define CORE_IO_READ_OUT_PORT(port) 0
-#define CORE_IO_READ_IN_PORT(port)  0
-#define CORE_IO_SET_STATE(port, index, state)
-#define CORE_IO_TOGGLE(port, pin)
-#define CORE_IO_PIN_PORT_DEF(port)    0
-#define CORE_IO_PIN_INDEX_DEF(index)  0
-#define CORE_IO_MCU_PIN_PORT(mcuPin)  (void)mcuPin
-#define CORE_IO_MCU_PIN_INDEX(mcuPin) (void)mcuPin
-#define CORE_IO_INIT(port, index, mode) \
-    (void)port;                         \
-    (void)index
-#define CORE_IO_MCU_PIN_VAR(_port, _index) \
+#define CORE_MCU_IO_READ(port, index)   0
+#define CORE_MCU_IO_READ_OUT_PORT(port) 0
+#define CORE_MCU_IO_READ_IN_PORT(port)  0
+#define CORE_MCU_IO_SET_STATE(port, index, state)
+#define CORE_MCU_IO_TOGGLE(port, pin)
+#define CORE_MCU_IO_PIN_PORT_DEF(port)   static_cast<core::mcu::io::pinPort_t>(0)
+#define CORE_MCU_IO_PIN_INDEX_DEF(index) static_cast<core::mcu::io::pinIndex_t>(0)
+#define CORE_MCU_IO_PIN_PORT(mcuPin)     mcuPin.port
+#define CORE_MCU_IO_PIN_INDEX(mcuPin)    mcuPin.index
+#define CORE_MCU_IO_PIN_VAR(_port, _index) \
     {                                      \
         .port  = _port,                    \
         .index = _index                    \
     }
-#endif
+
+inline void CORE_MCU_IO_INIT(core::mcu::io::pinPort_t  port,
+                             core::mcu::io::pinIndex_t index,
+                             core::mcu::io::pinMode_t  mode = core::mcu::io::pinMode_t::INPUT,
+                             core::mcu::io::pullMode_t pull = core::mcu::io::pullMode_t::NONE)
+{}

@@ -19,8 +19,7 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef __CORE_STUB_UART
-#define __CORE_STUB_UART
+#pragma once
 
 #define UCSRA_0 (*(volatile uint32_t*)(1))
 #define UCSRA_1 (*(volatile uint32_t*)(1))
@@ -73,5 +72,3 @@
 #define UPM1_0  3
 #define UPM1_1  4
 #define UPM1_2  5
-
-#endif

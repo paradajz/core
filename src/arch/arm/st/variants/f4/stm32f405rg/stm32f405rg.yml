@@ -1,0 +1,54 @@
+---
+  arch: "arm"
+  mcuFamily: "f4"
+  vendor: "st"
+  cpu: "cortex-m4"
+  freq: 168
+  fpu: "fpv4-sp-d16"
+  float-abi: "hard"
+  define-symbol: "STM32F405xx"
+  uid-bits: 96
+  adc-bits: 12
+  flash:
+    flash-start: 0x8000000
+    app-metadata-offset: 0x190
+    pages:
+    -
+      address: 0x8000000
+      size: 16384
+    -
+      address: 0x8004000
+      size: 16384
+    -
+      address: 0x8008000
+      size: 16384
+    -
+      address: 0x800C000
+      size: 16384
+    -
+      address: 0x8010000
+      size: 65536
+    -
+      address: 0x8020000
+      size: 131072
+    -
+      address: 0x8040000
+      size: 131072
+    -
+      address: 0x8060000
+      size: 131072
+    -
+      address: 0x8080000
+      size: 131072
+    -
+      address: 0x80A0000
+      size: 131072
+    -
+      address: 0x80C0000
+      size: 131072
+    -
+      address: 0x80E0000
+      size: 131072
+  peripherals:
+    uart: 6
+    i2c: 3

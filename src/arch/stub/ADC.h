@@ -19,46 +19,43 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef __CORE_STUB_ADC
-#define __CORE_STUB_ADC
+#pragma once
 
 #include <inttypes.h>
 
-namespace core
-{
-    namespace adc
-    {
-        enum class prescaler_t : uint8_t
-        {
-            P128 = 128,
-            P64  = 64,
-            P32  = 32,
-            P16  = 16
-        };
-
-        enum class vRef_t : uint8_t
-        {
-            AREF     = 0,
-            AVCC     = 1,
-            INT_2v56 = 2,
-            INT_1v1  = 3
-        };
-
-        ///
-        /// \brief Structure holding ADC prescaler and voltage reference settings.
-        ///
-        struct conf_t
-        {
-            prescaler_t prescaler;
-            vRef_t      vref;
-        };
-
-        void     startConversion() __attribute__((weak));
-        void     enableInterrupt() __attribute__((weak));
-        void     setup(conf_t configuration) __attribute__((weak));
-        void     disconnectDigitalIn(uint8_t adcChannel) __attribute__((weak));
-        void     setChannel(uint8_t adcChannel) __attribute__((weak));
-        uint16_t read() __attribute__((weak));
-    }    // namespace adc
-}    // namespace core
+#if !__has_include(<MCU.h>)
+// already defined in generated MCU, define only if it doesn't exist
+constexpr uint32_t core::mcu::adc::MAX = 1023;
 #endif
+
+namespace core::mcu::adc
+{
+    enum class prescaler_t : uint8_t
+    {
+        P128 = 128,
+        P64  = 64,
+        P32  = 32,
+        P16  = 16
+    };
+
+    enum class vRef_t : uint8_t
+    {
+        AREF     = 0,
+        AVCC     = 1,
+        INT_2V56 = 2,
+        INT_1V1  = 3
+    };
+
+    /// Structure holding ADC prescaler and voltage reference settings.
+    struct conf_t
+    {
+        prescaler_t prescaler;
+        vRef_t      vref;
+    };
+
+    void     init(conf_t configuration) __attribute__((weak));
+    uint16_t read(uint32_t channel) __attribute__((weak));
+    void     startItConversion() __attribute__((weak));
+    void     setChannel(uint32_t channel) __attribute__((weak));
+    void     disconnectDigitalIn(uint32_t channel) __attribute__((weak));
+}    // namespace core::mcu::adc

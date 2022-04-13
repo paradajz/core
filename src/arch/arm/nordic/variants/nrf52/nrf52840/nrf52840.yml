@@ -1,0 +1,20 @@
+---
+  arch: "arm"
+  vendor: "nordic"
+  mcuFamily: "nrf52"
+  cpu: "cortex-m4"
+  freq: 64
+  fpu: "fpv4-sp-d16"
+  float-abi: "hard"
+  define-symbol: "NRF52840_XXAA"
+  uid-bits: 64
+  adc-bits: 12
+  flash:
+    flash-start: 0x00
+    app-metadata-offset: 0x200
+    page-size: 0x1000
+    size: 0x100000
+  peripherals:
+    custom-pins: true
+    uart: 1
+    i2c: 1

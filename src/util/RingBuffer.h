@@ -28,15 +28,17 @@
 
 namespace core::util
 {
-    template<typename T, size_t size>
+    template<typename T, size_t maxSize>
     class RingBuffer
     {
-        static_assert(size && !(size & (size - 1)), "Ring buffer size must be a power of two.");
+        static_assert(maxSize > 1 && !(maxSize & (maxSize - 1)), "Ring buffer size must be a power of two and larger than 1.");
 
         public:
         RingBuffer() = default;
 
-        size_t count() const
+        static constexpr size_t BUFFER_SIZE = maxSize;
+
+        size_t size() const
         {
             size_t result = 0;
 
@@ -62,20 +64,41 @@ namespace core::util
 
         bool isFull() const
         {
-            return count() == (BUFFER_SIZE - 1);
+            return size() == (BUFFER_SIZE - 1);
         }
 
         bool insert(T data)
         {
-            size_t next = (_head + 1) & (BUFFER_SIZE - 1);
+            const size_t NEXT = (_head + 1) & (BUFFER_SIZE - 1);
 
-            if (_tail == next)
+            // avoid overflow - this would create empty buffer
+            if (_tail == NEXT)
             {
                 return false;
             }
 
-            _buffer[next] = data;
-            _head         = next;
+            _buffer[NEXT] = data;
+            _head         = NEXT;
+
+            return true;
+        }
+
+        // get last element without removing it
+        bool peek(T& result)
+        {
+            if (isEmpty())
+            {
+                return false;
+            }
+
+            size_t next = _tail + 1;
+
+            if (next >= BUFFER_SIZE)
+            {
+                next = 0;
+            }
+
+            result = _buffer[next];
 
             return true;
         }
@@ -106,9 +129,8 @@ namespace core::util
         }
 
         private:
-        static constexpr size_t BUFFER_SIZE   = size;
-        volatile T              _buffer[size] = {};
-        volatile size_t         _head         = 0;
-        volatile size_t         _tail         = 0;
+        T               _buffer[maxSize] = {};
+        volatile size_t _head            = 0;
+        volatile size_t _tail            = 0;
     };
 }    // namespace core::util

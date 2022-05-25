@@ -31,6 +31,11 @@ extern "C" void UARTE0_UART0_IRQHandler(void)
     core::mcu::isr::uart(0);
 }
 
+extern "C" void UARTE1_IRQHandler(void)
+{
+    core::mcu::isr::uart(1);
+}
+
 extern "C" void USBD_IRQHandler(void)
 {
     core::mcu::isr::usb();
@@ -38,7 +43,14 @@ extern "C" void USBD_IRQHandler(void)
 
 extern "C" void SAADC_IRQHandler(void)
 {
-    core::mcu::isr::adc(*reinterpret_cast<uint16_t*>(NRF_SAADC->RESULT.PTR));
+    auto value = *reinterpret_cast<nrf_saadc_value_t*>(NRF_SAADC->RESULT.PTR);
+
+    if (value < 0)
+    {
+        value = 0;
+    }
+
+    core::mcu::isr::adc(value);
 }
 
 namespace core::mcu::adc
@@ -50,10 +62,6 @@ namespace core::mcu::adc
 
     void setChannel(uint32_t channel)
     {
-        nrf_saadc_resolution_set(NRF_SAADC, NRF_SAADC_RESOLUTION_12BIT);
-        nrf_saadc_oversample_set(NRF_SAADC, NRF_SAADC_OVERSAMPLE_16X);
-        nrf_saadc_int_set(NRF_SAADC, NRF_SAADC_INT_STARTED | NRF_SAADC_INT_STOPPED | NRF_SAADC_INT_END);
-
         for (uint32_t chPos = 0; chPos < SAADC_CH_NUM; chPos++)
         {
             nrf_saadc_input_t pselp = NRF_SAADC_INPUT_DISABLED;

@@ -96,6 +96,23 @@ namespace core::mcu::io
         .index = _index                    \
     }
 
+// modification of NRF_GPIO_PIN_MAP macro which works with raw port indexes (0 or 1)
+// this function works with CORE_MCU_IO_PIN_PORT_DEF port definitions instead
+inline uint32_t CORE_NRF_GPIO_PIN_MAP(core::mcu::io::pinPort_t port, core::mcu::io::pinIndex_t index)
+{
+    switch (port)
+    {
+    case NRF_P0_BASE:
+        return NRF_GPIO_PIN_MAP(0, index);
+
+    case NRF_P1_BASE:
+        return NRF_GPIO_PIN_MAP(1, index);
+
+    default:
+        return 0xFFFFFFFF;
+    }
+}
+
 /// Macros used to retrieve either pin port or pin index from pin_t structure.
 #define CORE_MCU_IO_PIN_PORT(mcuPin)  mcuPin.port
 #define CORE_MCU_IO_PIN_INDEX(mcuPin) mcuPin.index

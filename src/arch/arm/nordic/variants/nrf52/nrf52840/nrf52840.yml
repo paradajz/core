@@ -16,5 +16,5 @@
     size: 0x100000
   peripherals:
     custom-pins: true
-    uart: 1
+    uart: 2
     i2c: 1

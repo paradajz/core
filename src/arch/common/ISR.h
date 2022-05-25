@@ -27,7 +27,7 @@
 
 namespace core::mcu::isr
 {
-    void adc(uint16_t value);
+    void adc(uint32_t value);
     void uart(uint8_t channel);
     void usb();
     void errorHandler();

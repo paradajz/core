@@ -24,7 +24,7 @@
 
 namespace core::mcu::isr
 {
-    __attribute__((weak)) void adc(uint16_t value)
+    __attribute__((weak)) void adc(uint32_t value)
     {}
 
     __attribute__((weak)) void uart(uint8_t channel)

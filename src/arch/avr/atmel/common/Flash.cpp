@@ -71,11 +71,12 @@ namespace core::mcu::flash
         }
     }
 
-    bool write16(uint32_t address, uint16_t data)
+    bool write32(uint32_t address, uint32_t data)
     {
         CORE_MCU_ATOMIC_SECTION
         {
-            boot_page_fill(address, data);
+            boot_page_fill_safe(address, data & static_cast<uint16_t>(0xFFFF));
+            boot_page_fill_safe(address + 2, data >> 16);
         }
 
         return true;
@@ -87,16 +88,6 @@ namespace core::mcu::flash
         data = pgm_read_byte_far(address);
 #else
         data = pgm_read_byte(address);
-#endif
-        return true;
-    }
-
-    bool read16(uint32_t address, uint16_t& data)
-    {
-#ifdef pgm_read_word_far
-        data = pgm_read_word_far(address);
-#else
-        data = pgm_read_word(address);
 #endif
         return true;
     }

@@ -115,14 +115,10 @@ namespace core::mcu::io
         .index = _index                    \
     }
 
-/// Macros used to retrieve either pin port or pin index from pin_t structure.
-#define CORE_MCU_IO_PIN_PORT(mcuPin)  mcuPin.port
-#define CORE_MCU_IO_PIN_INDEX(mcuPin) mcuPin.index
-
 inline void CORE_MCU_IO_CLOCK_ENABLE(core::mcu::io::pin_t pin)
 {
 #ifdef GPIOA
-    if (CORE_MCU_IO_PORT_TO_MEM(CORE_MCU_IO_PIN_PORT(pin)) == GPIOA)
+    if (CORE_MCU_IO_PORT_TO_MEM(pin.port) == GPIOA)
     {
         __HAL_RCC_GPIOA_CLK_ENABLE();
         return;
@@ -130,7 +126,7 @@ inline void CORE_MCU_IO_CLOCK_ENABLE(core::mcu::io::pin_t pin)
 #endif
 
 #ifdef GPIOB
-    if (CORE_MCU_IO_PORT_TO_MEM(CORE_MCU_IO_PIN_PORT(pin)) == GPIOB)
+    if (CORE_MCU_IO_PORT_TO_MEM(pin.port) == GPIOB)
     {
         __HAL_RCC_GPIOB_CLK_ENABLE();
         return;
@@ -138,7 +134,7 @@ inline void CORE_MCU_IO_CLOCK_ENABLE(core::mcu::io::pin_t pin)
 #endif
 
 #ifdef GPIOC
-    if (CORE_MCU_IO_PORT_TO_MEM(CORE_MCU_IO_PIN_PORT(pin)) == GPIOC)
+    if (CORE_MCU_IO_PORT_TO_MEM(pin.port) == GPIOC)
     {
         __HAL_RCC_GPIOC_CLK_ENABLE();
         return;
@@ -146,7 +142,7 @@ inline void CORE_MCU_IO_CLOCK_ENABLE(core::mcu::io::pin_t pin)
 #endif
 
 #ifdef GPIOD
-    if (CORE_MCU_IO_PORT_TO_MEM(CORE_MCU_IO_PIN_PORT(pin)) == GPIOD)
+    if (CORE_MCU_IO_PORT_TO_MEM(pin.port) == GPIOD)
     {
         __HAL_RCC_GPIOD_CLK_ENABLE();
         return;
@@ -154,7 +150,7 @@ inline void CORE_MCU_IO_CLOCK_ENABLE(core::mcu::io::pin_t pin)
 #endif
 
 #ifdef GPIOE
-    if (CORE_MCU_IO_PORT_TO_MEM(CORE_MCU_IO_PIN_PORT(pin)) == GPIOE)
+    if (CORE_MCU_IO_PORT_TO_MEM(pin.port) == GPIOE)
     {
         __HAL_RCC_GPIOE_CLK_ENABLE();
         return;
@@ -162,7 +158,7 @@ inline void CORE_MCU_IO_CLOCK_ENABLE(core::mcu::io::pin_t pin)
 #endif
 
 #ifdef GPIOF
-    if (CORE_MCU_IO_PORT_TO_MEM(CORE_MCU_IO_PIN_PORT(pin)) == GPIOF)
+    if (CORE_MCU_IO_PORT_TO_MEM(pin.port) == GPIOF)
     {
         __HAL_RCC_GPIOF_CLK_ENABLE();
         return;
@@ -170,7 +166,7 @@ inline void CORE_MCU_IO_CLOCK_ENABLE(core::mcu::io::pin_t pin)
 #endif
 
 #ifdef GPIOG
-    if (CORE_MCU_IO_PORT_TO_MEM(CORE_MCU_IO_PIN_PORT(pin)) == GPIOG)
+    if (CORE_MCU_IO_PORT_TO_MEM(pin.port) == GPIOG)
     {
         __HAL_RCC_GPIOG_CLK_ENABLE();
         return;
@@ -178,7 +174,7 @@ inline void CORE_MCU_IO_CLOCK_ENABLE(core::mcu::io::pin_t pin)
 #endif
 
 #ifdef GPIOH
-    if (CORE_MCU_IO_PORT_TO_MEM(CORE_MCU_IO_PIN_PORT(pin)) == GPIOH)
+    if (CORE_MCU_IO_PORT_TO_MEM(pin.port) == GPIOH)
     {
         __HAL_RCC_GPIOH_CLK_ENABLE();
         return;
@@ -186,7 +182,7 @@ inline void CORE_MCU_IO_CLOCK_ENABLE(core::mcu::io::pin_t pin)
 #endif
 
 #ifdef GPIOI
-    if (CORE_MCU_IO_PORT_TO_MEM(CORE_MCU_IO_PIN_PORT(pin)) == GPIOI)
+    if (CORE_MCU_IO_PORT_TO_MEM(pin.port) == GPIOI)
     {
         __HAL_RCC_GPIOI_CLK_ENABLE();
         return;
@@ -197,7 +193,7 @@ inline void CORE_MCU_IO_CLOCK_ENABLE(core::mcu::io::pin_t pin)
 inline void CORE_MCU_IO_CLOCK_DISABLE(core::mcu::io::pin_t pin)
 {
 #ifdef GPIOA
-    if (CORE_MCU_IO_PORT_TO_MEM(CORE_MCU_IO_PIN_PORT(pin)) == GPIOA)
+    if (CORE_MCU_IO_PORT_TO_MEM(pin.port) == GPIOA)
     {
         __HAL_RCC_GPIOA_CLK_DISABLE();
         return;
@@ -205,7 +201,7 @@ inline void CORE_MCU_IO_CLOCK_DISABLE(core::mcu::io::pin_t pin)
 #endif
 
 #ifdef GPIOB
-    if (CORE_MCU_IO_PORT_TO_MEM(CORE_MCU_IO_PIN_PORT(pin)) == GPIOB)
+    if (CORE_MCU_IO_PORT_TO_MEM(pin.port) == GPIOB)
     {
         __HAL_RCC_GPIOB_CLK_DISABLE();
         return;
@@ -213,7 +209,7 @@ inline void CORE_MCU_IO_CLOCK_DISABLE(core::mcu::io::pin_t pin)
 #endif
 
 #ifdef GPIOC
-    if (CORE_MCU_IO_PORT_TO_MEM(CORE_MCU_IO_PIN_PORT(pin)) == GPIOC)
+    if (CORE_MCU_IO_PORT_TO_MEM(pin.port) == GPIOC)
     {
         __HAL_RCC_GPIOC_CLK_DISABLE();
         return;
@@ -221,7 +217,7 @@ inline void CORE_MCU_IO_CLOCK_DISABLE(core::mcu::io::pin_t pin)
 #endif
 
 #ifdef GPIOD
-    if (CORE_MCU_IO_PORT_TO_MEM(CORE_MCU_IO_PIN_PORT(pin)) == GPIOD)
+    if (CORE_MCU_IO_PORT_TO_MEM(pin.port) == GPIOD)
     {
         __HAL_RCC_GPIOD_CLK_DISABLE();
         return;
@@ -229,7 +225,7 @@ inline void CORE_MCU_IO_CLOCK_DISABLE(core::mcu::io::pin_t pin)
 #endif
 
 #ifdef GPIOE
-    if (CORE_MCU_IO_PORT_TO_MEM(CORE_MCU_IO_PIN_PORT(pin)) == GPIOE)
+    if (CORE_MCU_IO_PORT_TO_MEM(pin.port) == GPIOE)
     {
         __HAL_RCC_GPIOE_CLK_DISABLE();
         return;
@@ -237,7 +233,7 @@ inline void CORE_MCU_IO_CLOCK_DISABLE(core::mcu::io::pin_t pin)
 #endif
 
 #ifdef GPIOF
-    if (CORE_MCU_IO_PORT_TO_MEM(CORE_MCU_IO_PIN_PORT(pin)) == GPIOF)
+    if (CORE_MCU_IO_PORT_TO_MEM(pin.port) == GPIOF)
     {
         __HAL_RCC_GPIOF_CLK_DISABLE();
         return;
@@ -245,7 +241,7 @@ inline void CORE_MCU_IO_CLOCK_DISABLE(core::mcu::io::pin_t pin)
 #endif
 
 #ifdef GPIOG
-    if (CORE_MCU_IO_PORT_TO_MEM(CORE_MCU_IO_PIN_PORT(pin)) == GPIOG)
+    if (CORE_MCU_IO_PORT_TO_MEM(pin.port) == GPIOG)
     {
         __HAL_RCC_GPIOG_CLK_DISABLE();
         return;
@@ -253,7 +249,7 @@ inline void CORE_MCU_IO_CLOCK_DISABLE(core::mcu::io::pin_t pin)
 #endif
 
 #ifdef GPIOH
-    if (CORE_MCU_IO_PORT_TO_MEM(CORE_MCU_IO_PIN_PORT(pin)) == GPIOH)
+    if (CORE_MCU_IO_PORT_TO_MEM(pin.port) == GPIOH)
     {
         __HAL_RCC_GPIOH_CLK_DISABLE();
         return;
@@ -261,7 +257,7 @@ inline void CORE_MCU_IO_CLOCK_DISABLE(core::mcu::io::pin_t pin)
 #endif
 
 #ifdef GPIOI
-    if (CORE_MCU_IO_PORT_TO_MEM(CORE_MCU_IO_PIN_PORT(pin)) == GPIOI)
+    if (CORE_MCU_IO_PORT_TO_MEM(pin.port) == GPIOI)
     {
         __HAL_RCC_GPIOI_CLK_DISABLE();
         return;
@@ -274,18 +270,18 @@ inline void CORE_MCU_IO_INIT(core::mcu::io::pin_t pin)
     CORE_MCU_IO_CLOCK_ENABLE(pin);
 
     GPIO_InitTypeDef gpioStruct = {};
-    gpioStruct.Pin              = CORE_MCU_IO_PIN_INDEX(pin);
+    gpioStruct.Pin              = pin.index;
     gpioStruct.Mode             = static_cast<uint32_t>(pin.mode);
     gpioStruct.Pull             = static_cast<uint32_t>(pin.pull);
     gpioStruct.Speed            = static_cast<uint32_t>(pin.speed);
     gpioStruct.Alternate        = pin.alternate;
 
-    HAL_GPIO_Init(CORE_MCU_IO_PORT_TO_MEM(CORE_MCU_IO_PIN_PORT(pin)), &gpioStruct);
+    HAL_GPIO_Init(CORE_MCU_IO_PORT_TO_MEM(pin.port), &gpioStruct);
 }
 
 inline void CORE_MCU_IO_DEINIT(core::mcu::io::pin_t pin)
 {
-    HAL_GPIO_DeInit(CORE_MCU_IO_PORT_TO_MEM(CORE_MCU_IO_PIN_PORT(pin)), CORE_MCU_IO_PIN_INDEX(pin));
+    HAL_GPIO_DeInit(CORE_MCU_IO_PORT_TO_MEM(pin.port), pin.index);
 }
 
 inline void CORE_MCU_IO_INIT(core::mcu::io::pinPort_t  port,

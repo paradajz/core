@@ -124,10 +124,6 @@ namespace core::mcu::io
         .index = _index                    \
     }
 
-/// Macros used to retrieve either pin port or pin index from pin_t structure.
-#define CORE_MCU_IO_PIN_PORT(mcuPin)  mcuPin.port
-#define CORE_MCU_IO_PIN_INDEX(mcuPin) mcuPin.index
-
 inline void CORE_MCU_IO_INIT(core::mcu::io::pinPort_t  port,
                              core::mcu::io::pinIndex_t index,
                              core::mcu::io::pinMode_t  mode,

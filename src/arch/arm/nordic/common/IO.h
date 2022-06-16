@@ -113,10 +113,6 @@ inline uint32_t CORE_NRF_GPIO_PIN_MAP(core::mcu::io::pinPort_t port, core::mcu::
     }
 }
 
-/// Macros used to retrieve either pin port or pin index from pin_t structure.
-#define CORE_MCU_IO_PIN_PORT(mcuPin)  mcuPin.port
-#define CORE_MCU_IO_PIN_INDEX(mcuPin) mcuPin.index
-
 inline void CORE_MCU_IO_DEINIT(core::mcu::io::pin_t pin)
 {
     CORE_MCU_IO_PORT_TO_MEM(pin.port)->PIN_CNF[pin.index] = (NRF_GPIO_PIN_DIR_INPUT << GPIO_PIN_CNF_DIR_Pos) |

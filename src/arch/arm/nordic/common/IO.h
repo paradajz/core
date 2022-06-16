@@ -62,6 +62,38 @@ namespace core::mcu::io
         pullMode_t  pull      = pullMode_t::NONE;
         uint32_t    strength  = NRF_GPIO_PIN_S0S1;
         interrupt_t interrupt = interrupt_t::NONE;
+
+        constexpr pin_t(pinPort_t  port,
+                        pinIndex_t index)
+            : port(port)
+            , index(index)
+        {}
+
+        constexpr pin_t(pinPort_t  port,
+                        pinIndex_t index,
+                        pinMode_t  mode,
+                        pullMode_t pull)
+            : port(port)
+            , index(index)
+            , mode(mode)
+            , pull(pull)
+        {}
+
+        constexpr pin_t(pinPort_t   port,
+                        pinIndex_t  index,
+                        pinMode_t   mode,
+                        pullMode_t  pull,
+                        uint32_t    strength,
+                        interrupt_t interrupt)
+            : port(port)
+            , index(index)
+            , mode(mode)
+            , pull(pull)
+            , strength(strength)
+            , interrupt(interrupt)
+        {}
+
+        pin_t() = default;
     };
 }    // namespace core::mcu::io
 
@@ -88,13 +120,6 @@ namespace core::mcu::io
 /// Convenience macros for portable GPIO port/pin definitions across various toolchains.
 #define CORE_MCU_IO_PIN_PORT_DEF(port)   (NRF_P##port##_BASE)
 #define CORE_MCU_IO_PIN_INDEX_DEF(index) (index)
-
-/// Convenience macro used to create pin_t structure.
-#define CORE_MCU_IO_PIN_VAR(_port, _index) \
-    {                                      \
-        .port  = _port,                    \
-        .index = _index                    \
-    }
 
 // modification of NRF_GPIO_PIN_MAP macro which works with raw port indexes (0 or 1)
 // this function works with CORE_MCU_IO_PIN_PORT_DEF port definitions instead

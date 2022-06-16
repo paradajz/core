@@ -82,11 +82,6 @@ namespace core::mcu::io
 #define CORE_MCU_IO_TOGGLE(port, pin)
 #define CORE_MCU_IO_PIN_PORT_DEF(port)   static_cast<core::mcu::io::pinPort_t>(0)
 #define CORE_MCU_IO_PIN_INDEX_DEF(index) static_cast<core::mcu::io::pinIndex_t>(0)
-#define CORE_MCU_IO_PIN_VAR(_port, _index) \
-    {                                      \
-        .port  = _port,                    \
-        .index = _index                    \
-    }
 
 inline void CORE_MCU_IO_INIT(core::mcu::io::pinPort_t  port,
                              core::mcu::io::pinIndex_t index,

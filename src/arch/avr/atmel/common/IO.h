@@ -49,9 +49,25 @@ namespace core::mcu::io
     /// Structure used to define single MCU pin.
     struct pin_t
     {
-        pinPort_t  port;
-        pinIndex_t index;
-        pinMode_t  mode;
+        pinPort_t  port  = 0;
+        pinIndex_t index = 0;
+        pinMode_t  mode  = pinMode_t::INPUT;
+
+        constexpr pin_t(pinPort_t  port,
+                        pinIndex_t index)
+            : port(port)
+            , index(index)
+        {}
+
+        constexpr pin_t(pinPort_t  port,
+                        pinIndex_t index,
+                        pinMode_t  mode)
+            : port(port)
+            , index(index)
+            , mode(mode)
+        {}
+
+        pin_t() = default;
     };
 }    // namespace core::mcu::io
 
@@ -116,13 +132,6 @@ namespace core::mcu::io
 /// Convenience macros for portable GPIO port/pin definitions across various toolchains.
 #define CORE_MCU_IO_PIN_PORT_DEF(port)   (PORT_##port)
 #define CORE_MCU_IO_PIN_INDEX_DEF(index) (index)
-
-/// Convenience macro used to create pin_t structure.
-#define CORE_MCU_IO_PIN_VAR(_port, _index) \
-    {                                      \
-        .port  = _port,                    \
-        .index = _index                    \
-    }
 
 inline void CORE_MCU_IO_INIT(core::mcu::io::pinPort_t  port,
                              core::mcu::io::pinIndex_t index,

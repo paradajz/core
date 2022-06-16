@@ -67,6 +67,38 @@ namespace core::mcu::io
         pullMode_t  pull      = pullMode_t::NONE;
         gpioSpeed_t speed     = gpioSpeed_t::MEDIUM;
         uint32_t    alternate = 0;
+
+        constexpr pin_t(pinPort_t  port,
+                        pinIndex_t index)
+            : port(port)
+            , index(index)
+        {}
+
+        constexpr pin_t(pinPort_t  port,
+                        pinIndex_t index,
+                        pinMode_t  mode,
+                        pullMode_t pull)
+            : port(port)
+            , index(index)
+            , mode(mode)
+            , pull(pull)
+        {}
+
+        constexpr pin_t(pinPort_t   port,
+                        pinIndex_t  index,
+                        pinMode_t   mode,
+                        pullMode_t  pull,
+                        gpioSpeed_t speed,
+                        uint32_t    alternate)
+            : port(port)
+            , index(index)
+            , mode(mode)
+            , pull(pull)
+            , speed(speed)
+            , alternate(alternate)
+        {}
+
+        pin_t() = default;
     };
 }    // namespace core::mcu::io
 
@@ -107,13 +139,6 @@ namespace core::mcu::io
 
 #define CORE_MCU_IO_PIN_PORT_DEF(port)   (GPIO##port##_BASE)
 #define CORE_MCU_IO_PIN_INDEX_DEF(index) (GPIO_PIN_##index)
-
-/// Convenience macro used to create pin_t structure.
-#define CORE_MCU_IO_PIN_VAR(_port, _index) \
-    {                                      \
-        .port  = _port,                    \
-        .index = _index                    \
-    }
 
 inline void CORE_MCU_IO_CLOCK_ENABLE(core::mcu::io::pin_t pin)
 {

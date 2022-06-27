@@ -120,6 +120,7 @@ namespace core::mcu::timers
         }
 
         CORE_ERROR_CHECK(app_timer_stop(&_timer.at(index).instance), NRF_SUCCESS);
+        _timer.at(index).started = false;
 
         return true;
     }

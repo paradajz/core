@@ -44,14 +44,14 @@ namespace core::mcu::flash
 
     uint32_t size()
     {
-        return FLASH_BASE - FLASH_END + static_cast<uint32_t>(1);
+        return CORE_MCU_FLASH_SIZE;
     }
 
     uint32_t pageSize(size_t index)
     {
-        CORE_ERROR_CHECK(index >= TOTAL_FLASH_PAGES, false);
+        CORE_ERROR_CHECK(index >= CORE_MCU_TOTAL_FLASH_PAGES, false);
 
-        return PAGE_DESCRIPTOR[index].size;
+        return CORE_MCU_FLASH_PAGE_SIZE(index);
     }
 
     _RAM bool erasePage(size_t index)
@@ -80,20 +80,6 @@ namespace core::mcu::flash
     _RAM void writePage(size_t index)
     {
         // nothing to do here
-    }
-
-    _RAM bool write16(uint32_t address, uint16_t data)
-    {
-        HAL_StatusTypeDef halStatus = HAL_FLASH_Unlock();
-
-        if (halStatus == HAL_OK)
-        {
-            __HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR | FLASH_FLAG_PGAERR | FLASH_FLAG_PGPERR | FLASH_FLAG_PGSERR);
-            halStatus = HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, address, data);
-        }
-
-        HAL_FLASH_Lock();
-        return (halStatus == HAL_OK);
     }
 
     _RAM bool write32(uint32_t address, uint32_t data)

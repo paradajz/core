@@ -532,7 +532,7 @@ namespace
         const IRQn_Type IRQN = static_cast<IRQn_Type>(0);
     } _i2cDescriptor2;
 
-    core::mcu::peripherals::Descriptor* _uartDescriptor[core::mcu::peripherals::MAX_UART_INTERFACES] = {
+    core::mcu::peripherals::Descriptor* _uartDescriptor[CORE_MCU_MAX_UART_INTERFACES] = {
         &_uartDescriptor0,
         &_uartDescriptor1,
         &_uartDescriptor2,
@@ -541,7 +541,7 @@ namespace
         &_uartDescriptor5,
     };
 
-    core::mcu::peripherals::Descriptor* _i2cDescriptor[core::mcu::peripherals::MAX_I2C_INTERFACES] = {
+    core::mcu::peripherals::Descriptor* _i2cDescriptor[CORE_MCU_MAX_I2C_INTERFACES] = {
         &_i2cDescriptor0,
         &_i2cDescriptor1,
         &_i2cDescriptor2

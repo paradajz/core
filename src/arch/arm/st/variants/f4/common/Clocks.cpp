@@ -230,17 +230,17 @@ namespace
     };
 }    // namespace
 
-#ifdef CORE_EXT_CLOCK_FREQ_MHZ
-#if CORE_EXT_CLOCK_FREQ_MHZ == 8
+#ifdef CORE_MCU_EXT_CLOCK_FREQ_MHZ
+#if CORE_MCU_EXT_CLOCK_FREQ_MHZ == 8
 constexpr size_t CLOCK_FREQ_ENUM_INDEX = static_cast<uint8_t>(externalClockFrequency_t::FREQ_8MHZ);
-#elif CORE_EXT_CLOCK_FREQ_MHZ == 12
+#elif CORE_MCU_EXT_CLOCK_FREQ_MHZ == 12
 constexpr size_t CLOCK_FREQ_ENUM_INDEX = static_cast<uint8_t>(externalClockFrequency_t::FREQ_12MHZ);
-#elif CORE_EXT_CLOCK_FREQ_MHZ == 16
+#elif CORE_MCU_EXT_CLOCK_FREQ_MHZ == 16
 constexpr size_t CLOCK_FREQ_ENUM_INDEX = static_cast<uint8_t>(externalClockFrequency_t::FREQ_16MHZ);
-#elif CORE_EXT_CLOCK_FREQ_MHZ == 25
+#elif CORE_MCU_EXT_CLOCK_FREQ_MHZ == 25
 constexpr size_t CLOCK_FREQ_ENUM_INDEX = static_cast<uint8_t>(externalClockFrequency_t::FREQ_25MHZ);
 #else
-#error Unsupported external clock frequency or CORE_EXT_CLOCK_FREQ_MHZ undefined
+#error Unsupported external clock frequency or CORE_MCU_EXT_CLOCK_FREQ_MHZ undefined
 #endif
 
 #define CORE_CLOCK_EXTERNAL 1
@@ -248,12 +248,12 @@ constexpr size_t CLOCK_FREQ_ENUM_INDEX = static_cast<uint8_t>(externalClockFrequ
 #define CORE_CLOCK_EXTERNAL 0
 #endif
 
-#if CORE_CPU_FREQ_MHZ == 84
+#if CORE_MCU_CPU_FREQ_MHZ == 84
 constexpr size_t CPU_FREQ_ENUM_INDEX = static_cast<uint8_t>(cpuFrequency_t::FREQ_84MHZ);
-#elif CORE_CPU_FREQ_MHZ == 168
+#elif CORE_MCU_CPU_FREQ_MHZ == 168
 constexpr size_t CPU_FREQ_ENUM_INDEX = static_cast<uint8_t>(cpuFrequency_t::FREQ_168MHZ);
 #else
-#error Unsupported CPU frequency or CORE_CPU_FREQ_MHZ undefined
+#error Unsupported CPU frequency or CORE_MCU_CPU_FREQ_MHZ undefined
 #endif
 
 namespace core::mcu::clocks

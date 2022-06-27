@@ -28,7 +28,7 @@
 
 namespace core::mcu
 {
-    using uniqueID_t = std::array<uint8_t, core::mcu::UID_BITS / 8>;
+    using uniqueID_t = std::array<uint8_t, CORE_MCU_UID_BITS / 8>;
 
     enum class initType_t : uint8_t
     {

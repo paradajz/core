@@ -39,75 +39,77 @@ namespace
         IRQn_Type                    irqn      = static_cast<IRQn_Type>(0);
         TIM_HandleTypeDef            timer     = {};
         clockSource_t                source    = clockSource_t::APB1;
-        uint32_t                     clock     = CORE_CPU_FREQ_MHZ * 1000000;
+        uint32_t                     clock     = CORE_MCU_CPU_FREQ_MHZ * 1000000;
         bool                         supported = false;
         bool                         allocated = false;
         core::mcu::timers::handler_t handler   = nullptr;
+
+        f4Timer_t() = default;
     };
 
-    f4Timer_t _timer[NUM_OF_TIMERS] = {
-        {
+    std::array<f4Timer_t, NUM_OF_TIMERS> _timer = {
+        f4Timer_t{
 #ifdef TIM6
-            .instance  = TIM6,
-            .irqn      = TIM6_DAC_IRQn,
-            .timer     = {},
-            .source    = f4Timer_t::clockSource_t::APB1,
-            .clock     = CORE_CPU_FREQ_MHZ * 1000000,
-            .supported = true,
-            .allocated = false,
-            .handler   = nullptr,
+            TIM6,
+            TIM6_DAC_IRQn,
+            {},
+            f4Timer_t::clockSource_t::APB1,
+            CORE_MCU_CPU_FREQ_MHZ * 1000000,
+            true,
+            false,
+            nullptr,
 #endif
         },
 
-        {
+        f4Timer_t{
 #ifdef TIM7
-            .instance  = TIM7,
-            .irqn      = TIM7_IRQn,
-            .timer     = {},
-            .source    = f4Timer_t::clockSource_t::APB1,
-            .clock     = CORE_CPU_FREQ_MHZ * 1000000,
-            .supported = true,
-            .allocated = false,
-            .handler   = nullptr,
+            TIM7,
+            TIM7_IRQn,
+            {},
+            f4Timer_t::clockSource_t::APB1,
+            CORE_MCU_CPU_FREQ_MHZ * 1000000,
+            true,
+            false,
+            nullptr,
 #endif
         },
 
-        {
+        f4Timer_t{
 #ifdef TIM10
-            .instance  = TIM10,
-            .irqn      = TIM1_UP_TIM10_IRQn,
-            .timer     = {},
-            .source    = f4Timer_t::clockSource_t::APB2,
-            .clock     = CORE_CPU_FREQ_MHZ * 1000000,
-            .supported = true,
-            .allocated = false,
-            .handler   = nullptr,
+            TIM10,
+            TIM1_UP_TIM10_IRQn,
+            {},
+            f4Timer_t::clockSource_t::APB2,
+            CORE_MCU_CPU_FREQ_MHZ * 1000000,
+            true,
+            false,
+            nullptr,
 #endif
         },
 
-        {
+        f4Timer_t{
 #ifdef TIM11
-            .instance  = TIM11,
-            .irqn      = TIM1_TRG_COM_TIM11_IRQn,
-            .timer     = {},
-            .source    = f4Timer_t::clockSource_t::APB2,
-            .clock     = CORE_CPU_FREQ_MHZ * 1000000,
-            .supported = true,
-            .allocated = false,
-            .handler   = nullptr,
+            TIM11,
+            TIM1_TRG_COM_TIM11_IRQn,
+            {},
+            f4Timer_t::clockSource_t::APB2,
+            CORE_MCU_CPU_FREQ_MHZ * 1000000,
+            true,
+            false,
+            nullptr,
 #endif
         },
 
-        {
+        f4Timer_t{
 #ifdef TIM13
-            .instance  = TIM13,
-            .irqn      = TIM8_UP_TIM13_IRQn,
-            .timer     = {},
-            .source    = f4Timer_t::clockSource_t::APB1,
-            .clock     = CORE_CPU_FREQ_MHZ * 1000000,
-            .supported = true,
-            .allocated = false,
-            .handler   = nullptr,
+            TIM13,
+            TIM8_UP_TIM13_IRQn,
+            {},
+            f4Timer_t::clockSource_t::APB1,
+            CORE_MCU_CPU_FREQ_MHZ * 1000000,
+            true,
+            false,
+            nullptr,
 #endif
         },
     };
@@ -317,7 +319,7 @@ namespace core::mcu::timers
 
     bool start(size_t index)
     {
-        if (index >= NUM_OF_TIMERS)
+        if (index >= _timer.size())
         {
             return false;
         }
@@ -328,7 +330,6 @@ namespace core::mcu::timers
         }
 
         stop(index);
-
         __HAL_TIM_CLEAR_IT(&_timer[index].timer, TIM_IT_UPDATE);
         HAL_TIM_Base_Start_IT(&_timer[index].timer);
 
@@ -345,12 +346,17 @@ namespace core::mcu::timers
 
     bool stop(size_t index)
     {
-        if (index >= NUM_OF_TIMERS)
+        if (index >= _timer.size())
         {
             return false;
         }
 
         if (!_timer[index].allocated)
+        {
+            return false;
+        }
+
+        if (!isRunning(index))
         {
             return false;
         }
@@ -375,7 +381,7 @@ namespace core::mcu::timers
 
     bool isRunning(size_t index)
     {
-        if (index >= NUM_OF_TIMERS)
+        if (index >= _timer.size())
         {
             return false;
         }
@@ -390,7 +396,7 @@ namespace core::mcu::timers
 
     bool setPeriod(size_t index, uint32_t us)
     {
-        if (index >= NUM_OF_TIMERS)
+        if (index >= _timer.size())
         {
             return false;
         }

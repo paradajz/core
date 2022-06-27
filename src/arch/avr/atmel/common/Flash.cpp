@@ -33,18 +33,18 @@ namespace core::mcu::flash
 {
     bool isInRange(uint32_t address)
     {
-        return address <= FLASH_END;
+        return address < CORE_MCU_FLASH_SIZE;
     }
 
     uint32_t size()
     {
-        return FLASH_END + static_cast<uint32_t>(1);
+        return CORE_MCU_FLASH_SIZE;
     }
 
     uint32_t pageSize(size_t index)
     {
         // always constant on avr
-        return FLASH_PAGE_SIZE_COMMON;
+        return CORE_MCU_FLASH_PAGE_SIZE_COMMON;
     }
 
     bool erasePage(size_t index)

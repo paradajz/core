@@ -23,7 +23,7 @@ namespace core::mcu::peripherals
 {
     bool uartChannel(USART_TypeDef* interface, uint8_t& channel)
     {
-        for (size_t i = 0; i < MAX_UART_INTERFACES; i++)
+        for (size_t i = 0; i < CORE_MCU_MAX_UART_INTERFACES; i++)
         {
             if (static_cast<USART_TypeDef*>(_uartDescriptor[i]->interface()) == interface)
             {
@@ -37,7 +37,7 @@ namespace core::mcu::peripherals
 
     Descriptor* uartDescriptor(uint8_t channel)
     {
-        if (channel >= MAX_UART_INTERFACES)
+        if (channel >= CORE_MCU_MAX_UART_INTERFACES)
         {
             return nullptr;
         }
@@ -47,7 +47,7 @@ namespace core::mcu::peripherals
 
     bool i2cChannel(I2C_TypeDef* interface, uint8_t& channel)
     {
-        for (size_t i = 0; i < MAX_I2C_INTERFACES; i++)
+        for (size_t i = 0; i < CORE_MCU_MAX_I2C_INTERFACES; i++)
         {
             if (static_cast<I2C_TypeDef*>(_i2cDescriptor[i]->interface()) == interface)
             {
@@ -61,7 +61,7 @@ namespace core::mcu::peripherals
 
     Descriptor* i2cDescriptor(uint8_t channel)
     {
-        if (channel >= MAX_I2C_INTERFACES)
+        if (channel >= CORE_MCU_MAX_I2C_INTERFACES)
         {
             return nullptr;
         }

@@ -2,7 +2,7 @@ Notes when adding support for new MCU:
 
 ## Linker file
 
-* Set FLASH origin to CORE_FLASH_START_ADDR
+* Set conditional origin for FLASH
 * Add fwMetadata section in text
 * Add .noinit section
 

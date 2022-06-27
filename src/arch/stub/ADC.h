@@ -25,7 +25,7 @@
 
 #if !__has_include(<MCU.h>)
 // already defined in generated MCU, define only if it doesn't exist
-constexpr uint32_t core::mcu::adc::MAX = 1023;
+#define CORE_MCU_ADC_MAX_VALUE 1023
 #endif
 
 namespace core::mcu::adc

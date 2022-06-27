@@ -35,8 +35,12 @@
 
 NRF_FSTORAGE_DEF(nrf_fstorage_t _fstorage) = {
     .evt_handler = NULL,
-    .start_addr  = CORE_FLASH_START_ADDR,
-    .end_addr    = FLASH_END,
+#ifdef CORE_MCU_FLASH_START_ADDR_USER
+    .start_addr = CORE_MCU_FLASH_START_ADDR_USER,
+#else
+    .start_addr = CORE_MCU_FLASH_START_ADDR,
+#endif
+    .end_addr = CORE_MCU_FLASH_SIZE - 1,
 };
 
 namespace core::mcu::flash
@@ -51,24 +55,24 @@ namespace core::mcu::flash
 
     bool isInRange(uint32_t address)
     {
-        return address <= FLASH_END;
+        return address < CORE_MCU_FLASH_SIZE;
     }
 
     uint32_t size()
     {
-        return FLASH_END + static_cast<uint32_t>(1);
+        return CORE_MCU_FLASH_SIZE;
     }
 
     uint32_t pageSize(size_t index)
     {
-        CORE_ERROR_CHECK(index >= TOTAL_FLASH_PAGES, false);
-        return FLASH_PAGE_SIZE_COMMON;
+        CORE_ERROR_CHECK(index >= CORE_MCU_TOTAL_FLASH_PAGES, false);
+        return CORE_MCU_FLASH_PAGE_SIZE_COMMON;
     }
 
     bool erasePage(size_t index)
     {
         CORE_ERROR_CHECK(nrf_fstorage_erase(&_fstorage,
-                                            FLASH_PAGE_ADDRESS(index),
+                                            CORE_MCU_FLASH_PAGE_ADDRESS(index),
                                             1,
                                             NULL),
                          NRF_SUCCESS);
@@ -84,23 +88,6 @@ namespace core::mcu::flash
     void writePage(size_t index)
     {
         // nothing to do here
-    }
-
-    bool write16(uint32_t address, uint16_t data)
-    {
-        CORE_ERROR_CHECK(nrf_fstorage_write(&_fstorage,
-                                            address,
-                                            &data,
-                                            sizeof(data),
-                                            NULL),
-                         NRF_SUCCESS);
-
-        while (nrf_fstorage_is_busy(&_fstorage))
-        {
-            sd_app_evt_wait();
-        }
-
-        return (*(volatile uint16_t*)address) == data;
     }
 
     bool write32(uint32_t address, uint32_t data)

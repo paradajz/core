@@ -40,7 +40,7 @@
 #include <MCU.h>
 #else
 // already defined in generated MCU, define only if it doesn't exist
-constexpr inline size_t core::mcu::UID_BITS = 80;
+#define CORE_MCU_UID_BITS 80
 #endif
 #include "core/src/arch/common/MCU.h"
 

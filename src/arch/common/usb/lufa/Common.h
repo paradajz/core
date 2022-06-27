@@ -104,7 +104,7 @@ namespace core::mcu::usb
     struct descriptorUIDString_t
     {
         descriptorHeader_t header;
-        uint16_t           unicodeString[core::mcu::UID_BITS / 4];
+        uint16_t           unicodeString[CORE_MCU_UID_BITS / 4];
     };
 
     enum descriptorTypes_t

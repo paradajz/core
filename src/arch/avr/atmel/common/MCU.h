@@ -284,7 +284,7 @@ namespace core::mcu
         {
             uint8_t address = 0x0E;
 
-            for (uint8_t i = 0; i < (UID_BITS / 8); i++)
+            for (uint8_t i = 0; i < (CORE_MCU_UID_BITS / 8); i++)
             {
                 uid[i] = boot_signature_byte_get(address++);
 

@@ -21,10 +21,6 @@
 
 #include "stm32f4xx_hal.h"
 
-#ifndef CORE_FLASH_START_ADDR
-#error CORE_FLASH_START_ADDR symbol undefined
-#endif
-
 extern "C" void HAL_MspInit(void)
 {
     __HAL_RCC_SYSCFG_CLK_ENABLE();
@@ -40,7 +36,11 @@ extern "C" void HAL_MspDeInit(void)
 extern "C" void CoreSTM32F4SystemInit(void)
 {
     // set stack pointer
-    __set_MSP(*reinterpret_cast<volatile uint32_t*>(CORE_FLASH_START_ADDR));
+#ifdef CORE_MCU_FLASH_START_ADDR_USER
+    __set_MSP(*reinterpret_cast<volatile uint32_t*>(CORE_MCU_FLASH_START_ADDR_USER));
+#else
+    __set_MSP(*reinterpret_cast<volatile uint32_t*>(CORE_MCU_FLASH_START_ADDR));
+#endif
 
     // setup FPU
 #if (__FPU_PRESENT == 1) && (__FPU_USED == 1)
@@ -48,5 +48,9 @@ extern "C" void CoreSTM32F4SystemInit(void)
 #endif
 
     // set the correct address of vector table
-    SCB->VTOR = CORE_FLASH_START_ADDR;
+#ifdef CORE_MCU_FLASH_START_ADDR_USER
+    SCB->VTOR = CORE_MCU_FLASH_START_ADDR_USER;
+#else
+    SCB->VTOR = CORE_MCU_FLASH_START_ADDR;
+#endif
 }

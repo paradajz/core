@@ -6,7 +6,6 @@
   freq: 64
   fpu: "fpv4-sp-d16"
   float-abi: "hard"
-  define-symbol: "NRF52840_XXAA"
   uid-bits: 64
   adc-bits: 12
   flash:
@@ -18,3 +17,16 @@
     custom-pins: true
     uart: 2
     i2c: 1
+  define-symbols:
+    - "NRF52840_XXAA"
+  include-dirs:
+    - "src/arch/arm/common/CMSIS"
+    - "modules/tinyusb/lib/CMSIS_5/CMSIS/Core/Include"
+    - "modules/tinyusb/hw/mcu/nordic/nrfx/soc"
+    - "modules/tinyusb/hw/mcu/nordic"
+    - "modules/tinyusb/hw/mcu/nordic/nrfx"
+    - "modules/tinyusb/hw/mcu/nordic/nrfx/mdk"
+    - "modules/tinyusb/hw/mcu/nordic/nrfx/hal"
+    - "modules/tinyusb/hw/mcu/nordic/nrfx/drivers/include"
+    - "modules/tinyusb/hw/mcu/nordic/nrfx/drivers/src"
+    - "modules/tinyusb/hw/mcu/nordic/nrfx/drivers/src/prs"

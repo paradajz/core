@@ -2,7 +2,6 @@
   arch: "avr"
   mcuFamily: "avr8"
   vendor: "atmel"
-  define-symbol: "__AVR_ATmega2560__"
   uid-bits: 80
   adc-bits: 10
   flash:
@@ -15,3 +14,8 @@
   peripherals:
     uart: 2
     i2c: 1
+  define-symbols:
+    - "__AVR_ATmega2560__"
+    - "ARCH=ARCH_AVR8"
+    - "F_CPU=16000000UL"
+    - "F_USB=16000000UL"

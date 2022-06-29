@@ -21,24 +21,15 @@
 
 #pragma once
 
-#ifdef CORE_ARCH_AVR
-#include "arch/avr/atmel/common/MCU.h"
-#elif defined(CORE_ARCH_ARM)
-#ifdef CORE_VENDOR_ST
-#include "arch/arm/st/common/MCU.h"
-#elif defined(CORE_VENDOR_NORDIC)
-#include "arch/arm/nordic/common/MCU.h"
-#elif defined(CORE_VENDOR_RPF)
-#include "arch/arm/rpf/common/MCU.h"
-#else
-#include "arch/stub/MCU.h"
-#endif
-#else
-#include "arch/stub/MCU.h"
-#endif
+#include "hardware/sync.h"
 
-#if __has_include(<MCU.h>)
-#include <MCU.h>
-#else
-#error aaaaaaaa
-#endif
+static __always_inline void restoreInterrupts(const uint32_t* __s)
+{
+    restore_interrupts(*__s);
+}
+
+#define CORE_MCU_ATOMIC_SECTION                                                                                         \
+    for (uint32_t primask_save __attribute__((unused, __cleanup__(restoreInterrupts))) = save_and_disable_interrupts(), \
+                                                      condition                        = 1;                             \
+         condition;                                                                                                     \
+         condition = 0)

@@ -21,24 +21,12 @@
 
 #pragma once
 
-#ifdef CORE_ARCH_AVR
-#include "arch/avr/atmel/common/MCU.h"
-#elif defined(CORE_ARCH_ARM)
-#ifdef CORE_VENDOR_ST
-#include "arch/arm/st/common/MCU.h"
-#elif defined(CORE_VENDOR_NORDIC)
-#include "arch/arm/nordic/common/MCU.h"
-#elif defined(CORE_VENDOR_RPF)
-#include "arch/arm/rpf/common/MCU.h"
-#else
-#include "arch/stub/MCU.h"
-#endif
-#else
-#include "arch/stub/MCU.h"
-#endif
+#include "pico/stdlib.h"
 
-#if __has_include(<MCU.h>)
-#include <MCU.h>
-#else
-#error aaaaaaaa
-#endif
+namespace core::timing
+{
+    inline void waitMs(uint32_t ms)
+    {
+        sleep_ms(ms);
+    }
+}    // namespace core::timing

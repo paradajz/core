@@ -19,26 +19,10 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#pragma once
-
-#ifdef CORE_ARCH_AVR
-#include "arch/avr/atmel/common/MCU.h"
-#elif defined(CORE_ARCH_ARM)
-#ifdef CORE_VENDOR_ST
-#include "arch/arm/st/common/MCU.h"
-#elif defined(CORE_VENDOR_NORDIC)
-#include "arch/arm/nordic/common/MCU.h"
-#elif defined(CORE_VENDOR_RPF)
-#include "arch/arm/rpf/common/MCU.h"
-#else
-#include "arch/stub/MCU.h"
-#endif
-#else
-#include "arch/stub/MCU.h"
+#ifndef CORE_MCU_GENERATED
+#error This file requires generated MCU header
 #endif
 
-#if __has_include(<MCU.h>)
+#include "core/src/arch/arm/rpf/common/Peripherals.h"
 #include <MCU.h>
-#else
-#error aaaaaaaa
-#endif
+#include "core/src/arch/arm/rpf/variants/rp/common/Peripherals.cpp.include"

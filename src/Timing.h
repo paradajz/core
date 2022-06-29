@@ -29,6 +29,8 @@
 #include "arch/arm/st/common/Timing.h"
 #elif defined(CORE_VENDOR_NORDIC)
 #include "arch/arm/nordic/common/Timing.h"
+#elif defined(CORE_VENDOR_RPF)
+#include "arch/arm/rpf/common/Timing.h"
 #endif
 #else
 #include "arch/stub/Timing.h"

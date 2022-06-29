@@ -21,24 +21,8 @@
 
 #pragma once
 
-#ifdef CORE_ARCH_AVR
-#include "arch/avr/atmel/common/MCU.h"
-#elif defined(CORE_ARCH_ARM)
-#ifdef CORE_VENDOR_ST
-#include "arch/arm/st/common/MCU.h"
-#elif defined(CORE_VENDOR_NORDIC)
-#include "arch/arm/nordic/common/MCU.h"
-#elif defined(CORE_VENDOR_RPF)
-#include "arch/arm/rpf/common/MCU.h"
-#else
-#include "arch/stub/MCU.h"
-#endif
-#else
-#include "arch/stub/MCU.h"
-#endif
-
-#if __has_include(<MCU.h>)
-#include <MCU.h>
-#else
-#error aaaaaaaa
-#endif
+#include <inttypes.h>
+#include <vector>
+#include <cstddef>
+#include "IO.h"
+#include "core/src/arch/arm/rpf/variants/rp/common/Peripherals.h.include"

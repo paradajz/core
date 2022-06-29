@@ -4,3 +4,6 @@
 [submodule "modules/lufa"]
 	path = modules/lufa
 	url = https://github.com/abcminiuser/lufa.git
+[submodule "modules/pico-sdk"]
+	path = modules/pico-sdk
+	url = https://github.com/raspberrypi/pico-sdk.git

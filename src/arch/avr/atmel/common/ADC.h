@@ -136,6 +136,8 @@ namespace core::mcu::adc
 
     inline uint16_t read(uint32_t channel)
     {
+        setChannel(channel);
+
         // single conversion mode
         ADCSRA |= (1 << ADSC);
 

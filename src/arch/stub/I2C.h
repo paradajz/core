@@ -1,13 +1,16 @@
 /*
     Copyright 2017-2022 Igor Petrovic
+
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the "Software"),
     to deal in the Software without restriction, including without limitation
     the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
     sell copies of the Software, and to permit persons to whom the Software is
     furnished to do so, subject to the following conditions:
+
     The above copyright notice and this permission notice shall be included in
     all copies or substantial portions of the Software.
+
     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
     OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
@@ -19,7 +22,9 @@
 #pragma once
 
 #include <inttypes.h>
+#include "IO.h"
 
+// AVR-specific registers
 #define TWCR            (*(volatile uint32_t*)(1))
 #define TWDR            (*(volatile uint32_t*)(1))
 #define TW_STATUS       (*(volatile uint32_t*)(1))
@@ -42,3 +47,31 @@
 #define TW_REP_START    13
 #define TWSTO           14
 #define TW_MR_SLA_ACK   15
+
+namespace core::mcu::i2c
+{
+    inline bool init(uint8_t channel, uint32_t clockSpeed)
+    {
+        return false;
+    }
+
+    inline bool init(core::mcu::io::pin_t sda, core::mcu::io::pin_t scl, uint8_t channel, uint32_t clockSpeed)
+    {
+        return false;
+    }
+
+    inline bool deInit(uint8_t channel)
+    {
+        return false;
+    }
+
+    inline bool write(uint8_t channel, uint8_t address, uint8_t* buffer, size_t size)
+    {
+        return false;
+    }
+
+    inline bool deviceAvailable(uint8_t channel, uint8_t address)
+    {
+        return false;
+    }
+}    // namespace core::mcu::i2c

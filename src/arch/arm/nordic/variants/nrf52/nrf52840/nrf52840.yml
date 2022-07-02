@@ -16,9 +16,12 @@
   peripherals:
     custom-pins: true
     uart: 2
-    i2c: 1
+    i2c: 2
   define-symbols:
     - "NRF52840_XXAA"
+    - "NRFX_TWIM_ENABLED=1"
+    - "NRFX_TWIM0_ENABLED=1"
+    - "NRFX_TWIM1_ENABLED=1"
   include-dirs:
     - "src/arch/arm/common/CMSIS"
     - "modules/tinyusb/lib/CMSIS_5/CMSIS/Core/Include"

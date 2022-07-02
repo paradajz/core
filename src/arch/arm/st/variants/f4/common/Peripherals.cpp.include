@@ -120,26 +120,6 @@ extern "C" void OTG_FS_IRQHandler(void)
     core::mcu::isr::usb();
 }
 
-extern "C" void ADC_IRQHandler(void)
-{
-    core::mcu::isr::adc(ADC1->DR);
-}
-
-extern "C" void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
-{
-    if (hadc->Instance == ADC1)
-    {
-        __HAL_RCC_ADC1_CLK_ENABLE();
-    }
-    else
-    {
-        return;
-    }
-
-    HAL_NVIC_SetPriority(ADC_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(ADC_IRQn);
-}
-
 extern "C" void HAL_UART_MspInit(UART_HandleTypeDef* huart)
 {
     uint8_t channel = 0;
@@ -223,47 +203,5 @@ extern "C" void HAL_I2C_MspDeInit(I2C_HandleTypeDef* hi2c)
         HAL_NVIC_DisableIRQ(descriptor->irqn());
     }
 }
-
-namespace core::mcu::adc
-{
-    void startItConversion()
-    {
-        // clear regular group conversion flag and overrun flag
-        // to ensure of no unknown state from potential previous ADC operations
-        ADC1->SR = ~(ADC_FLAG_EOC | ADC_FLAG_OVR);
-
-        // enable end of conversion interrupt for regular group
-        ADC1->CR1 |= (ADC_IT_EOC | ADC_IT_OVR);
-
-        // enable the selected ADC software conversion for regular group
-        ADC1->CR2 |= (uint32_t)ADC_CR2_SWSTART;
-    }
-
-    void setChannel(uint32_t channel)
-    {
-        // clear the old SQx bits for the selected rank
-        ADC1->SQR3 &= ~ADC_SQR3_RK(ADC_SQR3_SQ1, 1);
-
-        // set the SQx bits for the selected rank
-        ADC1->SQR3 |= ADC_SQR3_RK(channel, 1);
-    }
-
-    uint16_t read(uint32_t channel)
-    {
-        // clear regular group conversion flag and overrun flag
-        // to ensure of no unknown state from potential previous ADC operations
-        ADC1->SR = ~(ADC_FLAG_EOC | ADC_FLAG_OVR);
-
-        setChannel(channel);
-
-        // enable the selected ADC software conversion for regular group
-        ADC1->CR2 |= (uint32_t)ADC_CR2_SWSTART;
-
-        while (!core::util::BIT_READ(ADC1->SR, ADC_FLAG_EOC))
-            ;
-
-        return ADC1->DR;
-    }
-}    // namespace core::mcu::adc
 
 #include "core/src/arch/arm/st/common/Peripherals.cpp.include"

@@ -21,46 +21,18 @@
 
 #pragma once
 
-#include <inttypes.h>
-#include "IO.h"
-
-#if !__has_include(<MCU.h>)
-// already defined in generated MCU, define only if it doesn't exist
-#define CORE_MCU_ADC_MAX_VALUE 1023
+#ifndef CORE_MCU_GENERATED
+#error This file requires generated MCU header
 #endif
 
-namespace core::mcu::adc
+#include <inttypes.h>
+#include "core/src/MCU.h"
+
+namespace core::mcu::i2c
 {
-    struct conf_t
-    {
-        uint32_t prescaler   = 1;
-        bool     externalRef = false;
-        uint8_t  voltage     = 33;
-
-        conf_t() = default;
-    };
-
-    inline void init(conf_t configuration)
-    {}
-
-    inline void initPin(core::mcu::io::pin_t pin)
-    {}
-
-    inline void enableIt(uint8_t priority = 0)
-    {}
-
-    inline void disableIt()
-    {}
-
-    inline void startItConversion()
-    {}
-
-    inline void setActivePin(core::mcu::io::pin_t pin)
-    {}
-
-    inline uint16_t read(core::mcu::io::pin_t pin)
-    {
-        return 0;
-    }
-
-}    // namespace core::mcu::adc
+    bool init(uint8_t channel, uint32_t clockSpeed);
+    bool init(core::mcu::io::pin_t sda, core::mcu::io::pin_t scl, uint8_t channel, uint32_t clockSpeed);
+    bool deInit(uint8_t channel);
+    bool write(uint8_t channel, uint8_t address, uint8_t* buffer, size_t size);
+    bool deviceAvailable(uint8_t channel, uint8_t address);
+}    // namespace core::mcu::i2c

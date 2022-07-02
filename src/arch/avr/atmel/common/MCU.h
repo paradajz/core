@@ -33,7 +33,6 @@
 #include <util/delay.h>
 #include <util/twi.h>
 #include <avr/io.h>
-#include "ADC.h"
 #include "Interrupt.h"
 #include "IO.h"
 #include "Peripherals.h"
@@ -41,6 +40,7 @@
 #include "UART.h"
 #include "core/src/arch/avr/common/Atomic.h"
 #include "core/src/arch/common/ADC.h"
+#include "core/src/arch/common/I2C.h"
 #include "core/src/arch/common/Flash.h"
 #include "core/src/arch/common/ISR.h"
 #include "core/src/arch/common/Timers.h"

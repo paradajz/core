@@ -19,62 +19,60 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#pragma once
-
 #include <inttypes.h>
 #include <avr/io.h>
+#include "core/src/arch/common/ADC.h"
 
 #ifdef ADC
+
+namespace
+{
+    /// Disable digital input circuitry on specified ADC channel.
+    void disconnectDigitalIn(uint32_t channel)
+    {
+        if (channel > 7)
+        {
+#ifdef DIDR2
+            channel -= 8;
+            DIDR2 |= (1 << channel);
+#else
+            return;
+#endif
+        }
+        else
+        {
+            DIDR0 |= (1 << channel);
+        }
+    }
+}    // namespace
+
 namespace core::mcu::adc
 {
-    enum class prescaler_t : uint8_t
-    {
-        P128 = 128,
-        P64  = 64,
-        P32  = 32,
-        P16  = 16
-    };
-
-    enum class vRef_t : uint8_t
-    {
-        AREF     = 0,
-        AVCC     = 1,
-        INT_2V56 = 2,
-        INT_1V1  = 3
-    };
-
-    struct conf_t
-    {
-        prescaler_t prescaler;
-        vRef_t      vref;
-    };
-
-    inline void init(conf_t configuration)
+    void init(conf_t configuration)
     {
         ADMUX  = 0x00;
         ADCSRA = 0x0;
 
         switch (configuration.prescaler)
         {
-        case prescaler_t::P64:
+        case 64:
         {
             ADCSRA |= (1 << ADPS2) | (1 << ADPS1);
         }
         break;
 
-        case prescaler_t::P32:
+        case 32:
         {
             ADCSRA |= (1 << ADPS2) | (1 << ADPS0);
         }
         break;
 
-        case prescaler_t::P16:
+        case 16:
         {
             ADCSRA |= (1 << ADPS2);
         }
         break;
 
-        case prescaler_t::P128:
         default:
         {
             ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
@@ -82,42 +80,42 @@ namespace core::mcu::adc
         break;
         }
 
-        switch (configuration.vref)
-        {
-        case vRef_t::AVCC:
+        if (!configuration.externalRef)
         {
             ADMUX |= (1 << REFS0);
-        }
-        break;
-
-        case vRef_t::INT_2V56:
-        {
-            ADMUX |= (1 << REFS0) | (1 << REFS1);
-        }
-        break;
-
-        case vRef_t::INT_1V1:
-        {
-            ADMUX |= (1 << REFS1);
-        }
-        break;
-
-        case vRef_t::AREF:
-        default:
-            break;
         }
 
         // enable ADC
         ADCSRA |= (1 << ADEN);
     }
 
-    inline void startItConversion()
+    void initPin(core::mcu::io::pin_t pin)
     {
-        ADCSRA |= (1 << ADSC) | (1 << ADIE);
+        CORE_MCU_IO_INIT(pin.port, pin.index, core::mcu::io::pinMode_t::ANALOG);
+        CORE_MCU_IO_SET_LOW(pin.port, pin.index);
+
+        disconnectDigitalIn(core::mcu::peripherals::adcChannel(pin));
     }
 
-    inline void setChannel(uint32_t channel)
+    void enableIt(uint8_t priority)
     {
+        ADCSRA |= (1 << ADIE);
+    }
+
+    void disableIt()
+    {
+        ADCSRA &= ~(1 << ADIE);
+    }
+
+    void startItConversion()
+    {
+        ADCSRA |= (1 << ADSC);
+    }
+
+    void setActivePin(core::mcu::io::pin_t pin)
+    {
+        auto channel = core::mcu::peripherals::adcChannel(pin);
+
 #if defined(ADCSRB) && defined(MUX5)
         if (channel > 7)
         {
@@ -134,9 +132,9 @@ namespace core::mcu::adc
         ADMUX = (ADMUX & 0xF0) | (channel & 0x0F);
     }
 
-    inline uint16_t read(uint32_t channel)
+    uint16_t read(core::mcu::io::pin_t pin)
     {
-        setChannel(channel);
+        setActivePin(pin);
 
         // single conversion mode
         ADCSRA |= (1 << ADSC);
@@ -149,23 +147,6 @@ namespace core::mcu::adc
 
         return ADC;
     }
-
-    /// Disable digital input circuitry on specified ADC channel.
-    inline void disconnectDigitalIn(uint32_t channel)
-    {
-        if (channel > 7)
-        {
-#ifdef DIDR2
-            channel -= 8;
-            DIDR2 |= (1 << channel);
-#else
-            return;
-#endif
-        }
-        else
-        {
-            DIDR0 |= (1 << channel);
-        }
-    }
 }    // namespace core::mcu::adc
+
 #endif

@@ -23,7 +23,6 @@
 // included by specific mcu variant - not to be compiled directly
 
 #include <nrfx_uart.h>
-#include "nrfx_saadc.h"
 #include "core/src/arch/common/ISR.h"
 
 extern "C" void UARTE0_UART0_IRQHandler(void)
@@ -40,59 +39,3 @@ extern "C" void USBD_IRQHandler(void)
 {
     core::mcu::isr::usb();
 }
-
-extern "C" void SAADC_IRQHandler(void)
-{
-    auto value = *reinterpret_cast<nrf_saadc_value_t*>(NRF_SAADC->RESULT.PTR);
-
-    if (value < 0)
-    {
-        value = 0;
-    }
-
-    if (nrf_saadc_event_check(NRF_SAADC, NRF_SAADC_EVENT_STARTED))
-    {
-        nrf_saadc_event_clear(NRF_SAADC, NRF_SAADC_EVENT_STARTED);
-        nrf_saadc_task_trigger(NRF_SAADC, NRF_SAADC_TASK_SAMPLE);
-    }
-
-    if (nrf_saadc_event_check(NRF_SAADC, NRF_SAADC_EVENT_STOPPED))
-    {
-        nrf_saadc_event_clear(NRF_SAADC, NRF_SAADC_EVENT_STOPPED);
-    }
-
-    if (nrf_saadc_event_check(NRF_SAADC, NRF_SAADC_EVENT_END))
-    {
-        nrf_saadc_event_clear(NRF_SAADC, NRF_SAADC_EVENT_END);
-        core::mcu::isr::adc(value);
-    }
-
-    if (nrf_saadc_event_check(NRF_SAADC, NRF_SAADC_EVENT_CALIBRATEDONE))
-    {
-        nrf_saadc_event_clear(NRF_SAADC, NRF_SAADC_EVENT_CALIBRATEDONE);
-    }
-}
-
-namespace core::mcu::adc
-{
-    void startItConversion()
-    {
-        nrf_saadc_task_trigger(NRF_SAADC, NRF_SAADC_TASK_START);
-    }
-
-    void setChannel(uint32_t channel)
-    {
-        for (uint32_t chPos = 0; chPos < SAADC_CH_NUM; chPos++)
-        {
-            nrf_saadc_input_t pselp = NRF_SAADC_INPUT_DISABLED;
-
-            if ((1 << channel) & (1 << chPos))
-            {
-                pselp = static_cast<nrf_saadc_input_t>(chPos + 1);
-            }
-
-            nrf_saadc_burst_set(NRF_SAADC, chPos, NRF_SAADC_BURST_ENABLED);
-            nrf_saadc_channel_input_set(NRF_SAADC, chPos, pselp, NRF_SAADC_INPUT_DISABLED);
-        }
-    }
-}    // namespace core::mcu::adc

@@ -37,7 +37,6 @@ namespace core::mcu::flash
     uint32_t size();
     uint32_t pageSize(size_t index);
     bool     erasePage(size_t index);
-    void     writePage(size_t index);
     bool     write32(uint32_t address, uint32_t data);
     bool     read8(uint32_t address, uint8_t& data);
     bool     read16(uint32_t address, uint16_t& data);

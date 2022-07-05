@@ -30,6 +30,7 @@
 #include "HAL.h"
 #include "Peripherals.h"
 #include "core/src/arch/common/ADC.h"
+#include "core/src/arch/common/Bootloader.h"
 #include "core/src/arch/common/I2C.h"
 #include "core/src/arch/common/Clocks.h"
 #include "core/src/arch/common/Flash.h"

@@ -85,11 +85,6 @@ namespace core::mcu::flash
         return true;
     }
 
-    void writePage(size_t index)
-    {
-        // nothing to do here
-    }
-
     bool write32(uint32_t address, uint32_t data)
     {
         CORE_ERROR_CHECK(nrf_fstorage_write(&_fstorage,

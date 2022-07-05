@@ -77,11 +77,6 @@ namespace core::mcu::flash
         return (halStatus == HAL_OK) && (eraseStatus == 0xFFFFFFFFU);
     }
 
-    _RAM void writePage(size_t index)
-    {
-        // nothing to do here
-    }
-
     _RAM bool write32(uint32_t address, uint32_t data)
     {
         HAL_StatusTypeDef halStatus = HAL_FLASH_Unlock();

@@ -19,50 +19,50 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#pragma once
-
-#include <inttypes.h>
-
-#include "core/src/arch/common/Clocks.h"
-#include "core/src/arch/common/Flash.h"
-#include "core/src/arch/common/ISR.h"
-#include "core/src/arch/common/Timers.h"
-#include "ADC.h"
+#include "BootloaderCache.h"
 #include "Bootloader.h"
-#include "Atomic.h"
-#include "I2C.h"
-#include "Interrupt.h"
-#include "IO.h"
-#include "Peripherals.h"
-#include "UART.h"
-#include "Util.h"
-#if __has_include(<MCU.h>)
 #include <MCU.h>
-#else
-// already defined in generated MCU, define only if it doesn't exist
-#define CORE_MCU_UID_BITS 80
-#endif
-#include "core/src/arch/common/MCU.h"
 
-namespace core::mcu
+namespace
 {
-    inline void init(initType_t initType = initType_t::APP)
+    constexpr size_t PAGE_BUFFER_SIZE_WORDS = 1024;
+
+    uint32_t _pageBuffer[PAGE_BUFFER_SIZE_WORDS];
+    uint32_t _pageBufferCounter;
+    uint32_t _commitStartAddress;
+}    // namespace
+
+namespace core::mcu::bootloader
+{
+    void resetCache()
     {
+        _pageBufferCounter  = 0;
+        _commitStartAddress = 0xFFFFFFFF;
     }
 
-    inline void deInit()
+    void fillCache(size_t index, uint32_t addressInPage, uint32_t data)
     {
+        if (_commitStartAddress == 0xFFFFFFFF)
+        {
+            _commitStartAddress = addressInPage;
+        }
+
+        _pageBuffer[_pageBufferCounter++] = data;
+
+        if (_pageBufferCounter >= PAGE_BUFFER_SIZE_WORDS)
+        {
+            flushCache(index);
+        }
     }
 
-    inline void reset()
+    void flushCache(size_t index)
     {
-    }
+        for (size_t i = 0; i < _pageBufferCounter; i++)
+        {
+            core::mcu::flash::write32(CORE_MCU_FLASH_PAGE_ADDRESS(index) + _commitStartAddress + (i * 4),
+                                      _pageBuffer[i]);
+        }
 
-    inline void uniqueID(uniqueID_t& uid)
-    {
+        resetCache();
     }
-
-    inline void idle()
-    {
-    }
-}    // namespace core::mcu
+}    // namespace core::mcu::bootloader

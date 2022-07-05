@@ -47,41 +47,6 @@ namespace core::mcu::flash
         return CORE_MCU_FLASH_PAGE_SIZE_COMMON;
     }
 
-    bool erasePage(size_t index)
-    {
-        CORE_MCU_ATOMIC_SECTION
-        {
-            boot_page_erase(index * pageSize(index));
-            boot_spm_busy_wait();
-        }
-
-        return true;
-    }
-
-    void writePage(size_t index)
-    {
-        CORE_MCU_ATOMIC_SECTION
-        {
-            // write the filled flash page to memory
-            boot_page_write(index * pageSize(index));
-            boot_spm_busy_wait();
-
-            // re-enable RWW section
-            boot_rww_enable();
-        }
-    }
-
-    bool write32(uint32_t address, uint32_t data)
-    {
-        CORE_MCU_ATOMIC_SECTION
-        {
-            boot_page_fill_safe(address, data & static_cast<uint16_t>(0xFFFF));
-            boot_page_fill_safe(address + 2, data >> 16);
-        }
-
-        return true;
-    }
-
     bool read8(uint32_t address, uint8_t& data)
     {
 #ifdef pgm_read_byte_far

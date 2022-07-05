@@ -65,12 +65,8 @@ namespace core::mcu::flash
         {
             flash_range_erase(index * pageSize(index), pageSize(index));
         }
-        return true;
-    }
 
-    void writePage(size_t index)
-    {
-        // nothing to do here
+        return true;
     }
 
     bool write32(uint32_t address, uint32_t data)

@@ -22,47 +22,11 @@
 #pragma once
 
 #include <inttypes.h>
+#include <cstddef>
 
-#include "core/src/arch/common/Clocks.h"
-#include "core/src/arch/common/Flash.h"
-#include "core/src/arch/common/ISR.h"
-#include "core/src/arch/common/Timers.h"
-#include "ADC.h"
-#include "Bootloader.h"
-#include "Atomic.h"
-#include "I2C.h"
-#include "Interrupt.h"
-#include "IO.h"
-#include "Peripherals.h"
-#include "UART.h"
-#include "Util.h"
-#if __has_include(<MCU.h>)
-#include <MCU.h>
-#else
-// already defined in generated MCU, define only if it doesn't exist
-#define CORE_MCU_UID_BITS 80
-#endif
-#include "core/src/arch/common/MCU.h"
-
-namespace core::mcu
+namespace core::mcu::bootloader
 {
-    inline void init(initType_t initType = initType_t::APP)
-    {
-    }
-
-    inline void deInit()
-    {
-    }
-
-    inline void reset()
-    {
-    }
-
-    inline void uniqueID(uniqueID_t& uid)
-    {
-    }
-
-    inline void idle()
-    {
-    }
-}    // namespace core::mcu
+    bool erasePage(size_t index);
+    bool fillPage(size_t index, uint32_t addressInPage, uint32_t data);
+    bool commitPage(size_t index);
+}    // namespace core::mcu::bootloader

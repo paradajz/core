@@ -19,68 +19,51 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#pragma once
-
 #ifndef CORE_MCU_GENERATED
 #error This file requires generated MCU header
 #endif
 
-#include <array>
-#include "core/src/arch/arm/common/Atomic.h"
-#include "HAL.h"
-#include "IO.h"
-#include "Peripherals.h"
-#include "core/src/arch/common/ADC.h"
-#include "core/src/arch/common/Bootloader.h"
-#include "core/src/arch/common/I2C.h"
-#include "core/src/arch/common/Clocks.h"
-#include "core/src/arch/common/Flash.h"
-#include "core/src/arch/common/ISR.h"
-#include "core/src/arch/common/Timers.h"
-#include "core/src/ErrorHandler.h"
+#include <avr/pgmspace.h>
+#include <avr/boot.h>
 #include <MCU.h>
-#include "core/src/arch/common/usb/USB.h"
-#include "core/src/arch/common/MCU.h"
+#include "core/src/arch/avr/common/Atomic.h"
 
-namespace core::mcu
+namespace core::mcu::bootloader
 {
-    inline void init(initType_t initType = initType_t::APP)
+    bool erasePage(size_t index)
     {
-        HAL_Init();
-
-        clocks::init();
-        flash::init();
-    }
-
-    inline void deInit()
-    {
-        HAL_RCC_DeInit();
-        HAL_DeInit();
-    }
-
-    inline void reset()
-    {
-        NVIC_SystemReset();
-    }
-
-    inline void uniqueID(uniqueID_t& uid)
-    {
-        uint32_t id[3];
-
-        id[0] = HAL_GetUIDw0();
-        id[1] = HAL_GetUIDw1();
-        id[2] = HAL_GetUIDw2();
-
-        for (int i = 0; i < 3; i++)
+        CORE_MCU_ATOMIC_SECTION
         {
-            for (int j = 0; j < 4; j++)
-            {
-                uid[(i * 4) + j] = id[i] >> ((3 - j) * 8) & 0xFF;
-            }
+            boot_page_erase(index * core::mcu::flash::pageSize(index));
+            boot_spm_busy_wait();
         }
+
+        return true;
     }
 
-    inline void idle()
+    bool fillPage(size_t index, uint32_t addressInPage, uint32_t data)
     {
+        CORE_MCU_ATOMIC_SECTION
+        {
+            boot_page_fill_safe(CORE_MCU_FLASH_PAGE_ADDRESS(index) + addressInPage, data & static_cast<uint16_t>(0xFFFF));
+            boot_page_fill_safe(CORE_MCU_FLASH_PAGE_ADDRESS(index) + addressInPage + 2, data >> 16);
+        }
+
+        return true;
     }
-}    // namespace core::mcu
+
+    bool commitPage(size_t index)
+    {
+        CORE_MCU_ATOMIC_SECTION
+        {
+            // write the filled flash page to memory
+            boot_page_write(index * core::mcu::flash::pageSize(index));
+            boot_spm_busy_wait();
+
+            // re-enable RWW section
+            boot_rww_enable();
+        }
+
+        return true;
+    }
+}    // namespace core::mcu::bootloader

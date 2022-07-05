@@ -19,68 +19,30 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#pragma once
-
 #ifndef CORE_MCU_GENERATED
 #error This file requires generated MCU header
 #endif
 
-#include <array>
-#include "core/src/arch/arm/common/Atomic.h"
-#include "HAL.h"
-#include "IO.h"
-#include "Peripherals.h"
-#include "core/src/arch/common/ADC.h"
-#include "core/src/arch/common/Bootloader.h"
-#include "core/src/arch/common/I2C.h"
-#include "core/src/arch/common/Clocks.h"
-#include "core/src/arch/common/Flash.h"
-#include "core/src/arch/common/ISR.h"
-#include "core/src/arch/common/Timers.h"
-#include "core/src/ErrorHandler.h"
 #include <MCU.h>
-#include "core/src/arch/common/usb/USB.h"
-#include "core/src/arch/common/MCU.h"
+#include "core/src/arch/common/BootloaderCache.h"
 
-namespace core::mcu
+namespace core::mcu::bootloader
 {
-    inline void init(initType_t initType = initType_t::APP)
+    bool erasePage(size_t index)
     {
-        HAL_Init();
-
-        clocks::init();
-        flash::init();
+        resetCache();
+        return core::mcu::flash::erasePage(index);
     }
 
-    inline void deInit()
+    bool fillPage(size_t index, uint32_t addressInPage, uint32_t data)
     {
-        HAL_RCC_DeInit();
-        HAL_DeInit();
+        fillCache(index, addressInPage, data);
+        return true;
     }
 
-    inline void reset()
+    bool commitPage(size_t index)
     {
-        NVIC_SystemReset();
+        flushCache(index);
+        return true;
     }
-
-    inline void uniqueID(uniqueID_t& uid)
-    {
-        uint32_t id[3];
-
-        id[0] = HAL_GetUIDw0();
-        id[1] = HAL_GetUIDw1();
-        id[2] = HAL_GetUIDw2();
-
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 4; j++)
-            {
-                uid[(i * 4) + j] = id[i] >> ((3 - j) * 8) & 0xFF;
-            }
-        }
-    }
-
-    inline void idle()
-    {
-    }
-}    // namespace core::mcu
+}    // namespace core::mcu::bootloader

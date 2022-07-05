@@ -72,7 +72,7 @@ namespace core::mcu::flash
     bool erasePage(size_t index)
     {
         CORE_ERROR_CHECK(nrf_fstorage_erase(&_fstorage,
-                                            CORE_MCU_FLASH_PAGE_ADDRESS(index),
+                                            CORE_MCU_FLASH_PAGE_ADDR(index),
                                             1,
                                             NULL),
                          NRF_SUCCESS);

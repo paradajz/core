@@ -45,8 +45,8 @@ namespace core::mcu::bootloader
     {
         CORE_MCU_ATOMIC_SECTION
         {
-            boot_page_fill_safe(CORE_MCU_FLASH_PAGE_ADDRESS(index) + addressInPage, data & static_cast<uint16_t>(0xFFFF));
-            boot_page_fill_safe(CORE_MCU_FLASH_PAGE_ADDRESS(index) + addressInPage + 2, data >> 16);
+            boot_page_fill_safe(CORE_MCU_FLASH_PAGE_ADDR(index) + addressInPage, data & static_cast<uint16_t>(0xFFFF));
+            boot_page_fill_safe(CORE_MCU_FLASH_PAGE_ADDR(index) + addressInPage + 2, data >> 16);
         }
 
         return true;

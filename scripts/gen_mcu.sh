@@ -104,10 +104,10 @@ then
         } >> "$out_header"
 
         {
-            printf "%s\n" "constexpr uint32_t CORE_MCU_FLASH_PAGE_ADDRESS(size_t page) {"
-            printf "%s\n" "return FLASH_PAGE_DESCRIPTOR[page].address; }"
-            printf "%s\n" "constexpr uint32_t CORE_MCU_FLASH_PAGE_SIZE(size_t page) {"
-            printf "%s\n" "return FLASH_PAGE_DESCRIPTOR[page].size; }"
+            printf "%s\n" "constexpr uint32_t CORE_MCU_FLASH_PAGE_ADDR(size_t index) {"
+            printf "%s\n" "return FLASH_PAGE_DESCRIPTOR[index].address; }"
+            printf "%s\n" "constexpr uint32_t CORE_MCU_FLASH_PAGE_SIZE(size_t index) {"
+            printf "%s\n" "return FLASH_PAGE_DESCRIPTOR[index].size; }"
         } >> "$out_header"
     else
         # all flash pages have common size
@@ -122,11 +122,11 @@ then
         } >> "$out_makefile"
 
         {
-            printf "%s\n" "constexpr uint32_t CORE_MCU_FLASH_PAGE_SIZE(size_t page) {"
+            printf "%s\n" "constexpr uint32_t CORE_MCU_FLASH_PAGE_SIZE(size_t index) {"
             printf "%s\n" "return CORE_MCU_FLASH_PAGE_SIZE_COMMON; }"
 
-            printf "%s\n" "constexpr uint32_t CORE_MCU_FLASH_PAGE_ADDRESS(size_t page) {"
-            printf "%s\n" "return $flashStart + (CORE_MCU_FLASH_PAGE_SIZE_COMMON * page); }"
+            printf "%s\n" "constexpr uint32_t CORE_MCU_FLASH_PAGE_ADDR(size_t index) {"
+            printf "%s\n" "return $flashStart + (CORE_MCU_FLASH_PAGE_SIZE_COMMON * index); }"
         } >> "$out_header"
     fi
 

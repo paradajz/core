@@ -104,15 +104,5 @@ namespace core::mcu
 
     inline void idle()
     {
-        if (nrf_sdh_is_enabled())
-        {
-            sd_app_evt_wait();
-        }
-        else
-        {
-            __WFE();
-            __SEV();
-            __WFE();
-        }
     }
 }    // namespace core::mcu

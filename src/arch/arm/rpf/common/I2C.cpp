@@ -22,9 +22,82 @@ limitations under the License.
 
 namespace
 {
-    i2c_inst* _i2cInstance[CORE_MCU_MAX_I2C_INTERFACES] = {
-        i2c0,
-        i2c1
+    // Match SDA/SCL pin indexes with I2C interface:
+    // RP2040 uses semi-flexible pin mapping for I2C -
+    // specific pins use specific I2C interface
+    i2c_inst* i2cInstance(uint8_t sda, uint8_t scl)
+    {
+        if ((sda == 0) && (scl == 1))
+        {
+            return i2c0;
+        }
+
+        if ((sda == 2) && (scl == 3))
+        {
+            return i2c1;
+        }
+
+        if ((sda == 4) && (scl == 5))
+        {
+            return i2c0;
+        }
+
+        if ((sda == 6) && (scl == 7))
+        {
+            return i2c1;
+        }
+
+        if ((sda == 8) && (scl == 9))
+        {
+            return i2c0;
+        }
+
+        if ((sda == 10) && (scl == 11))
+        {
+            return i2c1;
+        }
+
+        if ((sda == 12) && (scl == 13))
+        {
+            return i2c0;
+        }
+
+        if ((sda == 14) && (scl == 15))
+        {
+            return i2c1;
+        }
+
+        if ((sda == 26) && (scl == 27))
+        {
+            return i2c1;
+        }
+
+        if ((sda == 20) && (scl == 21))
+        {
+            return i2c0;
+        }
+
+        if ((sda == 18) && (scl == 19))
+        {
+            return i2c1;
+        }
+
+        if ((sda == 16) && (scl == 17))
+        {
+            return i2c0;
+        }
+
+        return nullptr;
+    }
+
+    // Array holding I2C interface for specific channel:
+    // channel is specified by user, so it's possible to init I2C by
+    // specifying "init I2C channel 0 with the following pins"
+    // Each pin group matches with specific I2C interface.
+    // Instance should be set in init().
+    i2c_inst* _i2cInstanceMatched[CORE_MCU_MAX_I2C_INTERFACES] = {
+        nullptr,
+        nullptr,
     };
 }    // namespace
 
@@ -37,7 +110,10 @@ namespace core::mcu::i2c
             return false;
         }
 
-        i2c_init(_i2cInstance[channel], clockSpeed);
+        auto instance                = i2cInstance(sda.index, scl.index);
+        _i2cInstanceMatched[channel] = instance;
+
+        i2c_init(_i2cInstanceMatched[channel], clockSpeed);
         gpio_set_function(sda.index, GPIO_FUNC_I2C);
         gpio_set_function(scl.index, GPIO_FUNC_I2C);
         gpio_pull_up(sda.index);
@@ -53,7 +129,8 @@ namespace core::mcu::i2c
             return false;
         }
 
-        i2c_deinit(_i2cInstance[channel]);
+        i2c_deinit(_i2cInstanceMatched[channel]);
+
         return true;
     }
 
@@ -64,7 +141,7 @@ namespace core::mcu::i2c
             return false;
         }
 
-        return i2c_write_blocking(_i2cInstance[channel],
+        return i2c_write_blocking(_i2cInstanceMatched[channel],
                                   address,
                                   buffer,
                                   size,
@@ -82,7 +159,7 @@ namespace core::mcu::i2c
 
         uint8_t dummy = 0;
 
-        return i2c_read_blocking(_i2cInstance[channel],
+        return i2c_read_blocking(_i2cInstanceMatched[channel],
                                  address,
                                  &dummy,
                                  1,

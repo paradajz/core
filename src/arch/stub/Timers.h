@@ -22,47 +22,54 @@
 #pragma once
 
 #include <inttypes.h>
-
-#include "core/src/arch/common/Clocks.h"
-#include "core/src/arch/common/Flash.h"
-#include "core/src/arch/common/ISR.h"
-#include "ADC.h"
-#include "Bootloader.h"
-#include "Atomic.h"
-#include "I2C.h"
-#include "Interrupt.h"
-#include "IO.h"
-#include "Peripherals.h"
-#include "Timers.h"
-#include "UART.h"
-#include "Util.h"
-#if __has_include(<MCU.h>)
-#include <MCU.h>
-#else
-// already defined in generated MCU, define only if it doesn't exist
-#define CORE_MCU_UID_BITS 80
+#include <cstddef>
+#ifndef CORE_USE_C_TIMER_CALLBACK
+#include <functional>
 #endif
-#include "core/src/arch/common/MCU.h"
 
-namespace core::mcu
+namespace core::mcu::timers
 {
-    inline void init(initType_t initType = initType_t::APP)
+#ifdef CORE_USE_C_TIMER_CALLBACK
+    using handler_t = void (*)();
+#else
+    using handler_t = std::function<void()>;
+#endif
+
+    inline bool init()
+    {
+        return false;
+    }
+
+    inline bool allocate(size_t& index, handler_t handler)
+    {
+        return false;
+    }
+
+    inline bool setPeriod(size_t index, uint32_t us)
+    {
+        return false;
+    }
+
+    inline bool start(size_t index)
+    {
+        return false;
+    }
+
+    inline void startAll()
     {
     }
 
-    inline void deInit()
+    inline bool stop(size_t index)
+    {
+        return false;
+    }
+
+    inline void stopAll()
     {
     }
 
-    inline void reset()
+    inline bool isRunning(size_t index)
     {
+        return false;
     }
-
-    inline void uniqueID(uniqueID_t& uid)
-    {
-    }
-
-    inline void idle()
-    {
-    }
-}    // namespace core::mcu
+}    // namespace core::mcu::timers

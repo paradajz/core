@@ -23,6 +23,8 @@
 #include "core/src/util/Util.h"
 #include "core/src/arch/common/Timers.h"
 
+#ifdef __AVR_ATmega16U2__
+
 // no error here checking to reduce flash size
 
 // 4 constant based on prescaler 64
@@ -99,3 +101,5 @@ namespace core::mcu::timers
         return true;
     }
 }    // namespace core::mcu::timers
+
+#endif

@@ -119,7 +119,7 @@ namespace core::mcu::adc
         nrf_saadc_event_clear(NRF_SAADC, NRF_SAADC_EVENT_CALIBRATEDONE);
 
         nrf_saadc_resolution_set(NRF_SAADC, NRF_SAADC_RESOLUTION_12BIT);
-        nrf_saadc_oversample_set(NRF_SAADC, NRF_SAADC_OVERSAMPLE_16X);
+        nrf_saadc_oversample_set(NRF_SAADC, NRF_SAADC_OVERSAMPLE_8X);
     }
 
     void initPin(core::mcu::io::pin_t pin)

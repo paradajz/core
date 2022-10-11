@@ -39,6 +39,11 @@ void operator delete(void* ptr)
     free(ptr);
 }
 
+void operator delete(void* ptr, unsigned int size)
+{
+    free(ptr);
+}
+
 namespace std
 {
     void __throw_bad_function_call()

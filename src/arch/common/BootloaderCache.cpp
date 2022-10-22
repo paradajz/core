@@ -25,7 +25,11 @@
 
 namespace
 {
+#ifdef CORE_MCU_BTLDR_CACHE_WORDS_USER
+    constexpr size_t PAGE_BUFFER_SIZE_WORDS = CORE_MCU_BTLDR_CACHE_WORDS_USER;
+#else
     constexpr size_t PAGE_BUFFER_SIZE_WORDS = 1024;
+#endif
 
     uint32_t _pageBuffer[PAGE_BUFFER_SIZE_WORDS];
     uint32_t _pageBufferCounter;

@@ -24,12 +24,3 @@
 #include "core/src/arch/common/ISR.h"
 #include "hardware/regs/intctrl.h"
 
-extern "C" void isr_uart0(void)
-{
-    core::mcu::isr::uart(0);
-}
-
-extern "C" void isr_uart1(void)
-{
-    core::mcu::isr::uart(1);
-}

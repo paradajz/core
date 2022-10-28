@@ -49,9 +49,6 @@ namespace core::mcu
     {
         // Clear out most of the ISR handlers on startup:
         // relevant when jumping from bootloader to app.
-        // Leave out UART handlers since they are exclusively used in this module:
-        // UART0_IRQ
-        // UART1_IRQ
         irq_remove_handler(TIMER_IRQ_0, irq_get_vtable_handler(TIMER_IRQ_0));
         irq_remove_handler(TIMER_IRQ_1, irq_get_vtable_handler(TIMER_IRQ_1));
         irq_remove_handler(TIMER_IRQ_2, irq_get_vtable_handler(TIMER_IRQ_2));
@@ -76,6 +73,20 @@ namespace core::mcu
         irq_remove_handler(I2C1_IRQ, irq_get_vtable_handler(I2C1_IRQ));
         irq_remove_handler(RTC_IRQ, irq_get_vtable_handler(RTC_IRQ));
         irq_remove_handler(ADC_IRQ_FIFO, irq_get_vtable_handler(ADC_IRQ_FIFO));
+        irq_remove_handler(UART0_IRQ, irq_get_vtable_handler(UART0_IRQ));
+        irq_remove_handler(UART1_IRQ, irq_get_vtable_handler(UART1_IRQ));
+
+        irq_set_exclusive_handler(
+            UART0_IRQ, []()
+            {
+                core::mcu::isr::uart(0);
+            });
+
+        irq_set_exclusive_handler(
+            UART1_IRQ, []()
+            {
+                core::mcu::isr::uart(1);
+            });
     }
 
     inline void deInit()

@@ -36,6 +36,7 @@
 #include "core/src/arch/common/Flash.h"
 #include "core/src/arch/common/ISR.h"
 #include "core/src/arch/common/Timers.h"
+#include "core/src/arch/common/UART.h"
 #include "core/src/ErrorHandler.h"
 #include <MCU.h>
 #include "core/src/arch/common/usb/USB.h"

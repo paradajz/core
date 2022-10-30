@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include "MCU.h"
+#include "HAL.h"
 
 namespace core::timing
 {

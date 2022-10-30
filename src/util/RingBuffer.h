@@ -24,7 +24,6 @@
 
 #include <inttypes.h>
 #include <stddef.h>
-#include "core/src/MCU.h"
 
 namespace core::util
 {
@@ -40,18 +39,17 @@ namespace core::util
 
         size_t size() const
         {
-            size_t result = 0;
+            size_t   result   = 0;
+            uint16_t headCopy = _head;
+            uint16_t tailCopy = _tail;
 
-            CORE_MCU_ATOMIC_SECTION
+            if (headCopy >= tailCopy)
             {
-                if (_head >= _tail)
-                {
-                    result = _head - _tail;
-                }
-                else
-                {
-                    result = BUFFER_SIZE + _head - _tail;
-                }
+                result = headCopy - tailCopy;
+            }
+            else
+            {
+                result = BUFFER_SIZE + headCopy - tailCopy;
             }
 
             return result;

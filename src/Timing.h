@@ -22,6 +22,10 @@
 #pragma once
 
 #include <inttypes.h>
+
+#ifdef CORE_MCU_STUB
+#include "arch/stub/Timing.h"
+#else
 #ifdef CORE_ARCH_AVR
 #include "arch/avr/atmel/common/Timing.h"
 #elif defined(CORE_ARCH_ARM)
@@ -31,10 +35,14 @@
 #include "arch/arm/nordic/common/Timing.h"
 #elif defined(CORE_VENDOR_RPF)
 #include "arch/arm/rpf/common/Timing.h"
+#else
+#include "arch/stub/Timing.h"
 #endif
 #else
 #include "arch/stub/Timing.h"
 #endif
+#endif
+
 #include "MCU.h"
 
 namespace core::timing

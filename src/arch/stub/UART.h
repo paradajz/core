@@ -21,6 +21,9 @@
 
 #pragma once
 
+#include <functional>
+#include "core/src/util/RingBuffer.h"
+
 #define UCSRA_0 (*(volatile uint32_t*)(1))
 #define UCSRA_1 (*(volatile uint32_t*)(1))
 #define UCSRA_2 (*(volatile uint32_t*)(1))
@@ -72,3 +75,158 @@
 #define UPM1_0  3
 #define UPM1_1  4
 #define UPM1_2  5
+
+namespace core::mcu::uart
+{
+    using rxHandler_t = std::function<void(uint8_t data)>;
+    using txHandler_t = std::function<bool(uint8_t& data, size_t& remainingBytes)>;
+
+    class Config
+    {
+        public:
+        enum parity_t : uint8_t
+        {
+            NO,
+            EVEN,
+            ODD
+        };
+
+        enum stopBits_t : uint8_t
+        {
+            ONE,
+            TWO
+        };
+
+        enum type_t : uint8_t
+        {
+            RX_TX,
+            RX,
+            TX
+        };
+
+        struct pins_t
+        {
+            core::mcu::io::pin_t rx;
+            core::mcu::io::pin_t tx;
+        };
+
+        Config(uint8_t    channel,
+               uint32_t   baudRate,
+               parity_t   parity,
+               stopBits_t stopBits,
+               type_t     type,
+               pins_t     pins)
+            : channel(channel)
+            , baudRate(baudRate)
+            , parity(parity)
+            , stopBits(stopBits)
+            , type(type)
+            , pins(pins)
+        {}
+
+        Config(uint8_t    channel,
+               uint32_t   baudRate,
+               parity_t   parity,
+               stopBits_t stopBits,
+               type_t     type)
+            : channel(channel)
+            , baudRate(baudRate)
+            , parity(parity)
+            , stopBits(stopBits)
+            , type(type)
+            , pins({})
+        {}
+
+        Config()
+            : channel(0)
+            , baudRate(9600)
+            , parity(parity_t::NO)
+            , stopBits(stopBits_t::ONE)
+            , type(type_t::RX_TX)
+            , pins({})
+        {}
+
+        uint8_t    channel;
+        uint32_t   baudRate;
+        parity_t   parity;
+        stopBits_t stopBits;
+        type_t     type;
+        pins_t     pins;
+    };
+
+    namespace hw
+    {
+        /// Performs low-level initialization of the specified UART channel.
+        /// param [in]: config      Structure containing UART channel configuration.
+        /// param [in]: rxHandler   Function which will be called from hardware UART interrupt when new data is received.
+        /// param [in]: txHandler   Function which will be called from hardware UART interrupt when new data needs to be sent.
+        inline bool init(const Config& config, rxHandler_t&& rxHandler, txHandler_t&& txHandler)
+        {
+            return false;
+        }
+
+        /// Performs low-level deinitialization of the specified UART channel.
+        /// param [in]: config      Structure containing UART channel configuration.
+        inline bool deInit(const Config& config)
+        {
+            return false;
+        }
+
+        /// Used to start the process of transmitting the data from UART TX buffer to UART interface.ž
+        /// param [in]: config      Structure containing UART channel configuration.
+        void startTx(const Config& config);
+    };    // namespace hw
+
+    template<size_t txSize, size_t rxSize>
+    class Channel
+    {
+        public:
+        Channel() = default;
+
+        bool init(const Config& config)
+        {
+            return false;
+        }
+
+        bool deInit()
+        {
+            return false;
+        }
+
+        bool isInitialized()
+        {
+            return false;
+        }
+
+        bool read(uint8_t* buffer, size_t& size, const size_t maxSize)
+        {
+            return false;
+        }
+
+        bool read(uint8_t& value)
+        {
+            return false;
+        }
+
+        bool write(uint8_t* buffer, size_t size)
+        {
+            return false;
+        }
+
+        bool write(uint8_t value)
+        {
+            return false;
+        }
+
+        void setLoopbackState(bool state)
+        {
+        }
+
+        private:
+        /// Buffer in which outgoing UART data is stored.
+        core::util::RingBuffer<uint8_t, txSize> _txBuffer;
+
+        /// Buffer in which incoming UART data is stored.
+        core::util::RingBuffer<uint8_t, rxSize> _rxBuffer;
+    };
+}    // namespace core::mcu::uart

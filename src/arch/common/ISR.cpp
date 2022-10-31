@@ -19,6 +19,8 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#ifndef CORE_MCU_STUB
+
 #include "ISR.h"
 #include "core/src/ErrorHandler.h"
 
@@ -38,3 +40,5 @@ namespace core::mcu::isr
         core::errorHandler(0);
     }
 }    // namespace core::mcu::isr
+
+#endif

@@ -21,6 +21,8 @@
 
 #pragma once
 
+#ifndef CORE_MCU_STUB
+
 #include <inttypes.h>
 #include <array>
 
@@ -36,3 +38,7 @@ namespace core::mcu
         BOOT
     };
 }    // namespace core::mcu
+
+#else
+#include "core/src/arch/stub/MCU.h"
+#endif

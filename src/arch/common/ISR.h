@@ -21,6 +21,8 @@
 
 #pragma once
 
+#ifndef CORE_MCU_STUB
+
 #include <inttypes.h>
 
 // common names for ISRs across various architectures
@@ -32,3 +34,7 @@ namespace core::mcu::isr
     void usb();
     void errorHandler();
 }    // namespace core::mcu::isr
+
+#else
+#include "core/src/arch/stub/ISR.h"
+#endif

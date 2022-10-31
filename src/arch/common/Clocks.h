@@ -21,7 +21,13 @@
 
 #pragma once
 
+#ifndef CORE_MCU_STUB
+
 namespace core::mcu::clocks
 {
     void init();
 }    // namespace core::mcu::clocks
+
+#else
+#include "core/src/arch/stub/Clocks.h"
+#endif

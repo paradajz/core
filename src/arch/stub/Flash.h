@@ -21,41 +21,59 @@
 
 #pragma once
 
-#ifndef CORE_MCU_STUB
-
-#ifndef CORE_MCU_GENERATED
-#error This file requires generated MCU header
-#endif
-
 #include <inttypes.h>
-#include "core/src/MCU.h"
+#include <cstddef>
 
-namespace core::mcu::adc
+namespace core::mcu::flash
 {
-    /// Structure holding ADC prescaler and voltage reference settings.
-    struct conf_t
+    struct flashPage_t
     {
-        uint32_t prescaler   = 1;
-        bool     externalRef = false;
-
-        // accepted values are:
-        // 30: 3.0 volts
-        // 33: 3.3 volts
-        // 50: 5.0 volts
-        uint8_t voltage = 33;
-
-        conf_t() = default;
+        uint32_t address;
+        uint32_t size;
     };
 
-    void     init(conf_t configuration);
-    void     initPin(core::mcu::io::pin_t pin);
-    void     enableIt(uint8_t priority = 0);
-    void     disableIt();
-    void     startItConversion();
-    void     setActivePin(core::mcu::io::pin_t pin);
-    uint16_t read(core::mcu::io::pin_t pin);
-}    // namespace core::mcu::adc
+    inline bool init()
+    {
+        return false;
+    }
 
-#else
-#include "core/src/arch/stub/ADC.h"
-#endif
+    inline bool isInRange(uint32_t address)
+    {
+        return false;
+    }
+
+    inline uint32_t size()
+    {
+        return 0;
+    }
+
+    inline uint32_t pageSize(size_t index)
+    {
+        return 0;
+    }
+
+    inline bool erasePage(size_t index)
+    {
+        return false;
+    }
+
+    inline bool write32(uint32_t address, uint32_t data)
+    {
+        return false;
+    }
+
+    inline bool read8(uint32_t address, uint8_t& data)
+    {
+        return false;
+    }
+
+    inline bool read16(uint32_t address, uint16_t& data)
+    {
+        return false;
+    }
+
+    inline bool read32(uint32_t address, uint32_t& data)
+    {
+        return false;
+    }
+}    // namespace core::mcu::flash

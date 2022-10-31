@@ -70,8 +70,8 @@ namespace core::mcu::io
 
 }    // namespace core::mcu::io
 
-#define CORE_MCU_IO_SET_LOW(port, index)  (void)0
-#define CORE_MCU_IO_SET_HIGH(port, index) (void)1
+#define CORE_MCU_IO_SET_LOW(port, index)  (void)port
+#define CORE_MCU_IO_SET_HIGH(port, index) (void)port
 #define CORE_MCU_IO_SET_PORT_STATE(port, state) \
     (void)port;                                 \
     (void)state

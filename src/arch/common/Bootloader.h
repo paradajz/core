@@ -21,6 +21,8 @@
 
 #pragma once
 
+#ifndef CORE_MCU_STUB
+
 #include <inttypes.h>
 #include <cstddef>
 
@@ -30,3 +32,7 @@ namespace core::mcu::bootloader
     bool fillPage(size_t index, uint32_t addressInPage, uint32_t data);
     bool commitPage(size_t index);
 }    // namespace core::mcu::bootloader
+
+#else
+#include "core/src/arch/stub/Bootloader.h"
+#endif

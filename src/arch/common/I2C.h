@@ -21,6 +21,8 @@
 
 #pragma once
 
+#ifndef CORE_MCU_STUB
+
 #ifndef CORE_MCU_GENERATED
 #error This file requires generated MCU header
 #endif
@@ -70,3 +72,7 @@ namespace core::mcu::i2c
     bool write(uint8_t channel, uint8_t address, uint8_t* buffer, size_t size);
     bool deviceAvailable(uint8_t channel, uint8_t address);
 }    // namespace core::mcu::i2c
+
+#else
+#include "core/src/arch/stub/I2C.h"
+#endif

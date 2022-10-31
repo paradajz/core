@@ -19,6 +19,8 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#ifndef CORE_MCU_STUB
+
 #include "BootloaderCache.h"
 #include "Bootloader.h"
 #include <MCU.h>
@@ -70,3 +72,5 @@ namespace core::mcu::bootloader
         resetCache();
     }
 }    // namespace core::mcu::bootloader
+
+#endif

@@ -21,6 +21,8 @@
 
 #pragma once
 
+#ifndef CORE_MCU_STUB
+
 #include <inttypes.h>
 #include <cstddef>
 
@@ -33,3 +35,5 @@ namespace core::mcu::bootloader
     void fillCache(size_t index, uint32_t addressInPage, uint32_t data);
     void flushCache(size_t index);
 }    // namespace core::mcu::bootloader
+
+#endif

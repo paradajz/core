@@ -21,31 +21,42 @@
 
 #pragma once
 
+#ifndef CORE_MCU_STUB
+#define CORE_MCU_STUB
+#endif
+
 #include <inttypes.h>
 
-#include "core/src/arch/common/Clocks.h"
-#include "core/src/arch/common/Flash.h"
-#include "core/src/arch/common/ISR.h"
 #include "ADC.h"
-#include "Bootloader.h"
 #include "Atomic.h"
+#include "Bootloader.h"
+#include "Clocks.h"
+#include "Flash.h"
 #include "I2C.h"
 #include "Interrupt.h"
 #include "IO.h"
+#include "ISR.h"
 #include "Peripherals.h"
 #include "Timers.h"
 #include "UART.h"
 #include "Util.h"
-#if __has_include(<MCU.h>)
-#include <MCU.h>
-#else
-// already defined in generated MCU, define only if it doesn't exist
+
+#ifndef CORE_MCU_UID_BITS
 #define CORE_MCU_UID_BITS 80
 #endif
-#include "core/src/arch/common/MCU.h"
+
+#define CORE_MCU_NOP()
 
 namespace core::mcu
 {
+    using uniqueID_t = std::array<uint8_t, CORE_MCU_UID_BITS / 8>;
+
+    enum class initType_t : uint8_t
+    {
+        APP,
+        BOOT
+    };
+
     inline void init(initType_t initType = initType_t::APP)
     {
     }

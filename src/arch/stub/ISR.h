@@ -21,41 +21,14 @@
 
 #pragma once
 
-#ifndef CORE_MCU_STUB
-
-#ifndef CORE_MCU_GENERATED
-#error This file requires generated MCU header
-#endif
-
 #include <inttypes.h>
-#include "core/src/MCU.h"
 
-namespace core::mcu::adc
+// common names for ISRs across various architectures
+
+namespace core::mcu::isr
 {
-    /// Structure holding ADC prescaler and voltage reference settings.
-    struct conf_t
-    {
-        uint32_t prescaler   = 1;
-        bool     externalRef = false;
-
-        // accepted values are:
-        // 30: 3.0 volts
-        // 33: 3.3 volts
-        // 50: 5.0 volts
-        uint8_t voltage = 33;
-
-        conf_t() = default;
-    };
-
-    void     init(conf_t configuration);
-    void     initPin(core::mcu::io::pin_t pin);
-    void     enableIt(uint8_t priority = 0);
-    void     disableIt();
-    void     startItConversion();
-    void     setActivePin(core::mcu::io::pin_t pin);
-    uint16_t read(core::mcu::io::pin_t pin);
-}    // namespace core::mcu::adc
-
-#else
-#include "core/src/arch/stub/ADC.h"
-#endif
+    void adc(uint32_t value);
+    void uart(uint8_t channel);
+    void usb();
+    void errorHandler();
+}    // namespace core::mcu::isr

@@ -24,8 +24,10 @@
 #include <stdlib.h>
 #include <inttypes.h>
 #include <string.h>
+#ifndef CORE_MCU_STUB
 #ifdef CORE_ARCH_AVR
 #include <avr/pgmspace.h>
+#endif
 #endif
 
 namespace core::util
@@ -136,7 +138,7 @@ namespace core::util
 // on AVRs, it is common to place strings or other constant data in program memory
 // however, that concept doesn't exist on other platforms
 // in that case, allow compiling the AVR code by re-defining certain functions/macros
-#ifdef CORE_ARCH_AVR
+#if defined(CORE_ARCH_AVR) && !defined(CORE_MCU_STUB)
 #define CORE_UTIL_READ_PROGMEM_ARRAY(string) (PGM_P) pgm_read_word(&(string))
 #define CORE_UTIL_READ_PROGMEM_BYTE(address) pgm_read_byte(&address)
 #define CORE_UTIL_READ_PROGMEM_WORD(address) pgm_read_word(&address)
@@ -149,10 +151,12 @@ namespace core::util
 #define CORE_UTIL_READ_PROGMEM_WORD(address) address
 #endif
 
+#ifdef CORE_MCU_STUB
+#include "core/src/arch/stub/Util.h"
+#else
 #ifdef CORE_ARCH_AVR
 #include "core/src/arch/avr/common/Util.h"
 #elif defined(CORE_ARCH_ARM)
 #include "core/src/arch/arm/common/Util.h"
-#else
-#include "core/src/arch/stub/Util.h"
+#endif
 #endif

@@ -21,6 +21,7 @@
 
 #pragma once
 
+#ifndef CORE_MCU_STUB
 #ifdef HW_SUPPORT_UART
 
 #ifndef CORE_MCU_GENERATED
@@ -316,4 +317,7 @@ namespace core::mcu::uart
     };
 }    // namespace core::mcu::uart
 
+#endif
+#else
+#include "core/src/arch/stub/UART.h"
 #endif

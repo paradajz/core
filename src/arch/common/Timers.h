@@ -21,6 +21,8 @@
 
 #pragma once
 
+#ifndef CORE_MCU_STUB
+
 #include <inttypes.h>
 #include <cstddef>
 #ifndef CORE_USE_C_TIMER_CALLBACK
@@ -60,3 +62,7 @@ namespace core::mcu::timers
     /// Checks if specified timer is currently active (running).
     bool isRunning(size_t index);
 }    // namespace core::mcu::timers
+
+#else
+#include "core/src/arch/stub/Timers.h"
+#endif

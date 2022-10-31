@@ -21,6 +21,8 @@
 
 #pragma once
 
+#ifndef CORE_MCU_STUB
+
 #include <inttypes.h>
 #include <cstddef>
 
@@ -42,3 +44,7 @@ namespace core::mcu::flash
     bool     read16(uint32_t address, uint16_t& data);
     bool     read32(uint32_t address, uint32_t& data);
 }    // namespace core::mcu::flash
+
+#else
+#include "core/src/arch/stub/Flash.h"
+#endif

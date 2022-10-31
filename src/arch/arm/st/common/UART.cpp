@@ -41,29 +41,6 @@ namespace core::mcu::uart::hw
         _uartHandler[config.channel].Init.WordLength = UART_WORDLENGTH_8B;
         _uartHandler[config.channel].Init.StopBits   = config.stopBits == Config::stopBits_t::ONE ? UART_STOPBITS_1 : UART_STOPBITS_2;
 
-        uint32_t pclk;
-
-#if defined(USART6) && defined(UART9) && defined(UART10)
-        if ((_uartHandler[config.channel].Instance == USART1) || (_uartHandler[config.channel].Instance == USART6) || (_uartHandler[config.channel].Instance == UART9) || (_uartHandler[config.channel].Instance == UART10))
-        {
-            pclk = HAL_RCC_GetPCLK2Freq();
-        }
-#elif defined(USART6)
-        if ((_uartHandler[config.channel].Instance == USART1) || (_uartHandler[config.channel].Instance == USART6))
-        {
-            pclk = HAL_RCC_GetPCLK2Freq();
-        }
-#else
-        if (_uartHandler[config.channel].Instance == USART1)
-        {
-            pclk = HAL_RCC_GetPCLK2Freq();
-        }
-#endif
-        else
-        {
-            pclk = HAL_RCC_GetPCLK1Freq();
-        }
-
         if (config.parity == Config::parity_t::NO)
         {
             _uartHandler[config.channel].Init.Parity = UART_PARITY_NONE;

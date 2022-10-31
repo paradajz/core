@@ -103,21 +103,21 @@ namespace
 
 namespace core::mcu::i2c
 {
-    bool init(core::mcu::io::pin_t sda, core::mcu::io::pin_t scl, uint8_t channel, uint32_t clockSpeed)
+    bool init(uint8_t channel, const Config& config)
     {
         if (channel >= CORE_MCU_MAX_I2C_INTERFACES)
         {
             return false;
         }
 
-        auto instance                = i2cInstance(sda.index, scl.index);
+        auto instance                = i2cInstance(config.pins.sda.index, config.pins.scl.index);
         _i2cInstanceMatched[channel] = instance;
 
-        i2c_init(_i2cInstanceMatched[channel], clockSpeed);
-        gpio_set_function(sda.index, GPIO_FUNC_I2C);
-        gpio_set_function(scl.index, GPIO_FUNC_I2C);
-        gpio_pull_up(sda.index);
-        gpio_pull_up(scl.index);
+        i2c_init(_i2cInstanceMatched[channel], static_cast<uint32_t>(config.clockSpeed));
+        gpio_set_function(config.pins.sda.index, GPIO_FUNC_I2C);
+        gpio_set_function(config.pins.scl.index, GPIO_FUNC_I2C);
+        gpio_pull_up(config.pins.sda.index);
+        gpio_pull_up(config.pins.scl.index);
 
         return true;
     }

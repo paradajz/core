@@ -93,7 +93,7 @@ namespace
 
 namespace core::mcu::i2c
 {
-    bool init(uint8_t channel, uint32_t clockSpeed)
+    bool init(uint8_t channel, const Config& config)
     {
         if (channel >= CORE_MCU_MAX_I2C_INTERFACES)
         {
@@ -104,7 +104,7 @@ namespace core::mcu::i2c
         TWSR = 0x00;
 
         // use formula as per datasheet
-        TWBR = ((F_CPU / clockSpeed) - 16) / 2;
+        TWBR = ((F_CPU / static_cast<uint32_t>(config.clockSpeed)) - 16) / 2;
 
         // enable i2c interface
         TWCR = (1 << TWEN);

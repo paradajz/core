@@ -30,7 +30,7 @@ namespace
 
 namespace core::mcu::i2c
 {
-    bool init(core::mcu::io::pin_t sda, core::mcu::io::pin_t scl, uint8_t channel, uint32_t clockSpeed)
+    bool init(uint8_t channel, const Config& config)
     {
         if (channel >= CORE_MCU_MAX_I2C_INTERFACES)
         {
@@ -38,9 +38,9 @@ namespace core::mcu::i2c
         }
 
         const nrfx_twim_config_t CONFIG = {
-            .scl                = CORE_NRF_GPIO_PIN_MAP(scl.port, scl.index),
-            .sda                = CORE_NRF_GPIO_PIN_MAP(sda.port, sda.index),
-            .frequency          = clockSpeed == 100000 ? NRF_TWIM_FREQ_100K : NRF_TWIM_FREQ_400K,
+            .scl                = CORE_NRF_GPIO_PIN_MAP(config.pins.scl.port, config.pins.scl.index),
+            .sda                = CORE_NRF_GPIO_PIN_MAP(config.pins.sda.port, config.pins.sda.index),
+            .frequency          = config.clockSpeed == Config::clockSpeed_t::S100K ? NRF_TWIM_FREQ_100K : NRF_TWIM_FREQ_400K,
             .interrupt_priority = 0,    // irrelevant - no interrupt used here
             .hold_bus_uninit    = false
         };

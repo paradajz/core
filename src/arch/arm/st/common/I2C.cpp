@@ -29,7 +29,7 @@ namespace
 
 namespace core::mcu::i2c
 {
-    bool init(uint8_t channel, uint32_t clockSpeed)
+    bool init(uint8_t channel, const Config& config)
     {
         if (channel >= CORE_MCU_MAX_I2C_INTERFACES)
         {
@@ -37,7 +37,7 @@ namespace core::mcu::i2c
         }
 
         _i2cHandler[channel].Instance             = static_cast<I2C_TypeDef*>(core::mcu::peripherals::i2cDescriptor(channel)->interface());
-        _i2cHandler[channel].Init.ClockSpeed      = clockSpeed;
+        _i2cHandler[channel].Init.ClockSpeed      = static_cast<uint32_t>(config.clockSpeed);
         _i2cHandler[channel].Init.DutyCycle       = I2C_DUTYCYCLE_2;
         _i2cHandler[channel].Init.AddressingMode  = I2C_ADDRESSINGMODE_7BIT;
         _i2cHandler[channel].Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;

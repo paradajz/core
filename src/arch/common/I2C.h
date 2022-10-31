@@ -30,8 +30,42 @@
 
 namespace core::mcu::i2c
 {
-    bool init(uint8_t channel, uint32_t clockSpeed);
-    bool init(core::mcu::io::pin_t sda, core::mcu::io::pin_t scl, uint8_t channel, uint32_t clockSpeed);
+    class Config
+    {
+        public:
+        enum class clockSpeed_t : uint32_t
+        {
+            S100K = 100000,
+            S400K = 400000
+        };
+
+        struct pins_t
+        {
+            core::mcu::io::pin_t sda;
+            core::mcu::io::pin_t scl;
+        };
+
+        Config(clockSpeed_t clockSpeed,
+               pins_t       pins)
+            : clockSpeed(clockSpeed)
+            , pins(pins)
+        {}
+
+        Config(clockSpeed_t clockSpeed)
+            : clockSpeed(clockSpeed)
+            , pins({})
+        {}
+
+        Config()
+            : clockSpeed(clockSpeed_t::S100K)
+            , pins({})
+        {}
+
+        clockSpeed_t clockSpeed;
+        pins_t       pins;
+    };
+
+    bool init(uint8_t channel, const Config& config);
     bool deInit(uint8_t channel);
     bool write(uint8_t channel, uint8_t address, uint8_t* buffer, size_t size);
     bool deviceAvailable(uint8_t channel, uint8_t address);

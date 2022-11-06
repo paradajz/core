@@ -28,7 +28,7 @@
 
 namespace
 {
-    volatile bool _transmitting[CORE_MCU_MAX_UART_INTERFACES];
+    volatile bool _txEnabled[CORE_MCU_MAX_UART_INTERFACES];
 
     constexpr uint8_t UART_IRQ[CORE_MCU_MAX_UART_INTERFACES] = {
         UART0_IRQ,
@@ -95,12 +95,13 @@ namespace core::mcu::uart::hw
 
         _uartInstanceMatched[config.channel] = instance;
 
-        uart_init(_uartInstanceMatched[config.channel], config.baudRate);
-
         gpio_set_function(config.pins.tx.index, GPIO_FUNC_UART);
         gpio_set_function(config.pins.rx.index, GPIO_FUNC_UART);
+
+        uart_init(_uartInstanceMatched[config.channel], config.baudRate);
+
         uart_set_hw_flow(_uartInstanceMatched[config.channel], false, false);
-        uart_set_format(_uartInstanceMatched[config.channel], 8, config.stopBits, static_cast<uart_parity_t>(config.parity));
+        uart_set_format(_uartInstanceMatched[config.channel], 8, static_cast<int>(config.stopBits), static_cast<uart_parity_t>(config.parity));
         uart_set_fifo_enabled(_uartInstanceMatched[config.channel], false);
         irq_set_enabled(UART_IRQ[config.channel], true);
         uart_set_irq_enables(_uartInstanceMatched[config.channel], true, false);
@@ -118,10 +119,11 @@ namespace core::mcu::uart::hw
 
     void startTx(const Config& config)
     {
-        if (!_transmitting[config.channel])
+        if (!_txEnabled[config.channel])
         {
+            _txEnabled[config.channel] = true;
             uart_set_irq_enables(_uartInstanceMatched[config.channel], true, true);
-            core::mcu::isr::uart(config.channel);
+            irq_set_pending(UART_IRQ[config.channel]);
         }
     }
 }    // namespace core::mcu::uart::hw
@@ -130,7 +132,7 @@ void core::mcu::isr::uart(uint8_t channel)
 {
     while (uart_is_readable(_uartInstanceMatched[channel]))
     {
-        _rxHandler[channel](uart_getc(_uartInstanceMatched[channel]));
+        _rxHandler[channel](static_cast<uint8_t>(uart_get_hw(_uartInstanceMatched[channel])->dr));
     }
 
     if (uart_is_writable(_uartInstanceMatched[channel]))
@@ -140,13 +142,12 @@ void core::mcu::isr::uart(uint8_t channel)
 
         if (_txHandler[channel](value, remainingBytes))
         {
-            _transmitting[channel] = true;
             uart_putc_raw(_uartInstanceMatched[channel], value);
         }
         else
         {
-            // there is no "tx complete" event on rp2040 - if there's nothing more to send, set transmitting to false
-            _transmitting[channel] = false;
+            // there is no "tx complete" event on rp2040 - if there's nothing more to send, disable tx interrupt
+            _txEnabled[channel] = false;
             uart_set_irq_enables(_uartInstanceMatched[channel], true, false);
         }
     }

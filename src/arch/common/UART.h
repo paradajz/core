@@ -163,14 +163,6 @@ namespace core::mcu::uart
                 _config.type     = config.type;
                 _config.pins     = config.pins;
 
-                // ignore first rx event (junk)
-                core::timing::waitMs(150);
-
-                uint8_t junk;
-
-                while (read(junk))
-                    ;
-
                 return true;
             }
 

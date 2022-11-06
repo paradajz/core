@@ -51,8 +51,8 @@ namespace core::mcu::uart
 
         enum stopBits_t : uint8_t
         {
-            ONE,
-            TWO
+            ONE = 1,
+            TWO = 2
         };
 
         enum type_t : uint8_t

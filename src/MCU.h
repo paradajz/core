@@ -43,6 +43,4 @@
 
 #if __has_include(<MCU.h>)
 #include <MCU.h>
-#else
-#error aaaaaaaa
 #endif

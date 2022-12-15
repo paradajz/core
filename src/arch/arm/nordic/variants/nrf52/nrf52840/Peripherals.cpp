@@ -24,5 +24,5 @@
 #endif
 
 #include "core/src/arch/arm/nordic/common/Peripherals.h"
-#include <MCU.h>
+#include <CoreMCUGenerated.h>
 #include "core/src/arch/arm/nordic/variants/nrf52/common/Peripherals.cpp.include"

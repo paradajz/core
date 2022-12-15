@@ -25,7 +25,7 @@
 
 #include <avr/pgmspace.h>
 #include <avr/boot.h>
-#include <MCU.h>
+#include <CoreMCUGenerated.h>
 #include "core/src/arch/avr/common/Atomic.h"
 
 namespace core::mcu::bootloader

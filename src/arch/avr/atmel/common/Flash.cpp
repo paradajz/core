@@ -27,7 +27,7 @@
 #include <avr/boot.h>
 #include "core/src/arch/common/Flash.h"
 #include "core/src/arch/avr/common/Atomic.h"
-#include <MCU.h>
+#include <CoreMCUGenerated.h>
 
 namespace core::mcu::flash
 {

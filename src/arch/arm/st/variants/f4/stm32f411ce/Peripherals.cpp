@@ -24,7 +24,7 @@
 #endif
 
 #include "core/src/arch/arm/st/common/Peripherals.h"
-#include <MCU.h>
+#include <CoreMCUGenerated.h>
 
 namespace
 {

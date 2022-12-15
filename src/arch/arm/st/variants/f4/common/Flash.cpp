@@ -26,7 +26,7 @@
 #include "core/src/arch/common/Flash.h"
 #include "core/src/ErrorHandler.h"
 #include "core/src/arch/arm/st/common/MCU.h"
-#include <MCU.h>
+#include <CoreMCUGenerated.h>
 
 #define _RAM __attribute__((section(".data#"), noinline))
 

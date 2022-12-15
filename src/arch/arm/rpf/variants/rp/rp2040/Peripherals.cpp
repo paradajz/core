@@ -24,5 +24,5 @@
 #endif
 
 #include "core/src/arch/arm/rpf/common/Peripherals.h"
-#include <MCU.h>
+#include <CoreMCUGenerated.h>
 #include "core/src/arch/arm/rpf/variants/rp/common/Peripherals.cpp.include"

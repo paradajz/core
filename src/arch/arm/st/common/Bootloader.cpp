@@ -23,7 +23,7 @@
 #error This file requires generated MCU header
 #endif
 
-#include <MCU.h>
+#include <CoreMCUGenerated.h>
 #include "core/src/arch/common/BootloaderCache.h"
 
 namespace core::mcu::bootloader

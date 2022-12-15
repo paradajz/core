@@ -25,7 +25,7 @@
 
 #include "hardware/flash.h"
 #include "core/src/arch/common/Flash.h"
-#include <MCU.h>
+#include <CoreMCUGenerated.h>
 #include "Atomic.h"
 
 namespace

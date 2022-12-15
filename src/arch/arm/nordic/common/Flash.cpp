@@ -31,7 +31,7 @@
 #include "nrf_sdh_soc.h"
 #include "nrf_fstorage.h"
 #include "nrf_fstorage_sd.h"
-#include <MCU.h>
+#include <CoreMCUGenerated.h>
 
 NRF_FSTORAGE_DEF(nrf_fstorage_t _fstorage) = {
     .evt_handler = NULL,

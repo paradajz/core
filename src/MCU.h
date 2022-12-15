@@ -41,6 +41,6 @@
 #include "arch/stub/MCU.h"
 #endif
 
-#if __has_include(<MCU.h>)
-#include <MCU.h>
+#if __has_include(<CoreMCUGenerated.h>)
+#include <CoreMCUGenerated.h>
 #endif

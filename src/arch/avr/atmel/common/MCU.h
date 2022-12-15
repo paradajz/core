@@ -46,7 +46,7 @@
 #include "core/src/arch/common/ISR.h"
 #include "core/src/arch/common/Timers.h"
 #include "core/src/arch/common/UART.h"
-#include <MCU.h>
+#include <CoreMCUGenerated.h>
 #include "core/src/arch/common/usb/USB.h"
 #include "core/src/arch/common/MCU.h"
 

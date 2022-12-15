@@ -24,5 +24,5 @@
 #endif
 
 #include "core/src/arch/avr/atmel/common/Peripherals.h"
-#include <MCU.h>
+#include <CoreMCUGenerated.h>
 #include "core/src/arch/avr/atmel/common/Peripherals.cpp.include"

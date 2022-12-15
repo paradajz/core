@@ -23,7 +23,7 @@
 
 #include "BootloaderCache.h"
 #include "Bootloader.h"
-#include <MCU.h>
+#include <CoreMCUGenerated.h>
 
 namespace
 {

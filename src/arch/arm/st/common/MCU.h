@@ -39,7 +39,7 @@
 #include "core/src/arch/common/Timers.h"
 #include "core/src/arch/common/UART.h"
 #include "core/src/ErrorHandler.h"
-#include <MCU.h>
+#include <CoreMCUGenerated.h>
 #include "core/src/arch/common/usb/USB.h"
 #include "core/src/arch/common/MCU.h"
 

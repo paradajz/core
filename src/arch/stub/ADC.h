@@ -24,7 +24,7 @@
 #include <inttypes.h>
 #include "IO.h"
 
-#if !__has_include(<MCU.h>)
+#if !__has_include(<CoreMCUGenerated.h>)
 // already defined in generated MCU, define only if it doesn't exist
 #define CORE_MCU_ADC_MAX_VALUE 1023
 #endif

@@ -5,8 +5,8 @@ yaml_file=$1
 gen_dir=$2
 external_freq=$3
 yaml_parser="dasel -n -p yaml --plain -f"
-out_header="$gen_dir"/MCU.h
-out_makefile="$gen_dir"/MCU.mk
+out_header="$gen_dir"/CoreMCUGenerated.h
+out_makefile="$gen_dir"/CoreMCUGenerated.mk
 
 echo "Generating MCU definitions..."
 

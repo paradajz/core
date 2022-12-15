@@ -2,6 +2,7 @@
   arch: "avr"
   mcuFamily: "avr8"
   vendor: "atmel"
+  freq: 16
   uid-bits: 80
   adc-bits: 10
   flash:

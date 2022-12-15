@@ -60,16 +60,7 @@ then
     printf "%s\n" "DEFINES += CORE_MCU_EXT_CLOCK_FREQ_MHZ=$external_freq" >> "$out_makefile"
 fi
 
-if [[ $freq != "null" ]]
-then
-    printf "%s\n" "DEFINES += CORE_MCU_CPU_FREQ_MHZ=$freq" >> "$out_makefile"
-else
-    if [[ "$external_freq" != "" ]]
-    then
-        # If the MCU doesn't specify frequency in yaml file, use external clock frequency as core frequency (if defined)
-        printf "%s\n" "DEFINES += CORE_MCU_CPU_FREQ_MHZ=$external_freq" >> "$out_makefile"
-    fi
-fi
+printf "%s\n" "DEFINES += CORE_MCU_CPU_FREQ_MHZ=$freq" >> "$out_makefile"
 
 if [[ $($yaml_parser "$yaml_file" flash) != "null" ]]
 then

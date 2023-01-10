@@ -62,8 +62,8 @@ namespace
         std::vector<core::mcu::io::pin_t> _pins = {
             // rx
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(A),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(10),
+                .port      = CORE_MCU_IO_PIN_PORT_DEF(B),
+                .index     = CORE_MCU_IO_PIN_INDEX_DEF(7),
                 .mode      = core::mcu::io::pinMode_t::ALTERNATE_PP,
                 .pull      = core::mcu::io::pullMode_t::NONE,
                 .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,
@@ -72,8 +72,8 @@ namespace
 
             // tx
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(A),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(9),
+                .port      = CORE_MCU_IO_PIN_PORT_DEF(B),
+                .index     = CORE_MCU_IO_PIN_INDEX_DEF(6),
                 .mode      = core::mcu::io::pinMode_t::ALTERNATE_PP,
                 .pull      = core::mcu::io::pullMode_t::NONE,
                 .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,
@@ -399,7 +399,7 @@ namespace
             // sda
             {
                 .port      = CORE_MCU_IO_PIN_PORT_DEF(B),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(7),
+                .index     = CORE_MCU_IO_PIN_INDEX_DEF(9),
                 .mode      = core::mcu::io::pinMode_t::ALTERNATE_OD,
                 .pull      = core::mcu::io::pullMode_t::UP,
                 .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,
@@ -409,7 +409,7 @@ namespace
             // scl
             {
                 .port      = CORE_MCU_IO_PIN_PORT_DEF(B),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(6),
+                .index     = CORE_MCU_IO_PIN_INDEX_DEF(8),
                 .mode      = core::mcu::io::pinMode_t::ALTERNATE_OD,
                 .pull      = core::mcu::io::pullMode_t::UP,
                 .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,

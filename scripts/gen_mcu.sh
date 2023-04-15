@@ -34,10 +34,10 @@ adc_bits=$($yaml_parser "$yaml_file" adc-bits)
 } >> "$out_header"
 
 {
-    printf "%s\n" "CORE_MCU_ARCH := $arch"
-    printf "%s\n" "CORE_MCU_FAMILY := $mcu_family"
-    printf "%s\n" "CORE_MCU_VENDOR := $vendor"
     printf "%s\n" "CORE_MCU_MODEL := $mcu"
+    printf "%s\n" "CORE_MCU_ARCH := $arch"
+    printf "%s\n" "CORE_MCU_VENDOR := $vendor"
+    printf "%s\n" "CORE_MCU_FAMILY := $mcu_family"
     printf "%s\n" "CORE_MCU_CPU := $cpu"
     printf "%s%x\n" "CORE_FW_METADATA_OFFSET := 0x" "$app_metadata_offset"
     printf "%s\n" "DEFINES += CORE_MCU_GENERATED"

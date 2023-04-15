@@ -114,7 +114,7 @@ then
         {
             printf "%s\n" "DEFINES += CORE_MCU_TOTAL_FLASH_PAGES=$number_of_flash_pages"
             printf "%s\n" "CORE_MCU_FLASH_PAGE_SIZE_COMMON := $page_size"
-            printf "%s\n" 'DEFINES += CORE_MCU_FLASH_PAGE_SIZE_COMMON=$(CORE_MCU_FLASH_PAGE_SIZE_COMMON)'
+            printf "%s\n" "DEFINES += CORE_MCU_FLASH_PAGE_SIZE_COMMON=$page_size"
         } >> "$out_makefile"
 
         {
@@ -128,11 +128,11 @@ then
 
     {
         printf "%s\n" "CORE_MCU_FLASH_SIZE := $flash_size"
-        printf "%s\n" 'DEFINES += CORE_MCU_FLASH_SIZE=$(CORE_MCU_FLASH_SIZE)'
-        printf "%s\n" 'LDFLAGS += -Xlinker --defsym=CORE_MCU_FLASH_SIZE=$(CORE_MCU_FLASH_SIZE)'
+        printf "%s\n" "DEFINES += CORE_MCU_FLASH_SIZE=$flash_size"
+        printf "%s\n" "LDFLAGS += -Xlinker --defsym=CORE_MCU_FLASH_SIZE=$flash_size"
         printf "%s\n" "CORE_MCU_FLASH_START_ADDR := $flashStart"
-        printf "%s\n" 'DEFINES += CORE_MCU_FLASH_START_ADDR=$(CORE_MCU_FLASH_START_ADDR)'
-        printf "%s\n" 'LDFLAGS += -Xlinker --defsym=CORE_MCU_FLASH_START_ADDR=$(CORE_MCU_FLASH_START_ADDR)'
+        printf "%s\n" "DEFINES += CORE_MCU_FLASH_START_ADDR=$flashStart"
+        printf "%s\n" "LDFLAGS += -Xlinker --defsym=CORE_MCU_FLASH_START_ADDR=$flashStart"
     } >> "$out_makefile"
 fi
 

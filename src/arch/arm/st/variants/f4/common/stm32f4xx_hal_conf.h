@@ -89,8 +89,12 @@ extern "C"
 
 /* ########################## HSE/HSI Values adaptation ##################### */
 #if !defined(HSE_VALUE)
+#ifdef CORE_MCU_EXT_CLOCK_FREQ_MHZ
 #define HSE_VALUE (CORE_MCU_EXT_CLOCK_FREQ_MHZ * 1000000) /*!< Value of the External oscillator in Hz */
-#endif                                                    /* HSE_VALUE */
+#else
+#define HSE_VALUE ((uint32_t)8000000U)
+#endif
+#endif
 
 #if !defined(HSE_STARTUP_TIMEOUT)
 #define HSE_STARTUP_TIMEOUT ((uint32_t)100U) /*!< Time out for HSE start up, in ms */

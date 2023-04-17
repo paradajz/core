@@ -179,6 +179,17 @@ then
     done
 fi
 
+if [[ $($yaml_parser "$yaml_file" sources) != "null" ]]
+then
+    total_sources=$($yaml_parser "$yaml_file" sources --length)
+
+    for ((i=0;i<total_sources;i++))
+    do
+        source=$($yaml_parser "$yaml_file" sources.["$i"])
+        printf "%s\n" "SOURCES += ${script_dir}/../$source" >> "$out_makefile"
+    done
+fi
+
 if [[ $($yaml_parser "$yaml_file" ld-flags) != "null" ]]
 then
     total_ld_flags=$($yaml_parser "$yaml_file" ld-flags --length)

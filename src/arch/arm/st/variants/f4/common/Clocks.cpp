@@ -243,15 +243,16 @@ constexpr size_t CLOCK_FREQ_ENUM_INDEX = static_cast<uint8_t>(externalClockFrequ
 #error Unsupported external clock frequency or CORE_MCU_EXT_CLOCK_FREQ_MHZ undefined
 #endif
 
-#define CORE_CLOCK_EXTERNAL 1
+constexpr size_t CORE_CLOCK_EXTERNAL = 1;
 #else
-#define CORE_CLOCK_EXTERNAL 0
+constexpr size_t CORE_CLOCK_EXTERNAL   = 0;
+constexpr size_t CLOCK_FREQ_ENUM_INDEX = 0;
 #endif
 
 #if CORE_MCU_CPU_FREQ_MHZ == 84
 constexpr size_t CPU_FREQ_ENUM_INDEX = static_cast<uint8_t>(cpuFrequency_t::FREQ_84MHZ);
 #elif CORE_MCU_CPU_FREQ_MHZ == 168
-constexpr size_t CPU_FREQ_ENUM_INDEX = static_cast<uint8_t>(cpuFrequency_t::FREQ_168MHZ);
+constexpr size_t CPU_FREQ_ENUM_INDEX   = static_cast<uint8_t>(cpuFrequency_t::FREQ_168MHZ);
 #else
 #error Unsupported CPU frequency or CORE_MCU_CPU_FREQ_MHZ undefined
 #endif
@@ -267,7 +268,7 @@ namespace core::mcu::clocks
 
         const scaleDescriptor_t* descriptor = nullptr;
 
-        if (CORE_CLOCK_EXTERNAL)
+        if constexpr (CORE_CLOCK_EXTERNAL)
         {
             descriptor = &EXTERNAL_SCALES[CLOCK_FREQ_ENUM_INDEX][CPU_FREQ_ENUM_INDEX];
         }
@@ -278,7 +279,7 @@ namespace core::mcu::clocks
 
         __HAL_PWR_VOLTAGESCALING_CONFIG(descriptor->voltageScale);
 
-        if (CORE_CLOCK_EXTERNAL)
+        if constexpr (CORE_CLOCK_EXTERNAL)
         {
             rccOscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
             rccOscInitStruct.PLL.PLLSource  = RCC_PLLSOURCE_HSE;

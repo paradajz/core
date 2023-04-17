@@ -39,10 +39,10 @@ adc_bits=$($yaml_parser "$yaml_file" adc-bits)
     printf "%s\n" "CORE_MCU_VENDOR := $vendor"
     printf "%s\n" "CORE_MCU_FAMILY := $mcu_family"
     printf "%s\n" "CORE_MCU_CPU := $cpu"
-    printf "%s%x\n" "CORE_FW_METADATA_OFFSET := 0x" "$app_metadata_offset"
+    printf "%s%x\n" "CORE_MCU_FW_METADATA_OFFSET := 0x" "$app_metadata_offset"
     printf "%s\n" "DEFINES += CORE_MCU_GENERATED"
-    printf "%s%s\n" "DEFINES += CORE_ARCH_" "${arch^^}"
-    printf "%s%s\n" "DEFINES += CORE_VENDOR_" "${vendor^^}"
+    printf "%s%s\n" "DEFINES += CORE_MCU_ARCH_" "${arch^^}"
+    printf "%s%s\n" "DEFINES += CORE_MCU_VENDOR_" "${vendor^^}"
 } >> "$out_makefile"
 
 if [[ "$fpu" != "null" ]]
@@ -164,7 +164,7 @@ then
     for ((i=0;i<total_symbols;i++))
     do
         symbol=$($yaml_parser "$yaml_file" define-symbols.["$i"])
-        printf "%s\n" "DEFINES += $symbol" >> "$out_makefile"
+        printf "%s\n" "CORE_MCU_DEFINES += $symbol" >> "$out_makefile"
     done
 fi
 
@@ -175,7 +175,7 @@ then
     for ((i=0;i<total_include_dirs;i++))
     do
         dir=$($yaml_parser "$yaml_file" include-dirs.["$i"])
-        printf "%s\n" "INCLUDE_DIRS += -I\"${script_dir}/../$dir\"" >> "$out_makefile"
+        printf "%s\n" "CORE_MCU_INCLUDE_DIRS += -I\"${script_dir}/../$dir\"" >> "$out_makefile"
     done
 fi
 
@@ -186,7 +186,7 @@ then
     for ((i=0;i<total_sources;i++))
     do
         source=$($yaml_parser "$yaml_file" sources.["$i"])
-        printf "%s\n" "SOURCES += ${script_dir}/../$source" >> "$out_makefile"
+        printf "%s\n" "CORE_MCU_SOURCES += ${script_dir}/../$source" >> "$out_makefile"
     done
 fi
 
@@ -197,7 +197,7 @@ then
     for ((i=0;i<total_ld_flags;i++))
     do
         flag=$($yaml_parser "$yaml_file" ld-flags.["$i"])
-        printf "%s\n" "LDFLAGS += $flag" >> "$out_makefile"
+        printf "%s\n" "CORE_MCU_LDFLAGS += $flag" >> "$out_makefile"
     done
 fi
 
@@ -208,6 +208,6 @@ then
     for ((i=0;i<total_ld_libs;i++))
     do
         lib=$($yaml_parser "$yaml_file" ld-libs.["$i"])
-        printf "%s\n" "LDLIBS += ${script_dir}/../$lib" >> "$out_makefile"
+        printf "%s\n" "CORE_MCU_LDLIBS += ${script_dir}/../$lib" >> "$out_makefile"
     done
 fi

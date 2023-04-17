@@ -26,14 +26,14 @@
 #ifdef CORE_MCU_STUB
 #include "arch/stub/Timing.h"
 #else
-#ifdef CORE_ARCH_AVR
+#ifdef CORE_MCU_ARCH_AVR
 #include "arch/avr/atmel/common/Timing.h"
-#elif defined(CORE_ARCH_ARM)
-#ifdef CORE_VENDOR_ST
+#elif defined(CORE_MCU_ARCH_ARM)
+#ifdef CORE_MCU_VENDOR_ST
 #include "arch/arm/st/common/Timing.h"
-#elif defined(CORE_VENDOR_NORDIC)
+#elif defined(CORE_MCU_VENDOR_NORDIC)
 #include "arch/arm/nordic/common/Timing.h"
-#elif defined(CORE_VENDOR_RPF)
+#elif defined(CORE_MCU_VENDOR_RPF)
 #include "arch/arm/rpf/common/Timing.h"
 #else
 #include "arch/stub/Timing.h"

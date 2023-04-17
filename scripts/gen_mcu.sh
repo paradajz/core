@@ -30,7 +30,7 @@ adc_bits=$($yaml_parser "$yaml_file" adc-bits)
     printf "%s\n\n" "#pragma once"
     printf "%s\n" "#include <inttypes.h>"
     printf "%s\n" "#include <stddef.h>"
-    printf "%s\n" "#include \"core/src/arch/common/Flash.h\""
+    printf "%s\n" "#include \"core/arch/common/Flash.h\""
 } >> "$out_header"
 
 {

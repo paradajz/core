@@ -1,0 +1,62 @@
+---
+  arch: "avr"
+  mcuFamily: "avr8"
+  vendor: "atmel"
+  freq: 16
+  uid-bits: 80
+  adc-bits: 10
+  flash:
+    flash-start: 0x00
+    app-metadata-offset: 0x98
+    page-size: 0x100
+    size: 0x20000
+  eeprom:
+    size: 0x1000
+  peripherals:
+    uart: 1
+    i2c: 1
+  define-symbols:
+    - "__AVR_AT90USB1286__"
+    - "ARCH=ARCH_AVR8"
+    - "F_CPU=16000000UL"
+    - "F_USB=16000000UL"
+    - "BOARD=BOARD_NONE"
+    - "USE_STATIC_OPTIONS=0"
+    - "USB_DEVICE_ONLY"
+    - "INTERRUPT_CONTROL_ENDPOINT"
+    - "ORDERED_EP_CONFIG"
+  include-dirs:
+    - "src"
+    - "modules/lufa"
+    - "modules/avr-libstdcpp/include"
+  sources:
+    - "src/core/arch/common/ISR.cpp"
+    - "src/core/arch/common/BootloaderCache.cpp"
+    - "src/core/arch/avr/atmel/common/Flash.cpp"
+    - "src/core/arch/avr/atmel/common/StdLibDummy.cpp"
+    - "src/core/arch/avr/atmel/common/Timers.cpp"
+    - "src/core/arch/avr/atmel/common/UART.cpp"
+    - "src/core/arch/avr/atmel/common/I2C.cpp"
+    - "src/core/arch/avr/atmel/common/Bootloader.cpp"
+    - "src/core/arch/avr/atmel/common/ADC.cpp"
+    - "src/core/arch/avr/atmel/common/TimersMultiple.cpp"
+    - "src/core/arch/avr/atmel/variants/avr8/at90usb1286/Peripherals.cpp"
+    - "modules/lufa/LUFA/Drivers/USB/Core/AVR8/Device_AVR8.c"
+    - "modules/lufa/LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.c"
+    - "modules/lufa/LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.c"
+    - "modules/lufa/LUFA/Drivers/USB/Core/AVR8/PipeStream_AVR8.c"
+    - "modules/lufa/LUFA/Drivers/USB/Core/AVR8/Pipe_AVR8.c"
+    - "modules/lufa/LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.c"
+    - "modules/lufa/LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.c"
+    - "modules/lufa/LUFA/Drivers/USB/Core/ConfigDescriptors.c"
+    - "modules/lufa/LUFA/Drivers/USB/Core/DeviceStandardReq.c"
+    - "modules/lufa/LUFA/Drivers/USB/Core/Events.c"
+    - "modules/lufa/LUFA/Drivers/USB/Core/USBTask.c"
+    - "modules/lufa/LUFA/Drivers/USB/Class/Device/AudioClassDevice.c"
+    - "modules/lufa/LUFA/Drivers/USB/Class/Device/CDCClassDevice.c"
+    - "modules/lufa/LUFA/Drivers/USB/Class/Device/PrinterClassDevice.c"
+    - "modules/lufa/LUFA/Drivers/USB/Class/Device/HIDClassDevice.c"
+    - "modules/lufa/LUFA/Drivers/USB/Class/Device/MIDIClassDevice.c"
+    - "modules/lufa/LUFA/Drivers/USB/Class/Device/MassStorageClassDevice.c"
+    - "modules/lufa/LUFA/Drivers/USB/Class/Device/RNDISClassDevice.c"
+    - "modules/lufa/LUFA/Drivers/USB/Class/Device/CCIDClassDevice.c"

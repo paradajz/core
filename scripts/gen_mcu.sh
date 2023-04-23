@@ -211,3 +211,39 @@ then
         printf "%s\n" "CORE_MCU_LDLIBS += ${script_dir}/../$lib" >> "$out_makefile"
     done
 fi
+
+if [[ $($yaml_parser "$yaml_file" usb) != "null" ]]
+then
+    if [[ $($yaml_parser "$yaml_file" usb.define-symbols) != "null" ]]
+    then
+        total_symbols=$($yaml_parser "$yaml_file" usb.define-symbols --length)
+
+        for ((i=0;i<total_symbols;i++))
+        do
+            symbol=$($yaml_parser "$yaml_file" usb.define-symbols.["$i"])
+            printf "%s\n" "CORE_MCU_USB_DEFINES += $symbol" >> "$out_makefile"
+        done
+    fi
+
+    if [[ $($yaml_parser "$yaml_file" usb.include-dirs) != "null" ]]
+    then
+        total_include_dirs=$($yaml_parser "$yaml_file" usb.include-dirs --length)
+
+        for ((i=0;i<total_include_dirs;i++))
+        do
+            dir=$($yaml_parser "$yaml_file" usb.include-dirs.["$i"])
+            printf "%s\n" "CORE_MCU_USB_INCLUDE_DIRS += -I\"${script_dir}/../$dir\"" >> "$out_makefile"
+        done
+    fi
+
+    if [[ $($yaml_parser "$yaml_file" usb.sources) != "null" ]]
+    then
+        total_sources=$($yaml_parser "$yaml_file" usb.sources --length)
+
+        for ((i=0;i<total_sources;i++))
+        do
+            source=$($yaml_parser "$yaml_file" usb.sources.["$i"])
+            printf "%s\n" "CORE_MCU_USB_SOURCES += ${script_dir}/../$source" >> "$out_makefile"
+        done
+    fi
+fi

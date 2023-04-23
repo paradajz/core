@@ -16,6 +16,7 @@ MCU_YML_FILE              := $(shell find $(ROOT_MAKEFILE_DIR) -type f -name "*$
 MCU_GENERATED_SUBDIR_BASE := generated
 MCU_GEN_DIR               := $(ROOT_MAKEFILE_DIR)/$(MCU_GENERATED_SUBDIR_BASE)/$(MCU)
 MCU_EXT_CLOCK_MHZ         :=
+MCU_GEN_USB               := 0
 
 ifeq ($(MCU_YML_FILE),)
     $(error YML config file not found for specified MCU or MCU unspecified)
@@ -25,7 +26,8 @@ mcu:
 	@$(SCRIPTS_DIR)/gen_mcu.sh \
 	--yaml-file=$(MCU_YML_FILE) \
 	--gen-dir=$(MCU_GEN_DIR) \
-	--external-freq=$(MCU_EXT_CLOCK_MHZ)
+	--external-freq=$(MCU_EXT_CLOCK_MHZ) \
+	--gen-usb=$(MCU_GEN_USB)
 
 # Debugging
 print-%:

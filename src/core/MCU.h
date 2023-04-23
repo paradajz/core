@@ -41,6 +41,12 @@
 #include "arch/stub/MCU.h"
 #endif
 
+#if __has_include(<tusb.h>)
+#if !__has_include(<tusb_config.h>)
+#error "tusb_config.h not found - make sure to add directory containing the config file to compiler include path"
+#endif
+#endif
+
 #if __has_include(<CoreMCUGenerated.h>)
 #include <CoreMCUGenerated.h>
 #endif

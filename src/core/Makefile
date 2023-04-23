@@ -29,6 +29,9 @@ mcu:
 	--external-freq=$(MCU_EXT_CLOCK_MHZ) \
 	--gen-usb=$(MCU_GEN_USB)
 
+clean:
+	@rm -rf $(MCU_GENERATED_SUBDIR_BASE)
+
 # Debugging
 print-%:
 	@echo '$($*)'

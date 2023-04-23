@@ -23,10 +23,8 @@
 #error This file requires generated MCU header
 #endif
 
-#include "core/arch/common/Flash.h"
 #include "core/ErrorHandler.h"
-#include "core/arch/arm/st/common/MCU.h"
-#include <CoreMCUGenerated.h>
+#include "core/MCU.h"
 
 #define _RAM __attribute__((section(".data#"), noinline))
 

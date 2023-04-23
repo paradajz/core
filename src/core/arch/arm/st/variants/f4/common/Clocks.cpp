@@ -19,9 +19,8 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include "core/arch/common/Clocks.h"
 #include "core/ErrorHandler.h"
-#include "core/arch/arm/st/common/MCU.h"
+#include "core/MCU.h"
 
 namespace
 {

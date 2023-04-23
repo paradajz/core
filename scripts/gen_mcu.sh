@@ -1,9 +1,23 @@
 #!/usr/bin/env bash
 
+for arg in "$@"; do
+    case "$arg" in
+        --yaml-file=*)
+            yaml_file=${arg#--yaml-file=}
+            ;;
+
+        --gen-dir=*)
+            gen_dir=${arg#--gen-dir=}
+            ;;
+
+        --external-freq=*)
+            external_freq=${arg#--external-freq=}
+            ;;
+    esac
+done
+
 script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
-yaml_file=$1
-gen_dir=$2
-external_freq=$3
+
 yaml_parser="dasel -n -p yaml --plain -f"
 out_header="$gen_dir"/CoreMCUGenerated.h
 out_makefile="$gen_dir"/CoreMCUGenerated.mk

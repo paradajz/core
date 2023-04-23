@@ -22,7 +22,10 @@ ifeq ($(MCU_YML_FILE),)
 endif
 
 mcu:
-	@$(SCRIPTS_DIR)/gen_mcu.sh $(MCU_YML_FILE) $(MCU_GEN_DIR) $(MCU_EXT_CLOCK_MHZ)
+	@$(SCRIPTS_DIR)/gen_mcu.sh \
+	--yaml-file=$(MCU_YML_FILE) \
+	--gen-dir=$(MCU_GEN_DIR) \
+	--external-freq=$(MCU_EXT_CLOCK_MHZ)
 
 # Debugging
 print-%:

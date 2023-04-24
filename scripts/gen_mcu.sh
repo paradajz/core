@@ -268,3 +268,36 @@ then
         fi
     fi
 fi
+
+if [[ $($yaml_parser "$yaml_file" dl-deps) != "null" ]]
+then
+    command -v wget >/dev/null 2>&1 || { echo "wget is not installed"; exit 1; }
+
+    total_deps=$($yaml_parser "$yaml_file" dl-deps --length)
+    dep_dir="${script_dir}"/../src/core/deps/"${mcu}"
+    mkdir -p "$dep_dir"
+
+    for ((i=0;i<total_deps;i++))
+    do
+        dep=$($yaml_parser "$yaml_file" dl-deps.["$i"])
+        filename=$(basename "$dep")
+
+        if [[ ! -f "$dep_dir/$filename" ]]
+        then
+            echo "Downloading dependency for $mcu: $dep"
+            wget -q --show-progress "$dep" -P "$dep_dir"
+            ext="${dep##*.}"
+
+            case "$ext" in
+                "zip")
+                    command -v unzip >/dev/null 2>&1 || { echo "unzip is not installed"; exit 1; }
+                    echo "Extracting..."
+                    unzip -q "$dep_dir/$filename" -d "$dep_dir"
+                    ;;
+
+                    *)
+                    ;;
+            esac
+        fi
+    done
+fi

@@ -2,3 +2,4 @@ Documentation/*
 *ipch*
 .DS_Store
 **/generated/*
+**/deps/*

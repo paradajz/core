@@ -25,6 +25,8 @@ MEMORY
   FLASH (rx)  : ORIGIN = DEFINED(CORE_MCU_FLASH_START_ADDR_USER) ? CORE_MCU_FLASH_START_ADDR_USER : CORE_MCU_FLASH_START_ADDR, LENGTH = DEFINED(CORE_MCU_FLASH_SIZE_USER) ? CORE_MCU_FLASH_SIZE_USER : CORE_MCU_FLASH_SIZE
 }
 
+__flash_start__ = ORIGIN(FLASH);
+
 OUTPUT_FORMAT ("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
 
 /* Linker script to place sections and symbol values. Should be used together

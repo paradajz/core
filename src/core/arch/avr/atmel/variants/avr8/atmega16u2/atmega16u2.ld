@@ -22,6 +22,9 @@ MEMORY
   signature (rw!x) : ORIGIN = 0x840000, LENGTH = __SIGNATURE_REGION_LENGTH__
   user_signatures (rw!x) : ORIGIN = 0x850000, LENGTH = __USER_SIGNATURE_REGION_LENGTH__
 }
+
+__flash_start__ = ORIGIN(text);
+
 SECTIONS
 {
   /* Read-only sections, merged into text segment: */

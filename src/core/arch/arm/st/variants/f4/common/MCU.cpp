@@ -20,6 +20,7 @@
 */
 
 #include "stm32f4xx_hal.h"
+#include "core/arch/common/Flash.h"
 
 extern "C" void HAL_MspInit(void)
 {
@@ -36,11 +37,7 @@ extern "C" void HAL_MspDeInit(void)
 extern "C" void CoreSTM32F4SystemInit(void)
 {
     // set stack pointer
-#ifdef CORE_MCU_FLASH_START_ADDR_USER
-    __set_MSP(*reinterpret_cast<volatile uint32_t*>(CORE_MCU_FLASH_START_ADDR_USER));
-#else
-    __set_MSP(*reinterpret_cast<volatile uint32_t*>(CORE_MCU_FLASH_START_ADDR));
-#endif
+    __set_MSP(*reinterpret_cast<volatile uint32_t*>(reinterpret_cast<uint32_t>(__flash_start__)));
 
     // setup FPU
 #if (__FPU_PRESENT == 1) && (__FPU_USED == 1)
@@ -48,9 +45,5 @@ extern "C" void CoreSTM32F4SystemInit(void)
 #endif
 
     // set the correct address of vector table
-#ifdef CORE_MCU_FLASH_START_ADDR_USER
-    SCB->VTOR = CORE_MCU_FLASH_START_ADDR_USER;
-#else
-    SCB->VTOR = CORE_MCU_FLASH_START_ADDR;
-#endif
+    SCB->VTOR = reinterpret_cast<uint32_t>(__flash_start__);
 }

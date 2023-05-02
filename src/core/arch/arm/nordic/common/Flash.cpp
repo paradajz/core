@@ -35,12 +35,8 @@
 
 NRF_FSTORAGE_DEF(nrf_fstorage_t _fstorage) = {
     .evt_handler = NULL,
-#ifdef CORE_MCU_FLASH_START_ADDR_USER
-    .start_addr = CORE_MCU_FLASH_START_ADDR_USER,
-#else
-    .start_addr = CORE_MCU_FLASH_START_ADDR,
-#endif
-    .end_addr = CORE_MCU_FLASH_SIZE - 1,
+    .start_addr  = reinterpret_cast<uint32_t>(__flash_start__),
+    .end_addr    = CORE_MCU_FLASH_SIZE - 1,
 };
 
 namespace core::mcu::flash

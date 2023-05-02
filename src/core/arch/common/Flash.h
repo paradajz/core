@@ -26,6 +26,8 @@
 #include <inttypes.h>
 #include <cstddef>
 
+extern uint32_t __flash_start__[];
+
 namespace core::mcu::flash
 {
     struct flashPage_t

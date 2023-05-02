@@ -68,11 +68,7 @@ namespace core::mcu
             NVIC_SystemReset();
         }
 
-#ifdef CORE_MCU_FLASH_START_ADDR_USER
-        sd_softdevice_vector_table_base_set(CORE_MCU_FLASH_START_ADDR_USER);
-#else
-        sd_softdevice_vector_table_base_set(CORE_MCU_FLASH_START_ADDR);
-#endif
+        sd_softdevice_vector_table_base_set(reinterpret_cast<uint32_t>(__flash_start__));
 
         clocks::init();
         flash::init();

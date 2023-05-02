@@ -29,6 +29,8 @@ MEMORY
     SCRATCH_Y(rwx)  : ORIGIN = 0x20041000, LENGTH = 4k
 }
 
+__flash_start__ = ORIGIN(FLASH);
+
 ENTRY(_entry_point)
 
 SECTIONS

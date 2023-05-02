@@ -73,7 +73,7 @@ then
    printf "%s\n" "CORE_MCU_FLOAT_ABI := $float_abi" >> "$out_makefile"
 fi
 
-if [[ "$external_freq" != "" ]]
+if [[ ("$external_freq" != "") && ("$external_freq" != "null") ]]
 then
     printf "%s\n" "DEFINES += CORE_MCU_EXT_CLOCK_FREQ_MHZ=$external_freq" >> "$out_makefile"
 fi

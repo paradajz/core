@@ -58,9 +58,9 @@ adc_bits=$($yaml_parser "$yaml_file" adc-bits)
     printf "%s\n" "CORE_MCU_FAMILY := $mcu_family"
     printf "%s\n" "CORE_MCU_CPU := $cpu"
     printf "%s%x\n" "CORE_MCU_FW_METADATA_OFFSET := 0x" "$app_metadata_offset"
-    printf "%s\n" "DEFINES += CORE_MCU_GENERATED"
-    printf "%s%s\n" "DEFINES += CORE_MCU_ARCH_" "${arch^^}"
-    printf "%s%s\n" "DEFINES += CORE_MCU_VENDOR_" "${vendor^^}"
+    printf "%s\n" "CORE_MCU_DEFINES += CORE_MCU_GENERATED"
+    printf "%s%s\n" "CORE_MCU_DEFINES += CORE_MCU_ARCH_" "${arch^^}"
+    printf "%s%s\n" "CORE_MCU_DEFINES += CORE_MCU_VENDOR_" "${vendor^^}"
 } >> "$out_makefile"
 
 if [[ "$fpu" != "null" ]]
@@ -75,10 +75,10 @@ fi
 
 if [[ ("$external_freq" != "") && ("$external_freq" != "null") ]]
 then
-    printf "%s\n" "DEFINES += CORE_MCU_EXT_CLOCK_FREQ_MHZ=$external_freq" >> "$out_makefile"
+    printf "%s\n" "CORE_MCU_DEFINES += CORE_MCU_EXT_CLOCK_FREQ_MHZ=$external_freq" >> "$out_makefile"
 fi
 
-printf "%s\n" "DEFINES += CORE_MCU_CPU_FREQ_MHZ=$freq" >> "$out_makefile"
+printf "%s\n" "CORE_MCU_DEFINES += CORE_MCU_CPU_FREQ_MHZ=$freq" >> "$out_makefile"
 
 if [[ $($yaml_parser "$yaml_file" flash) != "null" ]]
 then
@@ -89,7 +89,7 @@ then
     then
         number_of_flash_pages=$($yaml_parser "$yaml_file" flash.pages --length)
 
-        printf "%s\n" "DEFINES += CORE_MCU_TOTAL_FLASH_PAGES=$number_of_flash_pages" >> "$out_makefile"
+        printf "%s\n" "CORE_MCU_DEFINES += CORE_MCU_TOTAL_FLASH_PAGES=$number_of_flash_pages" >> "$out_makefile"
 
         {
             printf "%s\n" "namespace {"
@@ -130,9 +130,9 @@ then
         number_of_flash_pages=$((flash_size/page_size))
 
         {
-            printf "%s\n" "DEFINES += CORE_MCU_TOTAL_FLASH_PAGES=$number_of_flash_pages"
+            printf "%s\n" "CORE_MCU_DEFINES += CORE_MCU_TOTAL_FLASH_PAGES=$number_of_flash_pages"
             printf "%s\n" "CORE_MCU_FLASH_PAGE_SIZE_COMMON := $page_size"
-            printf "%s\n" "DEFINES += CORE_MCU_FLASH_PAGE_SIZE_COMMON=$page_size"
+            printf "%s\n" "CORE_MCU_DEFINES += CORE_MCU_FLASH_PAGE_SIZE_COMMON=$page_size"
         } >> "$out_makefile"
 
         {
@@ -146,18 +146,18 @@ then
 
     {
         printf "%s\n" "CORE_MCU_FLASH_SIZE := $flash_size"
-        printf "%s\n" "DEFINES += CORE_MCU_FLASH_SIZE=$flash_size"
-        printf "%s\n" "LDFLAGS += -Xlinker --defsym=CORE_MCU_FLASH_SIZE=$flash_size"
+        printf "%s\n" "CORE_MCU_DEFINES += CORE_MCU_FLASH_SIZE=$flash_size"
+        printf "%s\n" "CORE_MCU_LDFLAGS += -Xlinker --defsym=CORE_MCU_FLASH_SIZE=$flash_size"
         printf "%s\n" "CORE_MCU_FLASH_START_ADDR := $flashStart"
-        printf "%s\n" "DEFINES += CORE_MCU_FLASH_START_ADDR=$flashStart"
-        printf "%s\n" "LDFLAGS += -Xlinker --defsym=CORE_MCU_FLASH_START_ADDR=$flashStart"
+        printf "%s\n" "CORE_MCU_DEFINES += CORE_MCU_FLASH_START_ADDR=$flashStart"
+        printf "%s\n" "CORE_MCU_LDFLAGS += -Xlinker --defsym=CORE_MCU_FLASH_START_ADDR=$flashStart"
     } >> "$out_makefile"
 fi
 
 if [[ $($yaml_parser "$yaml_file" eeprom) != "null" ]]
 then
     eeprom_size=$($yaml_parser "$yaml_file" eeprom.size)
-    printf "%s\n" "DEFINES += CORE_MCU_EEPROM_SIZE=$eeprom_size" >> "$out_makefile"
+    printf "%s\n" "CORE_MCU_DEFINES += CORE_MCU_EEPROM_SIZE=$eeprom_size" >> "$out_makefile"
 fi
 
 number_of_uart_interfaces=$($yaml_parser "$yaml_file" peripherals.uart)
@@ -165,14 +165,14 @@ number_of_i2c_interfaces=$($yaml_parser "$yaml_file" peripherals.i2c)
 
 if [[ $($yaml_parser "$yaml_file" peripherals.custom-pins) == "true" ]]
 then
-    printf "%s\n" "DEFINES += CORE_MCU_CUSTOM_PERIPHERAL_PINS" >> "$out_makefile"
+    printf "%s\n" "CORE_MCU_DEFINES += CORE_MCU_CUSTOM_PERIPHERAL_PINS" >> "$out_makefile"
 fi
 
 {
-    printf "%s\n" "DEFINES += CORE_MCU_MAX_UART_INTERFACES=${number_of_uart_interfaces}"
-    printf "%s\n" "DEFINES += CORE_MCU_MAX_I2C_INTERFACES=${number_of_i2c_interfaces}"
-    printf "%s\n" "DEFINES += CORE_MCU_ADC_MAX_VALUE=$((2 ** adc_bits - 1))"
-    printf "%s\n" "DEFINES += CORE_MCU_UID_BITS=${uid_bits}"
+    printf "%s\n" "CORE_MCU_DEFINES += CORE_MCU_MAX_UART_INTERFACES=${number_of_uart_interfaces}"
+    printf "%s\n" "CORE_MCU_DEFINES += CORE_MCU_MAX_I2C_INTERFACES=${number_of_i2c_interfaces}"
+    printf "%s\n" "CORE_MCU_DEFINES += CORE_MCU_ADC_MAX_VALUE=$((2 ** adc_bits - 1))"
+    printf "%s\n" "CORE_MCU_DEFINES += CORE_MCU_UID_BITS=${uid_bits}"
 } >> "$out_makefile"
 
 if [[ $($yaml_parser "$yaml_file" define-symbols) != "null" ]]

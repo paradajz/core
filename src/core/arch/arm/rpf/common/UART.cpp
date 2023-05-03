@@ -19,8 +19,6 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifdef HW_SUPPORT_UART
-
 #include "hardware/uart.h"
 #include "hardware/irq.h"
 #include "core/arch/common/UART.h"
@@ -152,5 +150,3 @@ void core::mcu::isr::uart(uint8_t channel)
         }
     }
 }
-
-#endif

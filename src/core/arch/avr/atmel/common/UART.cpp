@@ -19,8 +19,6 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifdef HW_SUPPORT_UART
-
 #include "core/arch/common/UART.h"
 #include "core/MCU.h"
 
@@ -306,6 +304,4 @@ ISR(USART_TX_vect_1)
 {
     TXC_ISR(1);
 };
-#endif
-
 #endif

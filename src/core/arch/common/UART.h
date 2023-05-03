@@ -22,7 +22,6 @@
 #pragma once
 
 #ifndef CORE_MCU_STUB
-#ifdef HW_SUPPORT_UART
 
 #ifndef CORE_MCU_GENERATED
 #error This file requires generated MCU header
@@ -309,7 +308,6 @@ namespace core::mcu::uart
     };
 }    // namespace core::mcu::uart
 
-#endif
 #else
 #include "core/arch/stub/UART.h"
 #endif

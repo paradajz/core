@@ -19,8 +19,6 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifdef HW_SUPPORT_UART
-
 #include <map>
 #include "core/arch/common/UART.h"
 #include "core/MCU.h"
@@ -297,5 +295,3 @@ void core::mcu::isr::uart(uint8_t channel)
         checkTx(channel, txEvent_t::STOPPED);
     }
 }
-
-#endif

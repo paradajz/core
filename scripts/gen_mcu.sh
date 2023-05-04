@@ -58,6 +58,7 @@ adc_bits=$($yaml_parser "$yaml_file" adc-bits)
     printf "%s\n" "CORE_MCU_FAMILY := $mcu_family"
     printf "%s\n" "CORE_MCU_CPU := $cpu"
     printf "%s%x\n" "CORE_MCU_FW_METADATA_OFFSET := 0x" "$app_metadata_offset"
+    printf "%s\n" "CORE_MCU_LINKER_FILE := $script_dir/../src/core/arch/$arch/$vendor/variants/$mcu_family/$mcu/$mcu.ld"
     printf "%s\n" "CORE_MCU_DEFINES += CORE_MCU_GENERATED"
     printf "%s%s\n" "CORE_MCU_DEFINES += CORE_MCU_ARCH_" "${arch^^}"
     printf "%s%s\n" "CORE_MCU_DEFINES += CORE_MCU_VENDOR_" "${vendor^^}"

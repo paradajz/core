@@ -161,6 +161,10 @@
     - "src/core/deps/nrf52840/nRF5_SDK_17.1.0_ddde560/components/ble/peer_manager/gatts_cache_manager.c"
     - "src/core/deps/nrf52840/nRF5_SDK_17.1.0_ddde560/components/ble/peer_manager/security_manager.c"
     - "src/core/deps/nrf52840/nRF5_SDK_17.1.0_ddde560/components/ble/peer_manager/pm_buffer.c"
+  ld-flags:
+    - "-mthumb"
+    - "-specs=nano.specs"
+    - "-specs=nosys.specs"
   usb:
     define-symbols:
       - "CFG_TUSB_MCU=OPT_MCU_NRF5X"

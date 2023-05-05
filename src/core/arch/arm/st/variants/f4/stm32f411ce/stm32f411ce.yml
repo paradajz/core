@@ -77,6 +77,10 @@
     - "src/core/arch/arm/st/variants/f4/common/ADC.cpp"
     - "src/core/arch/arm/st/variants/f4/stm32f411ce/startup.s"
     - "src/core/arch/arm/st/variants/f4/stm32f411ce/Peripherals.cpp"
+  ld-flags:
+    - "-mthumb"
+    - "-specs=nano.specs"
+    - "-specs=nosys.specs"
   usb:
     define-symbols:
       - "CFG_TUSB_MCU=OPT_MCU_STM32F4"

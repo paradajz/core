@@ -56,22 +56,47 @@ adc_bits=$($yaml_parser "$yaml_file" adc-bits)
     printf "%s\n" "CORE_MCU_ARCH := $arch"
     printf "%s\n" "CORE_MCU_VENDOR := $vendor"
     printf "%s\n" "CORE_MCU_FAMILY := $mcu_family"
-    printf "%s\n" "CORE_MCU_CPU := $cpu"
     printf "%s%x\n" "CORE_MCU_FW_METADATA_OFFSET := 0x" "$app_metadata_offset"
     printf "%s\n" "CORE_MCU_LINKER_FILE := $script_dir/../src/core/arch/$arch/$vendor/variants/$mcu_family/$mcu/$mcu.ld"
     printf "%s\n" "CORE_MCU_DEFINES += CORE_MCU_GENERATED"
     printf "%s%s\n" "CORE_MCU_DEFINES += CORE_MCU_ARCH_" "${arch^^}"
     printf "%s%s\n" "CORE_MCU_DEFINES += CORE_MCU_VENDOR_" "${vendor^^}"
+    printf "%s\n" 'CORE_MCU_LDFLAGS += -T $(CORE_MCU_LINKER_FILE)'
 } >> "$out_makefile"
+
+if [[ $arch == "avr" ]]
+then
+    {
+        printf "%s\n" "CORE_MCU_LDFLAGS += -mmcu=$mcu"
+        printf "%s\n" "CORE_MCU_CPPFLAGS += -mmcu=$mcu"
+    } >> "$out_makefile"
+fi
+
+if [[ $cpu != "null" ]]
+then
+    {
+        printf "%s\n" "CORE_MCU_CPU := $cpu"
+        printf "%s\n" "CORE_MCU_LDFLAGS += -mcpu=$cpu"
+        printf "%s\n" "CORE_MCU_CPPFLAGS += -mcpu=$cpu"
+    } >> "$out_makefile"
+fi
 
 if [[ "$fpu" != "null" ]]
 then
-    printf "%s\n" "CORE_MCU_FPU := $fpu" >> "$out_makefile"
+    {
+        printf "%s\n" "CORE_MCU_FPU := $fpu"
+        printf "%s\n" "CORE_MCU_LDFLAGS += -mfpu=$fpu"
+        printf "%s\n" "CORE_MCU_CPPFLAGS += -mfpu=$fpu"
+    } >> "$out_makefile"
 fi
 
 if [[ "$float_abi" != "null" ]]
 then
-   printf "%s\n" "CORE_MCU_FLOAT_ABI := $float_abi" >> "$out_makefile"
+    {
+        printf "%s\n" "CORE_MCU_FLOAT_ABI := $float_abi"
+        printf "%s\n" "CORE_MCU_LDFLAGS += -mfloat-abi=$float_abi"
+        printf "%s\n" "CORE_MCU_CPPFLAGS += -mfloat-abi=$float_abi"
+    } >> "$out_makefile"
 fi
 
 if [[ ("$external_freq" != "") && ("$external_freq" != "null") ]]

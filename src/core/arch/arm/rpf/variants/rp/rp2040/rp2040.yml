@@ -160,6 +160,9 @@
     - "src/core/arch/arm/rpf/variants/rp/common/ADC.cpp"
     - "src/core/arch/arm/rpf/variants/rp/rp2040/Peripherals.cpp"
   ld-flags:
+    - "-mthumb"
+    - "-specs=nano.specs"
+    - "-specs=nosys.specs"
     - "-Wl,-z,max-page-size=4096"
     - "-Wl,--wrap=sprintf"
     - "-Wl,--wrap=snprintf"

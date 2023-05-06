@@ -267,7 +267,7 @@ then
             for ((i=0;i<total_symbols;i++))
             do
                 symbol=$($yaml_parser "$yaml_file" usb.define-symbols.["$i"])
-                printf "%s\n" "CORE_MCU_DEFINES += $symbol" >> "$out_makefile"
+                printf "%s\n" "CORE_USB_DEFINES += $symbol" >> "$out_makefile"
             done
         fi
 
@@ -278,7 +278,7 @@ then
             for ((i=0;i<total_include_dirs;i++))
             do
                 dir=$($yaml_parser "$yaml_file" usb.include-dirs.["$i"])
-                printf "%s\n" "CORE_MCU_INCLUDE_DIRS += -I\"${script_dir}/../$dir\"" >> "$out_makefile"
+                printf "%s\n" "CORE_USB_INCLUDE_DIRS += -I\"${script_dir}/../$dir\"" >> "$out_makefile"
             done
         fi
 
@@ -289,7 +289,7 @@ then
             for ((i=0;i<total_sources;i++))
             do
                 source=$($yaml_parser "$yaml_file" usb.sources.["$i"])
-                printf "%s\n" "CORE_MCU_SOURCES += ${script_dir}/../$source" >> "$out_makefile"
+                printf "%s\n" "CORE_USB_SOURCES += ${script_dir}/../$source" >> "$out_makefile"
             done
         fi
     fi

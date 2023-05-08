@@ -171,6 +171,7 @@
     include-dirs:
       - "modules/tinyusb/hw"
       - "modules/tinyusb/src"
+      - "src/core/arch/arm/common/tinyusb"
     sources:
       - "modules/tinyusb/hw/mcu/nordic/nrfx/drivers/src/nrfx_usbreg.c"
       - "modules/tinyusb/hw/mcu/nordic/nrfx/drivers/src/nrfx_usbd.c"

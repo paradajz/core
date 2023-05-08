@@ -87,6 +87,7 @@
     include-dirs:
       - "modules/tinyusb/hw"
       - "modules/tinyusb/src"
+      - "src/core/arch/arm/common/tinyusb"
     sources:
       - "modules/tinyusb/src/device/usbd.c"
       - "modules/tinyusb/src/device/usbd_control.c"

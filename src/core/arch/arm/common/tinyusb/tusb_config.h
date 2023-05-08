@@ -19,28 +19,37 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#define _TUSB_CONFIG_H_
+
 #pragma once
 
-#ifndef CORE_MCU_STUB
-#ifdef CORE_MCU_ARCH_AVR
-#include "arch/avr/atmel/common/MCU.h"
-#elif defined(CORE_MCU_ARCH_ARM)
-#ifdef CORE_MCU_VENDOR_ST
-#include "arch/arm/st/common/MCU.h"
-#elif defined(CORE_MCU_VENDOR_NORDIC)
-#include "arch/arm/nordic/common/MCU.h"
-#elif defined(CORE_MCU_VENDOR_RPF)
-#include "arch/arm/rpf/common/MCU.h"
-#else
-#include "arch/stub/MCU.h"
-#endif
-#else
-#include "arch/stub/MCU.h"
-#endif
-#else
-#include "arch/stub/MCU.h"
+#ifdef __cplusplus
+extern "C"
+{
 #endif
 
-#if __has_include(<CoreMCUGenerated.h>)
-#include <CoreMCUGenerated.h>
+#ifndef CFG_TUSB_MEM_SECTION
+#define CFG_TUSB_MEM_SECTION
+#endif
+
+#ifndef CFG_TUSB_MEM_ALIGN
+#define CFG_TUSB_MEM_ALIGN __attribute__((aligned(4)))
+#endif
+
+#ifndef BOARD_DEVICE_RHPORT_NUM
+#define BOARD_DEVICE_RHPORT_NUM 0
+#endif
+
+#ifndef BOARD_DEVICE_RHPORT_SPEED
+#define BOARD_DEVICE_RHPORT_SPEED OPT_MODE_FULL_SPEED
+#endif
+
+#ifndef CFG_TUSB_RHPORT0_MODE
+#define CFG_TUSB_RHPORT0_MODE (OPT_MODE_DEVICE | BOARD_DEVICE_RHPORT_SPEED)
+#endif
+
+#define CFG_TUSB_OS OPT_OS_NONE
+
+#ifdef __cplusplus
+}
 #endif

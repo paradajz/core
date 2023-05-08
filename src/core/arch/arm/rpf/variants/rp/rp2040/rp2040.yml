@@ -328,6 +328,7 @@
       - "modules/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/include"
       - "modules/tinyusb/hw"
       - "modules/tinyusb/src"
+      - "src/core/arch/arm/common/tinyusb"
     define-symbols:
       - "CFG_TUSB_MCU=OPT_MCU_RP2040"
     sources:

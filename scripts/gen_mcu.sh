@@ -119,7 +119,7 @@ then
 
         {
             printf "%s\n" "namespace {"
-            printf "%s\n" "constexpr inline core::mcu::flash::flashPage_t FLASH_PAGE_DESCRIPTOR[CORE_MCU_TOTAL_FLASH_PAGES] = {"
+            printf "%s\n" "constexpr inline core::mcu::flash::flashPage_t FLASH_PAGE_DESCRIPTOR[$number_of_flash_pages] = {"
         } >> "$out_header"
 
         flash_size=0
@@ -163,10 +163,10 @@ then
 
         {
             printf "%s\n" "constexpr uint32_t CORE_MCU_FLASH_PAGE_SIZE(size_t index) {"
-            printf "%s\n" "return CORE_MCU_FLASH_PAGE_SIZE_COMMON; }"
+            printf "%s\n" "return $page_size; }"
 
             printf "%s\n" "constexpr uint32_t CORE_MCU_FLASH_PAGE_ADDR(size_t index) {"
-            printf "%s\n" "return $flashStart + (CORE_MCU_FLASH_PAGE_SIZE_COMMON * index); }"
+            printf "%s\n" "return $flashStart + ($page_size * index); }"
         } >> "$out_header"
     fi
 

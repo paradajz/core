@@ -57,7 +57,7 @@ adc_bits=$($yaml_parser "$yaml_file" adc-bits)
     printf "%s\n" "CORE_MCU_VENDOR := $vendor"
     printf "%s\n" "CORE_MCU_FAMILY := $mcu_family"
     printf "%s%x\n" "CORE_MCU_FW_METADATA_OFFSET := 0x" "$app_metadata_offset"
-    printf "%s\n" "CORE_MCU_LINKER_FILE := $script_dir/../src/core/arch/$arch/$vendor/variants/$mcu_family/$mcu/$mcu.ld"
+    printf "%s\n" "CORE_MCU_LINKER_FILE := $script_dir/../src/arch/$arch/$vendor/variants/$mcu_family/$mcu/$mcu.ld"
     printf "%s\n" "CORE_MCU_DEFINES += CORE_MCU_GENERATED"
     printf "%s%s\n" "CORE_MCU_DEFINES += CORE_MCU_ARCH_" "${arch^^}"
     printf "%s%s\n" "CORE_MCU_DEFINES += CORE_MCU_VENDOR_" "${vendor^^}"
@@ -300,7 +300,7 @@ then
     command -v wget >/dev/null 2>&1 || { echo "wget is not installed"; exit 1; }
 
     total_deps=$($yaml_parser "$yaml_file" dl-deps --length)
-    dep_dir="${script_dir}"/../src/core/deps/"${mcu}"
+    dep_dir="${script_dir}"/../deps/"${mcu}"
     mkdir -p "$dep_dir"
 
     for ((i=0;i<total_deps;i++))

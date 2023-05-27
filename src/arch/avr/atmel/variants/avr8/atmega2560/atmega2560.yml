@@ -1,0 +1,38 @@
+---
+  arch: "avr"
+  mcuFamily: "avr8"
+  vendor: "atmel"
+  freq: 16
+  uid-bits: 80
+  adc-bits: 10
+  flash:
+    flash-start: 0x00
+    app-metadata-offset: 0xE4
+    page-size: 0x100
+    size: 0x40000
+  eeprom:
+    size: 0x1000
+  peripherals:
+    uart: 2
+    i2c: 1
+  define-symbols:
+    - "__AVR_ATmega2560__"
+    - "ARCH=ARCH_AVR8"
+    - "F_CPU=16000000UL"
+    - "F_USB=16000000UL"
+  include-dirs:
+    - "include"
+    - "modules/lufa"
+    - "modules/avr-libstdcpp/include"
+  sources:
+    - "src/arch/common/ISR.cpp"
+    - "src/arch/common/BootloaderCache.cpp"
+    - "src/arch/avr/atmel/common/Flash.cpp"
+    - "src/arch/avr/atmel/common/StdLibDummy.cpp"
+    - "src/arch/avr/atmel/common/Timers.cpp"
+    - "src/arch/avr/atmel/common/UART.cpp"
+    - "src/arch/avr/atmel/common/I2C.cpp"
+    - "src/arch/avr/atmel/common/Bootloader.cpp"
+    - "src/arch/avr/atmel/common/ADC.cpp"
+    - "src/arch/avr/atmel/common/TimersMultiple.cpp"
+    - "src/arch/avr/atmel/variants/avr8/atmega2560/Peripherals.cpp"

@@ -75,23 +75,23 @@ namespace core::mcu::usb
 
     struct __attribute__((packed)) cdcDescriptorFunctionalHeader_t
     {
-        descriptorHeader_t header;
-        uint8_t            subType;
-        uint16_t           cdcSpecification;
+        descriptorHeader_t header           = {};
+        uint8_t            subType          = 0;
+        uint16_t           cdcSpecification = 0;
     };
 
     struct __attribute__((packed)) cdcDescriptorFunctionalACM_t
     {
-        descriptorHeader_t header;
-        uint8_t            subType;
-        uint8_t            capabilities;
+        descriptorHeader_t header       = {};
+        uint8_t            subType      = 0;
+        uint8_t            capabilities = 0;
     };
 
     struct __attribute__((packed)) cdcDescriptorFunctionalUnion_t
     {
-        descriptorHeader_t header;
-        uint8_t            subType;
-        uint8_t            masterInterfaceNumber;
-        uint8_t            slaveInterfaceNumber;
+        descriptorHeader_t header                = {};
+        uint8_t            subType               = 0;
+        uint8_t            masterInterfaceNumber = 0;
+        uint8_t            slaveInterfaceNumber  = 0;
     };
 }    // namespace core::mcu::usb

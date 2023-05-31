@@ -31,80 +31,80 @@ namespace core::mcu::usb
 {
     struct __attribute__((packed)) descriptorHeader_t
     {
-        uint8_t size;
-        uint8_t type;
+        uint8_t size = 0;
+        uint8_t type = 0;
     };
 
     struct __attribute__((packed)) descriptorConfigurationHeader_t
     {
-        descriptorHeader_t header;
-        uint16_t           totalConfigurationSize;
-        uint8_t            totalInterfaces;
-        uint8_t            configurationNumber;
-        uint8_t            configurationStrIndex;
-        uint8_t            configAttributes;
-        uint8_t            maxPowerConsumption;
+        descriptorHeader_t header                 = {};
+        uint16_t           totalConfigurationSize = 0;
+        uint8_t            totalInterfaces        = 0;
+        uint8_t            configurationNumber    = 0;
+        uint8_t            configurationStrIndex  = 0;
+        uint8_t            configAttributes       = 0;
+        uint8_t            maxPowerConsumption    = 0;
     };
 
     struct __attribute__((packed)) descriptorInterface_t
     {
-        descriptorHeader_t header;
-        uint8_t            interfaceNumber;
-        uint8_t            alternateSetting;
-        uint8_t            totalEndpoints;
-        uint8_t            classId;
-        uint8_t            subClassId;
-        uint8_t            protocol;
-        uint8_t            interfaceStrIndex;
+        descriptorHeader_t header            = {};
+        uint8_t            interfaceNumber   = 0;
+        uint8_t            alternateSetting  = 0;
+        uint8_t            totalEndpoints    = 0;
+        uint8_t            classId           = 0;
+        uint8_t            subClassId        = 0;
+        uint8_t            protocol          = 0;
+        uint8_t            interfaceStrIndex = 0;
     };
 
     struct __attribute__((packed)) descriptorInterfaceAssociation_t
     {
-        descriptorHeader_t header;
-        uint8_t            firstInterfaceIndex;
-        uint8_t            totalInterfaces;
-        uint8_t            classId;
-        uint8_t            subClassId;
-        uint8_t            protocol;
-        uint8_t            iadStrIndex;
+        descriptorHeader_t header              = {};
+        uint8_t            firstInterfaceIndex = 0;
+        uint8_t            totalInterfaces     = 0;
+        uint8_t            classId             = 0;
+        uint8_t            subClassId          = 0;
+        uint8_t            protocol            = 0;
+        uint8_t            iadStrIndex         = 0;
     };
 
     struct __attribute__((packed)) descriptorEndpoint_t
     {
-        descriptorHeader_t header;
-        uint8_t            endpointAddress;
-        uint8_t            attributes;
-        uint16_t           endpointSize;
-        uint8_t            pollingIntervalMs;
+        descriptorHeader_t header            = {};
+        uint8_t            endpointAddress   = 0;
+        uint8_t            attributes        = 0;
+        uint16_t           endpointSize      = 0;
+        uint8_t            pollingIntervalMs = 0;
     };
 
     struct __attribute__((packed)) descriptorDevice_t
     {
-        descriptorHeader_t header;
-        uint16_t           usbSpecification;
-        uint8_t            classId;
-        uint8_t            subClassId;
-        uint8_t            protocol;
-        uint8_t            endpoint0Size;
-        uint16_t           vendorId;
-        uint16_t           productId;
-        uint16_t           releaseNumber;
-        uint8_t            manufacturerStrIndex;
-        uint8_t            productStrIndex;
-        uint8_t            serialNumStrIndex;
-        uint8_t            numberOfConfigurations;
+        descriptorHeader_t header                 = {};
+        uint16_t           usbSpecification       = 0;
+        uint8_t            classId                = 0;
+        uint8_t            subClassId             = 0;
+        uint8_t            protocol               = 0;
+        uint8_t            endpoint0Size          = 0;
+        uint16_t           vendorId               = 0;
+        uint16_t           productId              = 0;
+        uint16_t           releaseNumber          = 0;
+        uint8_t            manufacturerStrIndex   = 0;
+        uint8_t            productStrIndex        = 0;
+        uint8_t            serialNumStrIndex      = 0;
+        uint8_t            numberOfConfigurations = 0;
     };
 
     struct descriptorString_t
     {
-        descriptorHeader_t header;
+        descriptorHeader_t header = {};
         char16_t           unicodeString[];
     };
 
     struct descriptorUIDString_t
     {
-        descriptorHeader_t header;
-        uint16_t           unicodeString[CORE_MCU_UID_BITS / 4];
+        descriptorHeader_t header                               = {};
+        uint16_t           unicodeString[CORE_MCU_UID_BITS / 4] = {};
     };
 
     enum descriptorTypes_t

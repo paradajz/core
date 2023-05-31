@@ -68,18 +68,18 @@ namespace core::mcu::usb
 
     struct __attribute__((packed)) audioDescriptorInterfaceAC_t
     {
-        descriptorHeader_t header;
-        uint8_t            subType;
-        uint16_t           acSpecification;
-        uint16_t           totalLength;
-        uint8_t            inCollection;
-        uint8_t            interfaceNumber;
+        descriptorHeader_t header          = {};
+        uint8_t            subType         = 0;
+        uint16_t           acSpecification = 0;
+        uint16_t           totalLength     = 0;
+        uint8_t            inCollection    = 0;
+        uint8_t            interfaceNumber = 0;
     };
 
     struct __attribute__((packed)) audioDescriptorStreamEndpointStd_t
     {
-        descriptorEndpoint_t endpoint;
-        uint8_t              refresh;
-        uint8_t              syncEndpointNumber;
+        descriptorEndpoint_t endpoint           = {};
+        uint8_t              refresh            = 0;
+        uint8_t              syncEndpointNumber = 0;
     };
 }    // namespace core::mcu::usb

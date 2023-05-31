@@ -91,5 +91,7 @@ namespace core::mcu::usb
             .size = sizeof(core::mcu::usb::descriptorHeader_t) + (sizeof(String) - 2), \
             .type = core::mcu::usb::DESC_TYPE_STRING                                   \
         },                                                                             \
+        {                                                                              \
             String                                                                     \
+        }                                                                              \
     }

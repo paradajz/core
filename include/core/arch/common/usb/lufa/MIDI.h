@@ -34,38 +34,38 @@ namespace core::mcu::usb
 
     struct __attribute__((packed)) midiDescriptorAudioInterfaceAS_t
     {
-        descriptorHeader_t header;
-        uint8_t            subType;
-        uint16_t           audioSpecification;
-        uint16_t           totalLength;
+        descriptorHeader_t header             = {};
+        uint8_t            subType            = 0;
+        uint16_t           audioSpecification = 0;
+        uint16_t           totalLength        = 0;
     };
 
     struct __attribute__((packed)) midiDescriptorInputJack_t
     {
-        descriptorHeader_t header;
-        uint8_t            subType;
-        uint8_t            jackType;
-        uint8_t            jackId;
-        uint8_t            jackStrIndex;
+        descriptorHeader_t header       = {};
+        uint8_t            subType      = 0;
+        uint8_t            jackType     = 0;
+        uint8_t            jackId       = 0;
+        uint8_t            jackStrIndex = 0;
     };
 
     struct __attribute__((packed)) midiDescriptorOutputJack_t
     {
-        descriptorHeader_t header;
-        uint8_t            subType;
-        uint8_t            jackType;
-        uint8_t            jackId;
-        uint8_t            numberOfPins;
-        uint8_t            sourceJackId[1];
-        uint8_t            sourcePinId[1];
-        uint8_t            jackStrIndex;
+        descriptorHeader_t header          = {};
+        uint8_t            subType         = 0;
+        uint8_t            jackType        = 0;
+        uint8_t            jackId          = 0;
+        uint8_t            numberOfPins    = 0;
+        uint8_t            sourceJackId[1] = {};
+        uint8_t            sourcePinId[1]  = {};
+        uint8_t            jackStrIndex    = 0;
     };
 
     struct __attribute__((packed)) midiDescriptorJackEndpoint_t
     {
-        descriptorHeader_t header;
-        uint8_t            subType;
-        uint8_t            totalEmbeddedJacks;
-        uint8_t            associatedJackId[1];
+        descriptorHeader_t header              = {};
+        uint8_t            subType             = 0;
+        uint8_t            totalEmbeddedJacks  = 0;
+        uint8_t            associatedJackId[1] = {};
     };
 }    // namespace core::mcu::usb

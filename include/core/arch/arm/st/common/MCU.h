@@ -38,6 +38,7 @@
 #include <CoreMCUGenerated.h>
 #include "core/arch/common/usb/USB.h"
 #include "core/arch/common/MCU.h"
+#include <CoreMCUGenerated.h>
 
 namespace core::mcu
 {

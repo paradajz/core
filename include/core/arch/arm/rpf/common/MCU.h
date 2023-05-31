@@ -39,6 +39,7 @@
 #include "RP2040/Include/RP2040.h"
 #include "pico/unique_id.h"
 #include "hardware/irq.h"
+#include <CoreMCUGenerated.h>
 
 namespace core::mcu
 {

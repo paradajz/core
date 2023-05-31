@@ -21,10 +21,6 @@
 
 #pragma once
 
-#ifndef CORE_MCU_GENERATED
-#error This file requires generated MCU header
-#endif
-
 #include <avr/boot.h>
 #include <avr/wdt.h>
 #include <avr/power.h>

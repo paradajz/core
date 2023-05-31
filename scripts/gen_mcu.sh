@@ -95,7 +95,6 @@ fi
     printf "%s\n" "set(CORE_MCU_CPU $cpu)"
     printf "%s\n" "set(CORE_MCU_FW_METADATA_OFFSET $app_metadata_offset)"
     printf "%s\n" "set(CORE_MCU_LINKER_FILE $script_dir/../src/arch/$arch/$vendor/variants/$mcu_family/$mcu/$mcu.ld)"
-    printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_GENERATED)"
     printf "%s%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_ARCH_" "${arch^^})"
     printf "%s%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_VENDOR_" "${vendor^^})"
     printf "%s%s\n" "target_link_options($cmake_mcu_target PUBLIC " '${CORE_MCU_FLAGS} -T ${CORE_MCU_LINKER_FILE} ${CORE_LINK_FLAGS})'

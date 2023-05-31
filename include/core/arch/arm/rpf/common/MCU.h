@@ -21,10 +21,6 @@
 
 #pragma once
 
-#ifndef CORE_MCU_GENERATED
-#error This file requires generated MCU header
-#endif
-
 #include <array>
 #include "Atomic.h"
 #include "Peripherals.h"

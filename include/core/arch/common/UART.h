@@ -23,10 +23,6 @@
 
 #ifndef CORE_MCU_STUB
 
-#ifndef CORE_MCU_GENERATED
-#error This file requires generated MCU header
-#endif
-
 #include <inttypes.h>
 #include <functional>
 #include "core/util/RingBuffer.h"

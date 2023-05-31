@@ -19,10 +19,6 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef CORE_MCU_GENERATED
-#error This file requires generated MCU header
-#endif
-
 #include "hardware/flash.h"
 #include "core/arch/common/Flash.h"
 #include <CoreMCUGenerated.h>

@@ -19,10 +19,6 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef CORE_MCU_GENERATED
-#error This file requires generated MCU header
-#endif
-
 #include "core/arch/arm/st/common/Peripherals.h"
 #include <CoreMCUGenerated.h>
 

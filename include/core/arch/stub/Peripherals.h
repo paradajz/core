@@ -19,12 +19,50 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#pragma once
+
+#include <vector>
 #include "IO.h"
 
 namespace core::mcu::peripherals
 {
+    class Descriptor
+    {
+        public:
+        virtual std::vector<core::mcu::io::pin_t> pins()         = 0;
+        virtual void*                             interface()    = 0;
+        virtual uint8_t                           irqn()         = 0;
+        virtual void                              enableClock()  = 0;
+        virtual void                              disableClock() = 0;
+    };
+
     constexpr uint32_t adcChannel(const core::mcu::io::pin_t& pin)
     {
         return pin.index;
+    }
+
+    inline Descriptor* uartDescriptor(uint8_t channel)
+    {
+        return nullptr;
+    }
+
+    inline Descriptor* i2cDescriptor(uint8_t channel)
+    {
+        return nullptr;
+    }
+
+    inline Descriptor* usbDescriptor()
+    {
+        return nullptr;
+    }
+
+    inline bool uartChannel(void* interface, uint8_t& channel)
+    {
+        return false;
+    }
+
+    inline bool i2cChannel(void* interface, uint8_t& channel)
+    {
+        return false;
     }
 }    // namespace core::mcu::peripherals

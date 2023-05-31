@@ -88,3 +88,6 @@ inline void CORE_MCU_IO_INIT(core::mcu::io::pinPort_t  port,
                              core::mcu::io::pinMode_t  mode = core::mcu::io::pinMode_t::INPUT,
                              core::mcu::io::pullMode_t pull = core::mcu::io::pullMode_t::NONE)
 {}
+
+inline void CORE_MCU_IO_INIT(core::mcu::io::pin_t pin)
+{}

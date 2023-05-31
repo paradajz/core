@@ -25,8 +25,13 @@
 #define CORE_MCU_STUB
 #endif
 
-#include <inttypes.h>
+#ifndef CORE_MCU_UID_BITS
+#define CORE_MCU_UID_BITS 80
+#endif
 
+#define CORE_MCU_NOP()
+
+#include <inttypes.h>
 #include "ADC.h"
 #include "Atomic.h"
 #include "Bootloader.h"
@@ -39,13 +44,9 @@
 #include "Peripherals.h"
 #include "Timers.h"
 #include "UART.h"
+#include "USB.h"
 #include "Util.h"
-
-#ifndef CORE_MCU_UID_BITS
-#define CORE_MCU_UID_BITS 80
-#endif
-
-#define CORE_MCU_NOP()
+#include "core/arch/common/usb/USB.h"
 
 namespace core::mcu
 {

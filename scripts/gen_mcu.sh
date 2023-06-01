@@ -111,6 +111,13 @@ fi
 
 printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_CPU_FREQ_MHZ=$freq)" >> "$out_cmakelists"
 
+uf2_id=$($yaml_parser "$yaml_file" uf2-id)
+
+if [[ $uf2_id != "null" ]]
+then
+    printf "%s\n" "set(CORE_MCU_UF2_ID $uf2_id)" >> "$out_cmakelists"
+fi
+
 if [[ $($yaml_parser "$yaml_file" flash) != "null" ]]
 then
     declare -i number_of_flash_pages

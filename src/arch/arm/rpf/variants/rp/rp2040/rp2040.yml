@@ -6,6 +6,7 @@
   freq: 133
   uid-bits: 64
   adc-bits: 10
+  uf2-id: 0xe48bff56
   flash:
     flash-start: 0x10000000
     app-metadata-offset: 0x1D4

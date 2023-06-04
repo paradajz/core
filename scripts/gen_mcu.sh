@@ -61,7 +61,6 @@ cmake_usb_target=usb
     printf "%s\n\n" "#pragma once"
     printf "%s\n" "#include <inttypes.h>"
     printf "%s\n" "#include <stddef.h>"
-    printf "%s\n" "#include \"core/arch/common/Flash.h\""
 } >> "$out_header"
 
 if [[ $arch == "avr" ]]
@@ -123,43 +122,46 @@ then
     declare -i number_of_flash_pages
     flashStart=$($yaml_parser "$yaml_file" flash.flash-start)
 
+    {
+        printf "%s\n" "#include <array>"
+        printf "%s\n" "namespace core::mcu::flash {"
+        printf "%s\n" "constexpr inline uint32_t startAddress() { return $flashStart; }"
+    } >> "$out_header"
+
     if [[ $($yaml_parser "$yaml_file" flash.pages) != "null" ]]
     then
         number_of_flash_pages=$($yaml_parser "$yaml_file" flash.pages --length)
+        printf "%s\n" "constexpr inline uint32_t TOTAL_FLASH_PAGES = $number_of_flash_pages;"  >> "$out_header"
 
-        printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_TOTAL_FLASH_PAGES=$number_of_flash_pages)" >> "$out_cmakelists"
-
-        {
-            printf "%s\n" "namespace {"
-            printf "%s\n" "constexpr inline core::mcu::flash::flashPage_t FLASH_PAGE_DESCRIPTOR[$number_of_flash_pages] = {"
-        } >> "$out_header"
+         # sizes
+        printf "%s\n" "constexpr inline std::array<uint32_t, TOTAL_FLASH_PAGES> FLASH_PAGE_SIZE = {" >> "$out_header"
 
         flash_size=0
 
         for ((i=0; i<number_of_flash_pages; i++))
         do
-            addressStart=$($yaml_parser "$yaml_file" flash.pages.["$i"].address)
             page_size=$($yaml_parser "$yaml_file" flash.pages.["$i"].size)
             ((flash_size+=page_size))
-
-            {
-                printf "%s\n" "{"
-                printf "%s\n" ".address = $addressStart",
-                printf "%s\n" ".size = $page_size",
-                printf "%s\n" "},"
-            } >> "$out_header"
+            printf "%s\n" "$page_size", >> "$out_header"
         done
 
-        {
-            printf "%s\n" "};"
-            printf "%s\n" "}"
-        } >> "$out_header"
+        printf "%s\n" "};" >> "$out_header"
+
+        # addresses
+        printf "%s\n" "constexpr inline std::array<uint32_t, TOTAL_FLASH_PAGES> FLASH_PAGE_ADDRESS = {" >> "$out_header"
+
+        for ((i=0; i<number_of_flash_pages; i++))
+        do
+            addressStart=$($yaml_parser "$yaml_file" flash.pages.["$i"].address)
+            printf "%s\n" "$addressStart", >> "$out_header"
+        done
+
+        printf "%s\n" "};" >> "$out_header"
 
         {
-            printf "%s\n" "constexpr uint32_t CORE_MCU_FLASH_PAGE_ADDR(size_t index) {"
-            printf "%s\n" "return FLASH_PAGE_DESCRIPTOR[index].address; }"
-            printf "%s\n" "constexpr uint32_t CORE_MCU_FLASH_PAGE_SIZE(size_t index) {"
-            printf "%s\n" "return FLASH_PAGE_DESCRIPTOR[index].size; }"
+            printf "%s\n" "constexpr uint32_t size() { return $flash_size; }"
+            printf "%s\n" "constexpr uint32_t pageSize(size_t index) { return FLASH_PAGE_SIZE[index]; }"
+            printf "%s\n" "constexpr uint32_t pageAddress(size_t index) { return FLASH_PAGE_ADDRESS[index]; }"
         } >> "$out_header"
     else
         # all flash pages have common size
@@ -168,26 +170,19 @@ then
         number_of_flash_pages=$((flash_size/page_size))
 
         {
-            printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_TOTAL_FLASH_PAGES=$number_of_flash_pages)"
-            printf "%s\n" "set(CORE_MCU_FLASH_PAGE_SIZE_COMMON $page_size)"
-            printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_FLASH_PAGE_SIZE_COMMON=$page_size)"
-        } >> "$out_cmakelists"
-
-        {
-            printf "%s\n" "constexpr uint32_t CORE_MCU_FLASH_PAGE_SIZE(size_t index) {"
-            printf "%s\n" "return $page_size; }"
-
-            printf "%s\n" "constexpr uint32_t CORE_MCU_FLASH_PAGE_ADDR(size_t index) {"
-            printf "%s\n" "return $flashStart + ($page_size * index); }"
+            printf "%s\n" "constexpr inline uint32_t TOTAL_FLASH_PAGES = $number_of_flash_pages;"
+            printf "%s\n" "constexpr inline uint32_t FLASH_PAGE_SIZE_COMMON = $page_size;"
+            printf "%s\n" "constexpr uint32_t size() { return $flash_size; }"
+            printf "%s\n" "constexpr uint32_t pageSize(size_t index) { return FLASH_PAGE_SIZE_COMMON; }"
+            printf "%s\n" "constexpr uint32_t pageAddress(size_t index) { return $flashStart + (FLASH_PAGE_SIZE_COMMON * index); }"
         } >> "$out_header"
     fi
 
+    printf "%s\n" "}" >> "$out_header"
+
     {
-        printf "%s\n" "set(CORE_MCU_FLASH_SIZE $flash_size)"
-        printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_FLASH_SIZE=$flash_size)"
         printf "%s\n" "target_link_options($cmake_mcu_target PUBLIC -Wl,--defsym=CORE_MCU_FLASH_SIZE=$flash_size)"
         printf "%s%x%s\n" "set(CORE_MCU_FLASH_START_ADDR 0x" "$flashStart" ")"
-        printf "%s%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_FLASH_START_ADDR=" '${CORE_MCU_FLASH_START_ADDR})'
         printf "%s%s\n" "target_link_options($cmake_mcu_target PUBLIC -Wl,--defsym=CORE_MCU_FLASH_START_ADDR=" '${CORE_MCU_FLASH_START_ADDR})'
     } >> "$out_cmakelists"
 fi

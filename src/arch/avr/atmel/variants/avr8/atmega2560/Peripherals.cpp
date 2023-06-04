@@ -20,5 +20,4 @@
 */
 
 #include "core/arch/avr/atmel/common/Peripherals.h"
-#include <CoreMCUGenerated.h>
 #include "../../../common/Peripherals.cpp.include"

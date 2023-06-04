@@ -22,27 +22,9 @@
 #include <avr/pgmspace.h>
 #include <avr/boot.h>
 #include "core/arch/common/Flash.h"
-#include "core/arch/avr/common/Atomic.h"
-#include <CoreMCUGenerated.h>
 
 namespace core::mcu::flash
 {
-    bool isInRange(uint32_t address)
-    {
-        return address < CORE_MCU_FLASH_SIZE;
-    }
-
-    uint32_t size()
-    {
-        return CORE_MCU_FLASH_SIZE;
-    }
-
-    uint32_t pageSize(size_t index)
-    {
-        // always constant on avr
-        return CORE_MCU_FLASH_PAGE_SIZE_COMMON;
-    }
-
     bool read8(uint32_t address, uint8_t& data)
     {
 #ifdef pgm_read_byte_far

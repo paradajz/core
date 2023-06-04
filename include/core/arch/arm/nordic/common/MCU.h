@@ -34,10 +34,8 @@
 #include "core/arch/common/Timers.h"
 #include "core/arch/common/UART.h"
 #include "core/ErrorHandler.h"
-#include <CoreMCUGenerated.h>
 #include "core/arch/common/usb/USB.h"
 #include "core/arch/common/MCU.h"
-#include <CoreMCUGenerated.h>
 
 namespace core::mcu
 {

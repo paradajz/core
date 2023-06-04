@@ -31,23 +31,6 @@ namespace core::mcu::flash
         return true;    // nothing to do
     }
 
-    bool isInRange(uint32_t address)
-    {
-        return IS_FLASH_ADDRESS(address);
-    }
-
-    uint32_t size()
-    {
-        return CORE_MCU_FLASH_SIZE;
-    }
-
-    uint32_t pageSize(size_t index)
-    {
-        CORE_ERROR_CHECK(index >= CORE_MCU_TOTAL_FLASH_PAGES, false);
-
-        return CORE_MCU_FLASH_PAGE_SIZE(index);
-    }
-
     _RAM bool erasePage(size_t index)
     {
         FLASH_EraseInitTypeDef pEraseInit = {};

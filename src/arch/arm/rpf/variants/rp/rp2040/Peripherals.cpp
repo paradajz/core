@@ -20,5 +20,4 @@
 */
 
 #include "core/arch/arm/rpf/common/Peripherals.h"
-#include <CoreMCUGenerated.h>
 #include "../common/Peripherals.cpp.include"

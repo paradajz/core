@@ -21,7 +21,6 @@
 
 #include "hardware/flash.h"
 #include "core/arch/common/Flash.h"
-#include <CoreMCUGenerated.h>
 #include "core/arch/arm/rpf/common/Atomic.h"
 
 namespace
@@ -34,29 +33,9 @@ namespace
 
 namespace core::mcu::flash
 {
-    bool isInRange(uint32_t address)
-    {
-        constexpr uint32_t MIN = CORE_MCU_FLASH_START_ADDR;
-        constexpr uint32_t MAX = MIN + CORE_MCU_FLASH_SIZE;
-
-        return (address >= CORE_MCU_FLASH_START_ADDR) && (address < MAX);
-    }
-
-    uint32_t size()
-    {
-        return CORE_MCU_FLASH_SIZE;
-    }
-
-    uint32_t pageSize(size_t index)
-    {
-        // This is actually sector size - external flash has concept of page (256-byte) only when performing writes.
-        // Minimum erase size for use with pico SDK is 4k, so use that
-        return SECTOR_SIZE;
-    }
-
     bool erasePage(size_t index)
     {
-        // pico sdk expects just the offset from CORE_MCU_FLASH_START_ADDR as an address for flash_range_erase
+        // pico sdk expects just the offset from start flash address as an address for flash_range_erase
         CORE_MCU_ATOMIC_SECTION
         {
             flash_range_erase(index * pageSize(index), pageSize(index));
@@ -76,9 +55,9 @@ namespace core::mcu::flash
         // If the addresses in the page aren't writeable, 4k sector in which the page
         // resides must be erased first.
 
-        const size_t   SECTOR               = (address - CORE_MCU_FLASH_START_ADDR) / SECTOR_SIZE;
-        const size_t   PAGE                 = (address - CORE_MCU_FLASH_START_ADDR) / PAGE_SIZE;
-        const size_t   INDEX_IN_SECTOR      = (address - CORE_MCU_FLASH_START_ADDR) % SECTOR_SIZE;
+        const size_t   SECTOR               = (address - core::mcu::flash::startAddress()) / SECTOR_SIZE;
+        const size_t   PAGE                 = (address - core::mcu::flash::startAddress()) / PAGE_SIZE;
+        const size_t   INDEX_IN_SECTOR      = (address - core::mcu::flash::startAddress()) % SECTOR_SIZE;
         const size_t   PAGE_WITHIN_SECTOR   = INDEX_IN_SECTOR / PAGE_SIZE;
         const uint32_t SECTOR_START_ADDRESS = SECTOR * SECTOR_SIZE;
         const uint32_t PAGE_START_ADDRESS   = PAGE * PAGE_SIZE;
@@ -90,7 +69,7 @@ namespace core::mcu::flash
         {
             for (size_t i = 0; i < SECTOR_SIZE; i++)
             {
-                read8(CORE_MCU_FLASH_START_ADDR + SECTOR_START_ADDRESS + i, _sectorBuf[i]);
+                read8(core::mcu::flash::startAddress() + SECTOR_START_ADDRESS + i, _sectorBuf[i]);
             }
 
             _lastCachedSector = SECTOR;
@@ -118,7 +97,7 @@ namespace core::mcu::flash
         _sectorBuf[INDEX_IN_SECTOR + 2] = data >> 16 & static_cast<uint32_t>(0xFF);
         _sectorBuf[INDEX_IN_SECTOR + 3] = data >> 24 & static_cast<uint32_t>(0xFF);
 
-        // pico sdk expects just the offset from CORE_MCU_FLASH_START_ADDR as an address
+        // pico sdk expects just the offset from start flash address as an address
 
         if (erase)
         {

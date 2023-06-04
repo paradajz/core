@@ -23,7 +23,7 @@
 
 #include "core/arch/common/BootloaderCache.h"
 #include "core/arch/common/Bootloader.h"
-#include <CoreMCUGenerated.h>
+#include "core/arch/common/Flash.h"
 
 namespace
 {
@@ -65,7 +65,7 @@ namespace core::mcu::bootloader
     {
         for (size_t i = 0; i < _pageBufferCounter; i++)
         {
-            core::mcu::flash::write32(CORE_MCU_FLASH_PAGE_ADDR(index) + _commitStartAddress + (i * 4),
+            core::mcu::flash::write32(core::mcu::flash::pageAddress(index) + _commitStartAddress + (i * 4),
                                       _pageBuffer[i]);
         }
 

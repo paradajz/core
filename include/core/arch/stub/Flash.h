@@ -26,12 +26,6 @@
 
 namespace core::mcu::flash
 {
-    struct flashPage_t
-    {
-        uint32_t address;
-        uint32_t size;
-    };
-
     inline bool init()
     {
         return false;
@@ -42,12 +36,22 @@ namespace core::mcu::flash
         return false;
     }
 
+    inline uint32_t startAddress()
+    {
+        return 0;
+    }
+
     inline uint32_t size()
     {
         return 0;
     }
 
     inline uint32_t pageSize(size_t index)
+    {
+        return 0;
+    }
+
+    inline uint32_t pageAddress(size_t index)
     {
         return 0;
     }

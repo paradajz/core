@@ -20,7 +20,6 @@
 */
 
 #include "core/arch/arm/st/common/Peripherals.h"
-#include <CoreMCUGenerated.h>
 
 namespace
 {

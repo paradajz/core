@@ -27,12 +27,11 @@
 #include "nrf_sdh_soc.h"
 #include "nrf_fstorage.h"
 #include "nrf_fstorage_sd.h"
-#include <CoreMCUGenerated.h>
 
 NRF_FSTORAGE_DEF(nrf_fstorage_t _fstorage) = {
     .evt_handler = NULL,
     .start_addr  = reinterpret_cast<uint32_t>(__flash_start__),
-    .end_addr    = CORE_MCU_FLASH_SIZE - 1,
+    .end_addr    = core::mcu::flash::size() - 1,
 };
 
 namespace core::mcu::flash
@@ -45,26 +44,10 @@ namespace core::mcu::flash
         return true;
     }
 
-    bool isInRange(uint32_t address)
-    {
-        return address < CORE_MCU_FLASH_SIZE;
-    }
-
-    uint32_t size()
-    {
-        return CORE_MCU_FLASH_SIZE;
-    }
-
-    uint32_t pageSize(size_t index)
-    {
-        CORE_ERROR_CHECK(index >= CORE_MCU_TOTAL_FLASH_PAGES, false);
-        return CORE_MCU_FLASH_PAGE_SIZE_COMMON;
-    }
-
     bool erasePage(size_t index)
     {
         CORE_ERROR_CHECK(nrf_fstorage_erase(&_fstorage,
-                                            CORE_MCU_FLASH_PAGE_ADDR(index),
+                                            core::mcu::flash::pageAddress(index),
                                             1,
                                             NULL),
                          NRF_SUCCESS);

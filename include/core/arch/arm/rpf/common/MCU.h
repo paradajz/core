@@ -33,13 +33,11 @@
 #include "core/arch/common/Timers.h"
 #include "core/arch/common/UART.h"
 #include "core/ErrorHandler.h"
-#include <CoreMCUGenerated.h>
 #include "core/arch/common/usb/USB.h"
 #include "core/arch/common/MCU.h"
 #include "RP2040/Include/RP2040.h"
 #include "pico/unique_id.h"
 #include "hardware/irq.h"
-#include <CoreMCUGenerated.h>
 
 namespace core::mcu
 {

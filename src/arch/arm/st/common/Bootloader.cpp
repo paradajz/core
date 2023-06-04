@@ -19,8 +19,8 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#include <CoreMCUGenerated.h>
 #include "core/arch/common/BootloaderCache.h"
+#include "core/arch/common/Flash.h"
 
 namespace core::mcu::bootloader
 {

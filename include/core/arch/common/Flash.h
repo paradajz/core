@@ -25,26 +25,34 @@
 
 #include <inttypes.h>
 #include <cstddef>
+#include "core/ErrorHandler.h"
+#include <CoreMCUGenerated.h>
 
 extern uint32_t __flash_start__[];
 
 namespace core::mcu::flash
 {
-    struct flashPage_t
-    {
-        uint32_t address;
-        uint32_t size;
-    };
+    bool init();
 
-    bool     init();
-    bool     isInRange(uint32_t address);
-    uint32_t size();
-    uint32_t pageSize(size_t index);
-    bool     erasePage(size_t index);
-    bool     write32(uint32_t address, uint32_t data);
-    bool     read8(uint32_t address, uint8_t& data);
-    bool     read16(uint32_t address, uint16_t& data);
-    bool     read32(uint32_t address, uint32_t& data);
+    constexpr bool isInRange(uint32_t address)
+    {
+        constexpr auto MIN = core::mcu::flash::startAddress();
+        constexpr auto MAX = MIN + core::mcu::flash::size();
+
+        return (address >= MIN) && (address < MAX);
+    }
+
+    // these functions need to be present in CoreMCUGenerated header:
+    // constexpr uint32_t startAddress()
+    // constexpr uint32_t size()
+    // constexpr uint32_t pageSize(size_t index)
+    // constexpr uint32_t pageAddress(size_t index)
+
+    bool erasePage(size_t index);
+    bool write32(uint32_t address, uint32_t data);
+    bool read8(uint32_t address, uint8_t& data);
+    bool read16(uint32_t address, uint16_t& data);
+    bool read32(uint32_t address, uint32_t& data);
 }    // namespace core::mcu::flash
 
 #else

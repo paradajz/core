@@ -11,6 +11,7 @@
   flash:
     flash-start: 0x8000000
     app-metadata-offset: 0x190
+    size: 0x100000
     pages:
     -
       address: 0x8000000

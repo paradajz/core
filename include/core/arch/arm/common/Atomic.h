@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <inttypes.h>
 #include "cmsis_compiler.h"
 
 static inline uint32_t disableInterruptsRetVal()

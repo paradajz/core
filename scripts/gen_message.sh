@@ -1,7 +1,17 @@
 #!/usr/bin/env bash
 
-yaml_file=$1
-gen_dir=$2
+for arg in "$@"; do
+    case "$arg" in
+        --yaml-file=*)
+            yaml_file=${arg#--yaml-file=}
+            ;;
+
+        --gen-dir=*)
+            gen_dir=${arg#--gen-dir=}
+            ;;
+    esac
+done
+
 yaml_parser="dasel -n -p yaml --plain -f"
 out_header="$gen_dir"/$(basename "$yaml_file").h
 out_source="$gen_dir"/$(basename "$yaml_file").cpp
@@ -14,7 +24,7 @@ namespace=$($yaml_parser "$yaml_file" namespace)
 
 {
     printf "%s\n\n" "#pragma once"
-    printf "%s\n\n" "#include \"core/src/util/messaging/Messaging.h\""
+    printf "%s\n\n" "#include \"core/util/messaging/Messaging.h\""
 } > "$out_header"
 
 {
@@ -48,7 +58,6 @@ then
 
     for ((i=0; i<number_of_notifications; i++))
     do
-        declare -i number_of_members
         notification_name=$($yaml_parser "$yaml_file" notifications.["$i"].name)
         number_of_data_members=$($yaml_parser "$yaml_file" notifications.["$i"].data --length)
         queue_size=$($yaml_parser "$yaml_file" notifications.["$i"].queue-size)
@@ -113,7 +122,6 @@ then
 
     for ((i=0; i<number_of_services; i++))
     do
-        declare -i number_of_members
         number_of_request_members=$($yaml_parser "$yaml_file" services.["$i"].request --length)
         number_of_response_members=$($yaml_parser "$yaml_file" services.["$i"].response --length)
         service_name=$($yaml_parser "$yaml_file" services.["$i"].name)

@@ -4,7 +4,7 @@
   # Adds includes on top of generated header file for message if specified.
   # If ommited, no includes will be added, apart from the Messaging.h in this directory.
   includes:
-    - "core/src/util/Util.h"
+    - "core/util/Util.h"
   notifications:
     -
       name: SensorStateChange

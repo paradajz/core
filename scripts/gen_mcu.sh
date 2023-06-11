@@ -120,7 +120,10 @@ fi
 if [[ $($yaml_parser "$yaml_file" flash) != "null" ]]
 then
     declare -i number_of_flash_pages
+    declare -i flash_size
+
     flashStart=$($yaml_parser "$yaml_file" flash.flash-start)
+    flash_size=$($yaml_parser "$yaml_file" flash.size)
 
     {
         printf "%s\n" "#include <array>"
@@ -136,12 +139,9 @@ then
          # sizes
         printf "%s\n" "constexpr inline std::array<uint32_t, TOTAL_FLASH_PAGES> FLASH_PAGE_SIZE = {" >> "$out_header"
 
-        flash_size=0
-
         for ((i=0; i<number_of_flash_pages; i++))
         do
             page_size=$($yaml_parser "$yaml_file" flash.pages.["$i"].size)
-            ((flash_size+=page_size))
             printf "%s\n" "$page_size", >> "$out_header"
         done
 
@@ -166,7 +166,6 @@ then
     else
         # all flash pages have common size
         page_size=$($yaml_parser "$yaml_file" flash.page-size)
-        flash_size=$($yaml_parser "$yaml_file" flash.size)
         number_of_flash_pages=$((flash_size/page_size))
 
         {

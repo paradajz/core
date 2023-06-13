@@ -122,13 +122,13 @@ then
     declare -i number_of_flash_pages
     declare -i flash_size
 
-    flashStart=$($yaml_parser "$yaml_file" flash.flash-start)
+    flash_start=$($yaml_parser "$yaml_file" flash.flash-start)
     flash_size=$($yaml_parser "$yaml_file" flash.size)
 
     {
         printf "%s\n" "#include <array>"
         printf "%s\n" "namespace core::mcu::flash {"
-        printf "%s\n" "constexpr inline uint32_t startAddress() { return $flashStart; }"
+        printf "%s\n" "constexpr inline uint32_t startAddress() { return $flash_start; }"
     } >> "$out_header"
 
     if [[ $($yaml_parser "$yaml_file" flash.pages) != "null" ]]
@@ -152,8 +152,8 @@ then
 
         for ((i=0; i<number_of_flash_pages; i++))
         do
-            addressStart=$($yaml_parser "$yaml_file" flash.pages.["$i"].address)
-            printf "%s\n" "$addressStart", >> "$out_header"
+            address_start=$($yaml_parser "$yaml_file" flash.pages.["$i"].address)
+            printf "%s\n" "$address_start", >> "$out_header"
         done
 
         printf "%s\n" "};" >> "$out_header"
@@ -173,7 +173,7 @@ then
             printf "%s\n" "constexpr inline uint32_t FLASH_PAGE_SIZE_COMMON = $page_size;"
             printf "%s\n" "constexpr uint32_t size() { return $flash_size; }"
             printf "%s\n" "constexpr uint32_t pageSize(size_t index) { return FLASH_PAGE_SIZE_COMMON; }"
-            printf "%s\n" "constexpr uint32_t pageAddress(size_t index) { return $flashStart + (FLASH_PAGE_SIZE_COMMON * index); }"
+            printf "%s\n" "constexpr uint32_t pageAddress(size_t index) { return $flash_start + (FLASH_PAGE_SIZE_COMMON * index); }"
         } >> "$out_header"
     fi
 
@@ -181,7 +181,7 @@ then
 
     {
         printf "%s\n" "target_link_options($cmake_mcu_target PUBLIC -Wl,--defsym=CORE_MCU_FLASH_SIZE=$flash_size)"
-        printf "%s%x%s\n" "set(CORE_MCU_FLASH_START_ADDR 0x" "$flashStart" ")"
+        printf "%s%x%s\n" "set(CORE_MCU_FLASH_START_ADDR 0x" "$flash_start" ")"
         printf "%s%s\n" "target_link_options($cmake_mcu_target PUBLIC -Wl,--defsym=CORE_MCU_FLASH_START_ADDR=" '${CORE_MCU_FLASH_START_ADDR})'
     } >> "$out_cmakelists"
 fi

@@ -23,62 +23,27 @@
 
 #include <inttypes.h>
 
-#ifdef CORE_MCU_STUB
-#include "arch/stub/Timing.h"
-#else
+#ifndef CORE_MCU_STUB
+
 #ifdef CORE_MCU_ARCH_AVR
-#include "arch/avr/atmel/common/Timing.h"
+#include "core/arch/avr/atmel/common/Timing.h"
 #elif defined(CORE_MCU_ARCH_ARM)
 #ifdef CORE_MCU_VENDOR_ST
-#include "arch/arm/st/common/Timing.h"
+#include "core/arch/arm/st/common/Timing.h"
 #elif defined(CORE_MCU_VENDOR_NORDIC)
-#include "arch/arm/nordic/common/Timing.h"
+#include "core/arch/arm/nordic/common/Timing.h"
 #elif defined(CORE_MCU_VENDOR_RPF)
-#include "arch/arm/rpf/common/Timing.h"
-#else
-#include "arch/stub/Timing.h"
-#endif
-#else
-#include "arch/stub/Timing.h"
+#include "core/arch/arm/rpf/common/Timing.h"
 #endif
 #endif
 
-#include "MCU.h"
-
-namespace core::timing
+namespace core::mcu::timing
 {
-    namespace detail
-    {
-        /// Definition of variable holding current MCU run time in milliseconds.
-        /// Must be implemented externally in order to use core::timing::ms() function.
-        extern volatile uint32_t ms;
+    void     init();
+    uint32_t ms();
+    void     waitMs(uint32_t ms);
+}    // namespace core::mcu::timing
 
-        /// Definition of variable holding current MCU run time in microseconds.
-        /// Must be implemented externally in order to use core::timing::us() function.
-        extern volatile uint32_t us;
-    }    // namespace detail
-
-    inline uint32_t ms()
-    {
-        uint32_t temp;
-
-        CORE_MCU_ATOMIC_SECTION
-        {
-            temp = detail::ms;
-        }
-
-        return temp;
-    }
-
-    inline uint32_t us()
-    {
-        uint32_t temp;
-
-        CORE_MCU_ATOMIC_SECTION
-        {
-            temp = detail::us;
-        }
-
-        return temp;
-    }
-}    // namespace core::timing
+#else
+#include "core/arch/stub/Timing.h"
+#endif

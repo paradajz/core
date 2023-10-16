@@ -23,7 +23,7 @@
 
 #include <util/delay.h>
 
-namespace core::timing
+namespace core::mcu::timing
 {
     inline void waitMs(uint32_t ms)
     {
@@ -32,4 +32,4 @@ namespace core::timing
             _delay_ms(1);
         }
     }
-}    // namespace core::timing
+}    // namespace core::mcu::timing

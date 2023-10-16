@@ -1,5 +1,5 @@
 /*
-    Copyright 2017-2022 Igor Petrovic
+    Copyright 2017-2023 Igor Petrovic
 
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the "Software"),
@@ -19,14 +19,22 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#pragma once
+#include "core/MCU.h"
 
-#include "HAL.h"
+namespace
+{
+    uint32_t fakeMs;
+}    // namespace
 
 namespace core::mcu::timing
 {
-    inline void waitMs(uint32_t ms)
+    void setMs(uint32_t ms)
     {
-        HAL_Delay(ms);
+        fakeMs = ms;
+    }
+
+    uint32_t ms()
+    {
+        return fakeMs;
     }
 }    // namespace core::mcu::timing

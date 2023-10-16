@@ -24,7 +24,7 @@
 #ifdef TWCR
 
 #include <inttypes.h>
-#include "core/Timing.h"
+#include "core/MCU.h"
 #include "core/util/Util.h"
 
 namespace
@@ -32,19 +32,19 @@ namespace
     constexpr uint32_t I2C_TRANSFER_TIMEOUT_MS = 10;
     uint32_t           _currentTime;
 
-#define TIMEOUT_CHECK(register, bit)                                           \
-    do                                                                         \
-    {                                                                          \
-        _currentTime = core::timing::ms();                                     \
-        while (!core::util::BIT_READ(register, bit))                           \
-        {                                                                      \
-            if ((core::timing::ms() - _currentTime) > I2C_TRANSFER_TIMEOUT_MS) \
-            {                                                                  \
-                TWCR = 0;                                                      \
-                TWDR = 0;                                                      \
-                return false;                                                  \
-            }                                                                  \
-        }                                                                      \
+#define TIMEOUT_CHECK(register, bit)                                                \
+    do                                                                              \
+    {                                                                               \
+        _currentTime = core::mcu::timing::ms();                                     \
+        while (!core::util::BIT_READ(register, bit))                                \
+        {                                                                           \
+            if ((core::mcu::timing::ms() - _currentTime) > I2C_TRANSFER_TIMEOUT_MS) \
+            {                                                                       \
+                TWCR = 0;                                                           \
+                TWDR = 0;                                                           \
+                return false;                                                       \
+            }                                                                       \
+        }                                                                           \
     } while (0)
 
     inline bool startTransfer(uint8_t address)

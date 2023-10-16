@@ -150,6 +150,7 @@
     - "modules/pico-sdk/src/rp2_common/hardware_i2c/i2c.c"
     - "modules/pico-sdk/src/rp2_common/hardware_adc/adc.c"
     - "src/arch/common/ISR.cpp"
+    - "src/arch/common/Timing.cpp"
     - "src/arch/common/BootloaderCache.cpp"
     - "src/arch/arm/common/ISR.cpp"
     - "src/arch/arm/rpf/common/Flash.cpp"

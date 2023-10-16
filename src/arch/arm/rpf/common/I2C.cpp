@@ -16,8 +16,8 @@ limitations under the License.
 
 */
 
+#include "core/MCU.h"
 #include "core/util/Util.h"
-#include "core/Timing.h"
 #include "hardware/i2c.h"
 
 namespace

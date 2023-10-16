@@ -4,3 +4,5 @@
   adc-bits: 10
   include-dirs:
     - "include"
+  sources:
+    - "src/arch/stub/Timing.cpp"

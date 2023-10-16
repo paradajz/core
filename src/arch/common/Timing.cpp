@@ -1,5 +1,5 @@
 /*
-    Copyright 2017-2022 Igor Petrovic
+    Copyright 2017-2023 Igor Petrovic
 
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the "Software"),
@@ -19,14 +19,38 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#pragma once
+#include "core/MCU.h"
 
-#include "HAL.h"
+namespace
+{
+    constexpr uint32_t PERIOD_US = 1000;
+    volatile uint32_t  mcuMs;
+}    // namespace
 
 namespace core::mcu::timing
 {
-    inline void waitMs(uint32_t ms)
+    void init()
     {
-        HAL_Delay(ms);
+        size_t timerIndex = 0;
+
+        core::mcu::timers::allocate(timerIndex, []()
+                                    {
+                                        mcuMs++;
+                                    });
+
+        core::mcu::timers::setPeriod(timerIndex, PERIOD_US);
+        core::mcu::timers::start(timerIndex);
+    }
+
+    uint32_t ms()
+    {
+        uint32_t temp;
+
+        CORE_MCU_ATOMIC_SECTION
+        {
+            temp = mcuMs;
+        }
+
+        return temp;
     }
 }    // namespace core::mcu::timing

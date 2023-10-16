@@ -21,9 +21,18 @@
 
 #pragma once
 
-namespace core::timing
+#include <inttypes.h>
+
+namespace core::mcu::timing
 {
+    inline void init()
+    {
+    }
+
+    void     setMs(uint32_t ms);
+    uint32_t ms();
+
     inline void waitMs(uint32_t ms)
     {
     }
-}    // namespace core::timing
+}    // namespace core::mcu::timing

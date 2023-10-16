@@ -23,10 +23,10 @@
 
 #include "pico/stdlib.h"
 
-namespace core::timing
+namespace core::mcu::timing
 {
     inline void waitMs(uint32_t ms)
     {
         sleep_ms(ms);
     }
-}    // namespace core::timing
+}    // namespace core::mcu::timing

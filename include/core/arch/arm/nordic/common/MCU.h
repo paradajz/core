@@ -32,6 +32,7 @@
 #include "core/arch/common/Flash.h"
 #include "core/arch/common/ISR.h"
 #include "core/arch/common/Timers.h"
+#include "core/arch/common/Timing.h"
 #include "core/arch/common/UART.h"
 #include "core/ErrorHandler.h"
 #include "core/arch/common/usb/USB.h"
@@ -68,6 +69,7 @@ namespace core::mcu
         clocks::init();
         flash::init();
         timers::init();
+        timing::init();
     }
 
     inline void deInit()

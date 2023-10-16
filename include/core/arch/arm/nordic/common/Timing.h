@@ -24,7 +24,7 @@
 #include <drivers/nrfx_common.h>
 #include "nrfx_glue.h"
 
-namespace core::timing
+namespace core::mcu::timing
 {
     inline void waitMs(uint32_t ms)
     {
@@ -33,4 +33,4 @@ namespace core::timing
             NRFX_DELAY_US(1000);
         }
     }
-}    // namespace core::timing
+}    // namespace core::mcu::timing

@@ -35,6 +35,7 @@
 #include "ISR.h"
 #include "Peripherals.h"
 #include "Timers.h"
+#include "Timing.h"
 #include "UART.h"
 #include "USB.h"
 #include "Util.h"

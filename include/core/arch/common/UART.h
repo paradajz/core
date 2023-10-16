@@ -27,7 +27,6 @@
 #include <functional>
 #include "core/util/RingBuffer.h"
 #include "core/MCU.h"
-#include "core/Timing.h"
 
 namespace core::mcu::uart
 {

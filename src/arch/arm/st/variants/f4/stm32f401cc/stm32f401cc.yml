@@ -59,6 +59,7 @@
     - "modules/tinyusb/hw/mcu/st/stm32f4xx_hal_driver/Src/stm32f4xx_hal_tim_ex.c"
     - "modules/tinyusb/hw/mcu/st/stm32f4xx_hal_driver/Src/stm32f4xx_hal_uart.c"
     - "src/arch/common/ISR.cpp"
+    - "src/arch/common/Timing.cpp"
     - "src/arch/common/BootloaderCache.cpp"
     - "src/arch/arm/common/ISR.cpp"
     - "src/arch/arm/st/common/ISR.cpp"

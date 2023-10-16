@@ -30,6 +30,7 @@
     - "modules/avr-libstdcpp/include"
   sources:
     - "src/arch/common/ISR.cpp"
+    - "src/arch/common/Timing.cpp"
     - "src/arch/common/BootloaderCache.cpp"
     - "src/arch/avr/atmel/common/Flash.cpp"
     - "src/arch/avr/atmel/common/StdLibDummy.cpp"

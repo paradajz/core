@@ -1,0 +1,6 @@
+---
+  arch: "native"
+  uid-bits: 80
+  adc-bits: 10
+  include-dirs:
+    - "include"

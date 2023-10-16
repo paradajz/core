@@ -21,14 +21,6 @@
 
 #pragma once
 
-#ifndef CORE_MCU_STUB
-#define CORE_MCU_STUB
-#endif
-
-#ifndef CORE_MCU_UID_BITS
-#define CORE_MCU_UID_BITS 80
-#endif
-
 #define CORE_MCU_NOP()
 
 #include <inttypes.h>

@@ -45,7 +45,7 @@ adc_bits=$($yaml_parser "$yaml_file" adc-bits)
 cmake_mcu_target=mcu
 cmake_usb_target=usb
 
-# CMakeLists requires some setup
+# Common (real and stub MCU)
 {
     printf "%s\n" "set(CMAKE_TOOLCHAIN_FILE ${script_dir}/../cmake/$arch.cmake)"
     printf "%s\n" "project($cmake_mcu_target)"
@@ -56,156 +56,6 @@ cmake_usb_target=usb
     printf "%s\n" "target_include_directories($cmake_mcu_target PUBLIC $gen_dir)"
     printf "%s\n" "set(CORE_MCU_FLAGS \"\")"
 } > "$out_cmakelists"
-
-{
-    printf "%s\n\n" "#pragma once"
-    printf "%s\n" "#include <inttypes.h>"
-    printf "%s\n" "#include <stddef.h>"
-} >> "$out_header"
-
-if [[ $arch == "avr" ]]
-then
-    printf "%s\n" "list(APPEND CORE_MCU_FLAGS \"-mmcu=$mcu\")" >> "$out_cmakelists"
-fi
-
-if [[ $cpu != "null" ]]
-then
-    {
-        printf "%s\n" "set(CORE_MCU_CPU $cpu)"
-        printf "%s\n" "list(APPEND CORE_MCU_FLAGS \"-mcpu=$cpu\")"
-    } >> "$out_cmakelists"
-fi
-
-if [[ "$fpu" != "null" ]]
-then
-    printf "%s\n" "list(APPEND CORE_MCU_FLAGS \"-mfpu=$fpu\")" >> "$out_cmakelists"
-fi
-
-if [[ "$float_abi" != "null" ]]
-then
-    printf "%s\n" "list(APPEND CORE_MCU_FLAGS \"-mfloat-abi=$float_abi\")" >> "$out_cmakelists"
-fi
-
-{
-    printf "%s\n" "set(CORE_MCU_MODEL $mcu)"
-    printf "%s\n" "set(CORE_MCU_ARCH $arch)"
-    printf "%s\n" "set(CORE_MCU_VENDOR $vendor)"
-    printf "%s\n" "set(CORE_MCU_FAMILY $mcu_family)"
-    printf "%s\n" "set(CORE_MCU_CPU $cpu)"
-    printf "%s\n" "set(CORE_MCU_FW_METADATA_OFFSET $app_metadata_offset)"
-    printf "%s\n" "set(CORE_MCU_LINKER_FILE $script_dir/../src/arch/$arch/$vendor/variants/$mcu_family/$mcu/$mcu.ld)"
-    printf "%s%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_ARCH_" "${arch^^})"
-    printf "%s%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_VENDOR_" "${vendor^^})"
-    printf "%s%s\n" "target_link_options($cmake_mcu_target PUBLIC " '${CORE_MCU_FLAGS} -T ${CORE_MCU_LINKER_FILE} ${CORE_LINK_FLAGS})'
-    printf "%s\n" "target_compile_options($cmake_mcu_target PUBLIC"
-    printf "%s\n" '$<$<COMPILE_LANGUAGE:ASM>:${CORE_ASM_FLAGS}>'
-    printf "%s\n" '$<$<COMPILE_LANGUAGE:CXX>:${CORE_CXX_FLAGS} ${CORE_MCU_FLAGS}>'
-    printf "%s\n" '$<$<COMPILE_LANGUAGE:C>:${CORE_C_FLAGS} ${CORE_MCU_FLAGS}>)'
-} >> "$out_cmakelists"
-
-if [[ ("$external_freq" != "") && ("$external_freq" != "null") ]]
-then
-    printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_EXT_CLOCK_FREQ_MHZ=$external_freq)" >> "$out_cmakelists"
-fi
-
-printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_CPU_FREQ_MHZ=$freq)" >> "$out_cmakelists"
-
-uf2_id=$($yaml_parser "$yaml_file" uf2-id)
-
-if [[ $uf2_id != "null" ]]
-then
-    printf "%s\n" "set(CORE_MCU_UF2_ID $uf2_id)" >> "$out_cmakelists"
-fi
-
-if [[ $($yaml_parser "$yaml_file" flash) != "null" ]]
-then
-    declare -i number_of_flash_pages
-    declare -i flash_size
-
-    flash_start=$($yaml_parser "$yaml_file" flash.flash-start)
-    flash_size=$($yaml_parser "$yaml_file" flash.size)
-
-    {
-        printf "%s\n" "#include <array>"
-        printf "%s\n" "namespace core::mcu::flash {"
-        printf "%s\n" "constexpr inline uint32_t startAddress() { return $flash_start; }"
-    } >> "$out_header"
-
-    if [[ $($yaml_parser "$yaml_file" flash.pages) != "null" ]]
-    then
-        number_of_flash_pages=$($yaml_parser "$yaml_file" flash.pages --length)
-        printf "%s\n" "constexpr inline uint32_t TOTAL_FLASH_PAGES = $number_of_flash_pages;"  >> "$out_header"
-
-         # sizes
-        printf "%s\n" "constexpr inline std::array<uint32_t, TOTAL_FLASH_PAGES> FLASH_PAGE_SIZE = {" >> "$out_header"
-
-        for ((i=0; i<number_of_flash_pages; i++))
-        do
-            page_size=$($yaml_parser "$yaml_file" flash.pages.["$i"].size)
-            printf "%s\n" "$page_size", >> "$out_header"
-        done
-
-        printf "%s\n" "};" >> "$out_header"
-
-        # addresses
-        printf "%s\n" "constexpr inline std::array<uint32_t, TOTAL_FLASH_PAGES> FLASH_PAGE_ADDRESS = {" >> "$out_header"
-
-        for ((i=0; i<number_of_flash_pages; i++))
-        do
-            address_start=$($yaml_parser "$yaml_file" flash.pages.["$i"].address)
-            printf "%s\n" "$address_start", >> "$out_header"
-        done
-
-        printf "%s\n" "};" >> "$out_header"
-
-        {
-            printf "%s\n" "constexpr uint32_t size() { return $flash_size; }"
-            printf "%s\n" "constexpr uint32_t pageSize(size_t index) { return FLASH_PAGE_SIZE[index]; }"
-            printf "%s\n" "constexpr uint32_t pageAddress(size_t index) { return FLASH_PAGE_ADDRESS[index]; }"
-        } >> "$out_header"
-    else
-        # all flash pages have common size
-        page_size=$($yaml_parser "$yaml_file" flash.page-size)
-        number_of_flash_pages=$((flash_size/page_size))
-
-        {
-            printf "%s\n" "constexpr inline uint32_t TOTAL_FLASH_PAGES = $number_of_flash_pages;"
-            printf "%s\n" "constexpr inline uint32_t FLASH_PAGE_SIZE_COMMON = $page_size;"
-            printf "%s\n" "constexpr uint32_t size() { return $flash_size; }"
-            printf "%s\n" "constexpr uint32_t pageSize(size_t index) { return FLASH_PAGE_SIZE_COMMON; }"
-            printf "%s\n" "constexpr uint32_t pageAddress(size_t index) { return $flash_start + (FLASH_PAGE_SIZE_COMMON * index); }"
-        } >> "$out_header"
-    fi
-
-    printf "%s\n" "}" >> "$out_header"
-
-    {
-        printf "%s\n" "target_link_options($cmake_mcu_target PUBLIC -Wl,--defsym=CORE_MCU_FLASH_SIZE=$flash_size)"
-        printf "%s%x%s\n" "set(CORE_MCU_FLASH_START_ADDR 0x" "$flash_start" ")"
-        printf "%s%s\n" "target_link_options($cmake_mcu_target PUBLIC -Wl,--defsym=CORE_MCU_FLASH_START_ADDR=" '${CORE_MCU_FLASH_START_ADDR})'
-    } >> "$out_cmakelists"
-fi
-
-if [[ $($yaml_parser "$yaml_file" eeprom) != "null" ]]
-then
-    eeprom_size=$($yaml_parser "$yaml_file" eeprom.size)
-    printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_EEPROM_SIZE=$eeprom_size)" >> "$out_cmakelists"
-fi
-
-number_of_uart_interfaces=$($yaml_parser "$yaml_file" peripherals.uart)
-number_of_i2c_interfaces=$($yaml_parser "$yaml_file" peripherals.i2c)
-
-if [[ $($yaml_parser "$yaml_file" peripherals.custom-pins) == "true" ]]
-then
-    printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_CUSTOM_PERIPHERAL_PINS)" >> "$out_cmakelists"
-fi
-
-{
-    printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_MAX_UART_INTERFACES=${number_of_uart_interfaces})"
-    printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_MAX_I2C_INTERFACES=${number_of_i2c_interfaces})"
-    printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_ADC_MAX_VALUE=$((2 ** adc_bits - 1)))"
-    printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_UID_BITS=${uid_bits})"
-} >> "$out_cmakelists"
 
 if [[ $($yaml_parser "$yaml_file" define-symbols) != "null" ]]
 then
@@ -240,112 +90,275 @@ then
     done
 fi
 
-if [[ $($yaml_parser "$yaml_file" ld-flags) != "null" ]]
+{
+    printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_UID_BITS=${uid_bits})"
+    printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_ADC_MAX_VALUE=$((2 ** adc_bits - 1)))"
+} >> "$out_cmakelists"
+
+if [[ $mcu == "stub" ]]
 then
-    total_ld_flags=$($yaml_parser "$yaml_file" ld-flags --length)
+    # Stub MCU only
+    {
+        printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_MAX_UART_INTERFACES=0)"
+        printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_MAX_I2C_INTERFACES=0)"
+    } >> "$out_cmakelists"
+else
+    # Real MCU only
+    if [[ $($yaml_parser "$yaml_file" dl-deps) != "null" ]]
+    then
+        command -v wget >/dev/null 2>&1 || { echo "wget is not installed"; exit 1; }
 
-    for ((i=0;i<total_ld_flags;i++))
-    do
-        flag=$($yaml_parser "$yaml_file" ld-flags.["$i"])
-        printf "%s\n" "target_link_options($cmake_mcu_target PUBLIC $flag)" >> "$out_cmakelists"
-    done
-fi
+        total_deps=$($yaml_parser "$yaml_file" dl-deps --length)
+        dep_dir="${script_dir}"/../deps/"${mcu}"
+        mkdir -p "$dep_dir"
 
-if [[ $($yaml_parser "$yaml_file" ld-libs) != "null" ]]
-then
-    total_ld_libs=$($yaml_parser "$yaml_file" ld-libs --length)
+        for ((i=0;i<total_deps;i++))
+        do
+            dep=$($yaml_parser "$yaml_file" dl-deps.["$i"])
+            filename=$(basename "$dep")
 
-    for ((i=0;i<total_ld_libs;i++))
-    do
-        lib=$($yaml_parser "$yaml_file" ld-libs.["$i"])
-        printf "%s\n" "target_link_options($cmake_mcu_target PUBLIC ${script_dir}/../$lib)" >> "$out_cmakelists"
-    done
-fi
+            if [[ ! -f "$dep_dir/$filename" ]]
+            then
+                echo "Downloading dependency for $mcu: $dep"
+                wget -q --show-progress "$dep" -P "$dep_dir"
+                ext="${dep##*.}"
 
-if [[ $gen_usb -eq 1 ]]
-then
-    if [[ $($yaml_parser "$yaml_file" usb) != "null" ]]
+                case "$ext" in
+                    "zip")
+                        command -v unzip >/dev/null 2>&1 || { echo "unzip is not installed"; exit 1; }
+                        echo "Extracting..."
+                        unzip -q "$dep_dir/$filename" -d "$dep_dir"
+                        ;;
+
+                        *)
+                        ;;
+                esac
+            fi
+        done
+    fi
+
+    {
+        printf "%s\n\n" "#pragma once"
+        printf "%s\n" "#include <inttypes.h>"
+        printf "%s\n" "#include <stddef.h>"
+    } >> "$out_header"
+
+    if [[ $arch == "avr" ]]
+    then
+        printf "%s\n" "list(APPEND CORE_MCU_FLAGS \"-mmcu=$mcu\")" >> "$out_cmakelists"
+    fi
+
+    if [[ $cpu != "null" ]]
     then
         {
-            printf "%s\n" "add_library($cmake_usb_target OBJECT)"
-            printf "%s\n" "set_target_properties($cmake_usb_target PROPERTIES LINKER_LANGUAGE C)"
-            printf "%s\n" "target_compile_options($cmake_usb_target PUBLIC"
-            printf "%s\n" '$<$<COMPILE_LANGUAGE:ASM>:${CORE_ASM_FLAGS}>'
-            printf "%s\n" '$<$<COMPILE_LANGUAGE:CXX>:${CORE_CXX_FLAGS} ${CORE_MCU_FLAGS}>'
-            printf "%s\n" '$<$<COMPILE_LANGUAGE:C>:${CORE_C_FLAGS} ${CORE_MCU_FLAGS}>)'
-        } >> "$out_cmakelists"
-
-        if [[ $($yaml_parser "$yaml_file" usb.define-symbols) != "null" ]]
-        then
-            total_symbols=$($yaml_parser "$yaml_file" usb.define-symbols --length)
-
-            for ((i=0;i<total_symbols;i++))
-            do
-                symbol=$($yaml_parser "$yaml_file" usb.define-symbols.["$i"])
-                printf "%s\n" "target_compile_definitions($cmake_usb_target PUBLIC $symbol)" >> "$out_cmakelists"
-            done
-        fi
-
-        if [[ $($yaml_parser "$yaml_file" usb.include-dirs) != "null" ]]
-        then
-            total_include_dirs=$($yaml_parser "$yaml_file" usb.include-dirs --length)
-
-            for ((i=0;i<total_include_dirs;i++))
-            do
-                dir=$($yaml_parser "$yaml_file" usb.include-dirs.["$i"])
-                printf "%s\n" "target_include_directories($cmake_usb_target PUBLIC \"${script_dir}/../$dir\")" >> "$out_cmakelists"
-            done
-        fi
-
-        if [[ $($yaml_parser "$yaml_file" usb.sources) != "null" ]]
-        then
-            total_sources=$($yaml_parser "$yaml_file" usb.sources --length)
-
-            for ((i=0;i<total_sources;i++))
-            do
-                source=$($yaml_parser "$yaml_file" usb.sources.["$i"])
-                printf "%s\n" "target_sources($cmake_usb_target PRIVATE \"${script_dir}/../$source\")" >> "$out_cmakelists"
-            done
-        fi
-
-        {
-            printf "%s\n" "get_target_property(CORE_USB_DEFINITIONS mcu COMPILE_DEFINITIONS)"
-            printf "%s%s\n" "target_compile_definitions($cmake_usb_target PRIVATE " '${CORE_USB_DEFINITIONS})'
-            printf "%s\n" "get_target_property(CORE_USB_INCLUDES mcu INCLUDE_DIRECTORIES)"
-            printf "%s%s\n" "target_include_directories($cmake_usb_target PRIVATE " '${CORE_USB_INCLUDES})'
+            printf "%s\n" "set(CORE_MCU_CPU $cpu)"
+            printf "%s\n" "list(APPEND CORE_MCU_FLAGS \"-mcpu=$cpu\")"
         } >> "$out_cmakelists"
     fi
-fi
 
-if [[ $($yaml_parser "$yaml_file" dl-deps) != "null" ]]
-then
-    command -v wget >/dev/null 2>&1 || { echo "wget is not installed"; exit 1; }
+    if [[ "$fpu" != "null" ]]
+    then
+        printf "%s\n" "list(APPEND CORE_MCU_FLAGS \"-mfpu=$fpu\")" >> "$out_cmakelists"
+    fi
 
-    total_deps=$($yaml_parser "$yaml_file" dl-deps --length)
-    dep_dir="${script_dir}"/../deps/"${mcu}"
-    mkdir -p "$dep_dir"
+    if [[ "$float_abi" != "null" ]]
+    then
+        printf "%s\n" "list(APPEND CORE_MCU_FLAGS \"-mfloat-abi=$float_abi\")" >> "$out_cmakelists"
+    fi
 
-    for ((i=0;i<total_deps;i++))
-    do
-        dep=$($yaml_parser "$yaml_file" dl-deps.["$i"])
-        filename=$(basename "$dep")
+    {
+        printf "%s\n" "set(CORE_MCU_MODEL $mcu)"
+        printf "%s\n" "set(CORE_MCU_ARCH $arch)"
+        printf "%s\n" "set(CORE_MCU_VENDOR $vendor)"
+        printf "%s\n" "set(CORE_MCU_FAMILY $mcu_family)"
+        printf "%s\n" "set(CORE_MCU_CPU $cpu)"
+        printf "%s\n" "set(CORE_MCU_FW_METADATA_OFFSET $app_metadata_offset)"
+        printf "%s\n" "set(CORE_MCU_LINKER_FILE $script_dir/../src/arch/$arch/$vendor/variants/$mcu_family/$mcu/$mcu.ld)"
+        printf "%s%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_ARCH_" "${arch^^})"
+        printf "%s%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_VENDOR_" "${vendor^^})"
+        printf "%s%s\n" "target_link_options($cmake_mcu_target PUBLIC " '${CORE_MCU_FLAGS} -T ${CORE_MCU_LINKER_FILE} ${CORE_LINK_FLAGS})'
+        printf "%s\n" "target_compile_options($cmake_mcu_target PUBLIC"
+        printf "%s\n" '$<$<COMPILE_LANGUAGE:ASM>:${CORE_ASM_FLAGS}>'
+        printf "%s\n" '$<$<COMPILE_LANGUAGE:CXX>:${CORE_CXX_FLAGS} ${CORE_MCU_FLAGS}>'
+        printf "%s\n" '$<$<COMPILE_LANGUAGE:C>:${CORE_C_FLAGS} ${CORE_MCU_FLAGS}>)'
+    } >> "$out_cmakelists"
 
-        if [[ ! -f "$dep_dir/$filename" ]]
+    if [[ ("$external_freq" != "") && ("$external_freq" != "null") ]]
+    then
+        printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_EXT_CLOCK_FREQ_MHZ=$external_freq)" >> "$out_cmakelists"
+    fi
+
+    printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_CPU_FREQ_MHZ=$freq)" >> "$out_cmakelists"
+
+    uf2_id=$($yaml_parser "$yaml_file" uf2-id)
+
+    if [[ $uf2_id != "null" ]]
+    then
+        printf "%s\n" "set(CORE_MCU_UF2_ID $uf2_id)" >> "$out_cmakelists"
+    fi
+
+    if [[ $($yaml_parser "$yaml_file" flash) != "null" ]]
+    then
+        declare -i number_of_flash_pages
+        declare -i flash_size
+
+        flash_start=$($yaml_parser "$yaml_file" flash.flash-start)
+        flash_size=$($yaml_parser "$yaml_file" flash.size)
+
+        {
+            printf "%s\n" "#include <array>"
+            printf "%s\n" "namespace core::mcu::flash {"
+            printf "%s\n" "constexpr inline uint32_t startAddress() { return $flash_start; }"
+        } >> "$out_header"
+
+        if [[ $($yaml_parser "$yaml_file" flash.pages) != "null" ]]
         then
-            echo "Downloading dependency for $mcu: $dep"
-            wget -q --show-progress "$dep" -P "$dep_dir"
-            ext="${dep##*.}"
+            number_of_flash_pages=$($yaml_parser "$yaml_file" flash.pages --length)
+            printf "%s\n" "constexpr inline uint32_t TOTAL_FLASH_PAGES = $number_of_flash_pages;"  >> "$out_header"
 
-            case "$ext" in
-                "zip")
-                    command -v unzip >/dev/null 2>&1 || { echo "unzip is not installed"; exit 1; }
-                    echo "Extracting..."
-                    unzip -q "$dep_dir/$filename" -d "$dep_dir"
-                    ;;
+            # sizes
+            printf "%s\n" "constexpr inline std::array<uint32_t, TOTAL_FLASH_PAGES> FLASH_PAGE_SIZE = {" >> "$out_header"
 
-                    *)
-                    ;;
-            esac
+            for ((i=0; i<number_of_flash_pages; i++))
+            do
+                page_size=$($yaml_parser "$yaml_file" flash.pages.["$i"].size)
+                printf "%s\n" "$page_size", >> "$out_header"
+            done
+
+            printf "%s\n" "};" >> "$out_header"
+
+            # addresses
+            printf "%s\n" "constexpr inline std::array<uint32_t, TOTAL_FLASH_PAGES> FLASH_PAGE_ADDRESS = {" >> "$out_header"
+
+            for ((i=0; i<number_of_flash_pages; i++))
+            do
+                address_start=$($yaml_parser "$yaml_file" flash.pages.["$i"].address)
+                printf "%s\n" "$address_start", >> "$out_header"
+            done
+
+            printf "%s\n" "};" >> "$out_header"
+
+            {
+                printf "%s\n" "constexpr uint32_t size() { return $flash_size; }"
+                printf "%s\n" "constexpr uint32_t pageSize(size_t index) { return FLASH_PAGE_SIZE[index]; }"
+                printf "%s\n" "constexpr uint32_t pageAddress(size_t index) { return FLASH_PAGE_ADDRESS[index]; }"
+            } >> "$out_header"
+        else
+            # all flash pages have common size
+            page_size=$($yaml_parser "$yaml_file" flash.page-size)
+            number_of_flash_pages=$((flash_size/page_size))
+
+            {
+                printf "%s\n" "constexpr inline uint32_t TOTAL_FLASH_PAGES = $number_of_flash_pages;"
+                printf "%s\n" "constexpr inline uint32_t FLASH_PAGE_SIZE_COMMON = $page_size;"
+                printf "%s\n" "constexpr uint32_t size() { return $flash_size; }"
+                printf "%s\n" "constexpr uint32_t pageSize(size_t index) { return FLASH_PAGE_SIZE_COMMON; }"
+                printf "%s\n" "constexpr uint32_t pageAddress(size_t index) { return $flash_start + (FLASH_PAGE_SIZE_COMMON * index); }"
+            } >> "$out_header"
         fi
-    done
+
+        printf "%s\n" "}" >> "$out_header"
+
+        {
+            printf "%s\n" "target_link_options($cmake_mcu_target PUBLIC -Wl,--defsym=CORE_MCU_FLASH_SIZE=$flash_size)"
+            printf "%s%x%s\n" "set(CORE_MCU_FLASH_START_ADDR 0x" "$flash_start" ")"
+            printf "%s%s\n" "target_link_options($cmake_mcu_target PUBLIC -Wl,--defsym=CORE_MCU_FLASH_START_ADDR=" '${CORE_MCU_FLASH_START_ADDR})'
+        } >> "$out_cmakelists"
+    fi
+
+    if [[ $($yaml_parser "$yaml_file" eeprom) != "null" ]]
+    then
+        eeprom_size=$($yaml_parser "$yaml_file" eeprom.size)
+        printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_EEPROM_SIZE=$eeprom_size)" >> "$out_cmakelists"
+    fi
+
+    number_of_uart_interfaces=$($yaml_parser "$yaml_file" peripherals.uart)
+    number_of_i2c_interfaces=$($yaml_parser "$yaml_file" peripherals.i2c)
+
+    if [[ $($yaml_parser "$yaml_file" peripherals.custom-pins) == "true" ]]
+    then
+        printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_CUSTOM_PERIPHERAL_PINS)" >> "$out_cmakelists"
+    fi
+
+    {
+        printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_MAX_UART_INTERFACES=${number_of_uart_interfaces})"
+        printf "%s\n" "target_compile_definitions($cmake_mcu_target PUBLIC CORE_MCU_MAX_I2C_INTERFACES=${number_of_i2c_interfaces})"
+    } >> "$out_cmakelists"
+
+    if [[ $($yaml_parser "$yaml_file" ld-flags) != "null" ]]
+    then
+        total_ld_flags=$($yaml_parser "$yaml_file" ld-flags --length)
+
+        for ((i=0;i<total_ld_flags;i++))
+        do
+            flag=$($yaml_parser "$yaml_file" ld-flags.["$i"])
+            printf "%s\n" "target_link_options($cmake_mcu_target PUBLIC $flag)" >> "$out_cmakelists"
+        done
+    fi
+
+    if [[ $($yaml_parser "$yaml_file" ld-libs) != "null" ]]
+    then
+        total_ld_libs=$($yaml_parser "$yaml_file" ld-libs --length)
+
+        for ((i=0;i<total_ld_libs;i++))
+        do
+            lib=$($yaml_parser "$yaml_file" ld-libs.["$i"])
+            printf "%s\n" "target_link_options($cmake_mcu_target PUBLIC ${script_dir}/../$lib)" >> "$out_cmakelists"
+        done
+    fi
+
+    if [[ $gen_usb -eq 1 ]]
+    then
+        if [[ $($yaml_parser "$yaml_file" usb) != "null" ]]
+        then
+            {
+                printf "%s\n" "add_library($cmake_usb_target OBJECT)"
+                printf "%s\n" "set_target_properties($cmake_usb_target PROPERTIES LINKER_LANGUAGE C)"
+                printf "%s\n" "target_compile_options($cmake_usb_target PUBLIC"
+                printf "%s\n" '$<$<COMPILE_LANGUAGE:ASM>:${CORE_ASM_FLAGS}>'
+                printf "%s\n" '$<$<COMPILE_LANGUAGE:CXX>:${CORE_CXX_FLAGS} ${CORE_MCU_FLAGS}>'
+                printf "%s\n" '$<$<COMPILE_LANGUAGE:C>:${CORE_C_FLAGS} ${CORE_MCU_FLAGS}>)'
+            } >> "$out_cmakelists"
+
+            if [[ $($yaml_parser "$yaml_file" usb.define-symbols) != "null" ]]
+            then
+                total_symbols=$($yaml_parser "$yaml_file" usb.define-symbols --length)
+
+                for ((i=0;i<total_symbols;i++))
+                do
+                    symbol=$($yaml_parser "$yaml_file" usb.define-symbols.["$i"])
+                    printf "%s\n" "target_compile_definitions($cmake_usb_target PUBLIC $symbol)" >> "$out_cmakelists"
+                done
+            fi
+
+            if [[ $($yaml_parser "$yaml_file" usb.include-dirs) != "null" ]]
+            then
+                total_include_dirs=$($yaml_parser "$yaml_file" usb.include-dirs --length)
+
+                for ((i=0;i<total_include_dirs;i++))
+                do
+                    dir=$($yaml_parser "$yaml_file" usb.include-dirs.["$i"])
+                    printf "%s\n" "target_include_directories($cmake_usb_target PUBLIC \"${script_dir}/../$dir\")" >> "$out_cmakelists"
+                done
+            fi
+
+            if [[ $($yaml_parser "$yaml_file" usb.sources) != "null" ]]
+            then
+                total_sources=$($yaml_parser "$yaml_file" usb.sources --length)
+
+                for ((i=0;i<total_sources;i++))
+                do
+                    source=$($yaml_parser "$yaml_file" usb.sources.["$i"])
+                    printf "%s\n" "target_sources($cmake_usb_target PRIVATE \"${script_dir}/../$source\")" >> "$out_cmakelists"
+                done
+            fi
+
+            {
+                printf "%s\n" "get_target_property(CORE_USB_DEFINITIONS mcu COMPILE_DEFINITIONS)"
+                printf "%s%s\n" "target_compile_definitions($cmake_usb_target PRIVATE " '${CORE_USB_DEFINITIONS})'
+                printf "%s\n" "get_target_property(CORE_USB_INCLUDES mcu INCLUDE_DIRECTORIES)"
+                printf "%s%s\n" "target_include_directories($cmake_usb_target PRIVATE " '${CORE_USB_INCLUDES})'
+            } >> "$out_cmakelists"
+        fi
+    fi
 fi

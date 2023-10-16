@@ -24,10 +24,6 @@
 #include <inttypes.h>
 #include "IO.h"
 
-#ifndef CORE_MCU_ADC_MAX_VALUE
-#define CORE_MCU_ADC_MAX_VALUE 1023
-#endif
-
 namespace core::mcu::adc
 {
     struct conf_t

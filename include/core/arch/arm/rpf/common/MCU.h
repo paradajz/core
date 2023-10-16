@@ -83,6 +83,8 @@ namespace core::mcu
             {
                 core::mcu::isr::uart(1);
             });
+
+        timers::init();
     }
 
     inline void deInit()

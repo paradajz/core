@@ -67,6 +67,7 @@ namespace core::mcu
 
         clocks::init();
         flash::init();
+        timers::init();
     }
 
     inline void deInit()

@@ -75,6 +75,8 @@ namespace core::mcu
         clock_prescale_set(clock_div_1);
 
         CORE_MCU_ENABLE_INTERRUPTS();
+
+        timers::init();
     }
 
     inline void deInit()

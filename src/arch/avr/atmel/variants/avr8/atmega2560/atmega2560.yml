@@ -35,5 +35,4 @@
     - "src/arch/avr/atmel/common/I2C.cpp"
     - "src/arch/avr/atmel/common/Bootloader.cpp"
     - "src/arch/avr/atmel/common/ADC.cpp"
-    - "src/arch/avr/atmel/common/TimersMultiple.cpp"
     - "src/arch/avr/atmel/variants/avr8/atmega2560/Peripherals.cpp"

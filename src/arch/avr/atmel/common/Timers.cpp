@@ -19,35 +19,51 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#include <array>
 #include <avr/interrupt.h>
 #include "core/util/Util.h"
 #include "core/arch/common/Timers.h"
 
-#ifdef __AVR_ATmega16U2__
-
-// no error here checking to reduce flash size
-
-// 4 constant based on prescaler 64
-constexpr uint32_t TIMER_US_TO_TICKS(uint32_t us)
-{
-    return (((us / 4) - 1));
-}
-
 namespace
 {
-    // use just one timer on AVR
-    core::mcu::timers::handler_t _handler = nullptr;
+    // 4 constant based on prescaler 64
+    constexpr uint32_t TIMER_US_TO_TICKS(uint32_t us)
+    {
+        return (((us / 4) - 1));
+    }
+
+    constexpr size_t NUM_OF_TIMERS = 2;
+
+    struct avrTimer_t
+    {
+        bool                         allocated = false;
+        core::mcu::timers::handler_t handler   = nullptr;
+    };
+
+    std::array<avrTimer_t, NUM_OF_TIMERS> _timer;
 }    // namespace
 
 ISR(TIMER0_COMPA_vect)
 {
-    _handler();
+    if (_timer[0].handler != nullptr)
+    {
+        _timer[0].handler();
+    }
+}
+
+ISR(TIMER1_COMPA_vect)
+{
+    if (_timer[1].handler != nullptr)
+    {
+        _timer[1].handler();
+    }
 }
 
 namespace core::mcu::timers
 {
     bool init()
     {
+        // timer0
         TCCR0A = 0;
         TCCR0B = 0;
         TIMSK0 = 0;
@@ -55,51 +71,168 @@ namespace core::mcu::timers
         TCCR0A |= (1 << WGM01);                 // CTC mode
         TCCR0B |= (1 << CS01) | (1 << CS00);    // prescaler 64
 
+        // timer1
+        TCCR1A = 0;
+        TCCR1B = 0;
+        TCCR1C = 0;
+        TIMSK1 = 0;
+        TCNT1  = 0;
+        TCCR1B |= (1 << WGM12);                 // CTC mode
+        TCCR1B |= (1 << CS11) | (1 << CS10);    // prescaler 64
+
         return true;
     }
 
     bool allocate(size_t& index, handler_t handler)
     {
-        index    = 0;
-        _handler = handler;
+        for (size_t i = 0; i < NUM_OF_TIMERS; i++)
+        {
+            if (!_timer[i].allocated)
+            {
+                _timer[i].allocated = true;
+                index               = i;
+                _timer[i].handler   = handler;
 
-        return true;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     bool start(size_t index)
     {
-        TIMSK0 |= (1 << OCIE0A);    // compare match interrupt
+        if (index >= _timer.size())
+        {
+            return false;
+        }
+
+        if (!_timer[index].allocated)
+        {
+            return false;
+        }
+
+        stop(index);
+
+        // enable compare match interrupt
+        switch (index)
+        {
+        case 0:
+        {
+            TIMSK0 |= (1 << OCIE0A);
+        }
+        break;
+
+        case 1:
+        {
+            TIMSK1 |= (1 << OCIE1A);
+        }
+        break;
+
+        default:
+            return false;
+        }
+
         return true;
     }
 
     void startAll()
     {
-        start(0);
+        for (size_t i = 0; i < NUM_OF_TIMERS; i++)
+        {
+            start(i);
+        }
     }
 
     bool stop(size_t index)
     {
-        TIMSK0 &= ~(1 << OCIE0A);
-        TCNT0 = 0;
+        if (index >= _timer.size())
+        {
+            return false;
+        }
+
+        if (!_timer[index].allocated)
+        {
+            return false;
+        }
+
+        if (!isRunning(index))
+        {
+            return false;
+        }
+
+        // disable compare match interrupt and clear counter
+        switch (index)
+        {
+        case 0:
+        {
+            TIMSK0 &= ~(1 << OCIE0A);
+            TCNT0 = 0;
+        }
+        break;
+
+        case 1:
+        {
+            TIMSK1 &= ~(1 << OCIE1A);
+            TCNT1 = 0;
+        }
+        break;
+
+        default:
+            return false;
+        }
 
         return true;
     }
 
     void stopAll()
     {
-        stop(0);
+        for (size_t i = 0; i < NUM_OF_TIMERS; i++)
+        {
+            stop(i);
+        }
     }
 
     bool isRunning(size_t index)
     {
+        if (index >= _timer.size())
+        {
+            return false;
+        }
+
+        if (!_timer[index].allocated)
+        {
+            return false;
+        }
+
         return core::util::BIT_READ(TIMSK0, OCIE0A);
     }
 
     bool setPeriod(size_t index, uint32_t us)
     {
-        OCR0A = TIMER_US_TO_TICKS(us);
+        if (!_timer[index].allocated)
+        {
+            return false;
+        }
+
+        switch (index)
+        {
+        case 0:
+        {
+            OCR0A = TIMER_US_TO_TICKS(us);
+        }
+        break;
+
+        case 1:
+        {
+            OCR1A = TIMER_US_TO_TICKS(us);
+        }
+        break;
+
+        default:
+            return false;
+        }
+
         return true;
     }
 }    // namespace core::mcu::timers
-
-#endif

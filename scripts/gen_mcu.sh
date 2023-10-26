@@ -26,8 +26,6 @@ yaml_parser="dasel -n -p yaml --plain -f"
 out_header="$gen_dir"/CoreMCUGenerated.h
 out_cmakelists="$gen_dir"/CMakeLists.txt
 
-echo "Generating MCU definitions..."
-
 mkdir -p "$gen_dir"
 echo "" > "$out_header"
 
@@ -44,6 +42,8 @@ uid_bits=$($yaml_parser "$yaml_file" uid-bits)
 adc_bits=$($yaml_parser "$yaml_file" adc-bits)
 cmake_mcu_target=mcu
 cmake_usb_target=usb
+
+echo "Generating configuration for MCU: $mcu"
 
 # Common (real and stub MCU)
 {

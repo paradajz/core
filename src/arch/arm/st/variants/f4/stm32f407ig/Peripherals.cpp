@@ -57,22 +57,22 @@ namespace
         std::vector<core::mcu::io::pin_t> _pins = {
             // rx
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(A),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(10),
-                .mode      = core::mcu::io::pinMode_t::ALTERNATE_PP,
-                .pull      = core::mcu::io::pullMode_t::NONE,
-                .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,
-                .alternate = GPIO_AF7_USART1,
+                CORE_MCU_IO_PIN_PORT_DEF(A),
+                CORE_MCU_IO_PIN_INDEX_DEF(10),
+                core::mcu::io::pinMode_t::ALTERNATE_PP,
+                core::mcu::io::pullMode_t::NONE,
+                core::mcu::io::gpioSpeed_t::VERY_HIGH,
+                GPIO_AF7_USART1,
             },
 
             // tx
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(A),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(9),
-                .mode      = core::mcu::io::pinMode_t::ALTERNATE_PP,
-                .pull      = core::mcu::io::pullMode_t::NONE,
-                .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,
-                .alternate = GPIO_AF7_USART1,
+                CORE_MCU_IO_PIN_PORT_DEF(A),
+                CORE_MCU_IO_PIN_INDEX_DEF(9),
+                core::mcu::io::pinMode_t::ALTERNATE_PP,
+                core::mcu::io::pullMode_t::NONE,
+                core::mcu::io::gpioSpeed_t::VERY_HIGH,
+                GPIO_AF7_USART1,
             },
         };
 
@@ -113,22 +113,22 @@ namespace
         std::vector<core::mcu::io::pin_t> _pins = {
             // rx
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(D),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(6),
-                .mode      = core::mcu::io::pinMode_t::ALTERNATE_PP,
-                .pull      = core::mcu::io::pullMode_t::NONE,
-                .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,
-                .alternate = GPIO_AF7_USART2,
+                CORE_MCU_IO_PIN_PORT_DEF(D),
+                CORE_MCU_IO_PIN_INDEX_DEF(6),
+                core::mcu::io::pinMode_t::ALTERNATE_PP,
+                core::mcu::io::pullMode_t::NONE,
+                core::mcu::io::gpioSpeed_t::VERY_HIGH,
+                GPIO_AF7_USART2,
             },
 
             // tx
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(D),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(5),
-                .mode      = core::mcu::io::pinMode_t::ALTERNATE_PP,
-                .pull      = core::mcu::io::pullMode_t::NONE,
-                .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,
-                .alternate = GPIO_AF7_USART2,
+                CORE_MCU_IO_PIN_PORT_DEF(D),
+                CORE_MCU_IO_PIN_INDEX_DEF(5),
+                core::mcu::io::pinMode_t::ALTERNATE_PP,
+                core::mcu::io::pullMode_t::NONE,
+                core::mcu::io::gpioSpeed_t::VERY_HIGH,
+                GPIO_AF7_USART2,
             },
         };
 
@@ -169,22 +169,22 @@ namespace
         std::vector<core::mcu::io::pin_t> _pins = {
             // rx
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(B),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(11),
-                .mode      = core::mcu::io::pinMode_t::ALTERNATE_PP,
-                .pull      = core::mcu::io::pullMode_t::NONE,
-                .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,
-                .alternate = GPIO_AF7_USART3,
+                CORE_MCU_IO_PIN_PORT_DEF(B),
+                CORE_MCU_IO_PIN_INDEX_DEF(11),
+                core::mcu::io::pinMode_t::ALTERNATE_PP,
+                core::mcu::io::pullMode_t::NONE,
+                core::mcu::io::gpioSpeed_t::VERY_HIGH,
+                GPIO_AF7_USART3,
             },
 
             // tx
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(B),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(10),
-                .mode      = core::mcu::io::pinMode_t::ALTERNATE_PP,
-                .pull      = core::mcu::io::pullMode_t::NONE,
-                .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,
-                .alternate = GPIO_AF7_USART3,
+                CORE_MCU_IO_PIN_PORT_DEF(B),
+                CORE_MCU_IO_PIN_INDEX_DEF(10),
+                core::mcu::io::pinMode_t::ALTERNATE_PP,
+                core::mcu::io::pullMode_t::NONE,
+                core::mcu::io::gpioSpeed_t::VERY_HIGH,
+                GPIO_AF7_USART3,
             },
         };
 
@@ -225,22 +225,22 @@ namespace
         std::vector<core::mcu::io::pin_t> _pins = {
             // rx
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(C),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(11),
-                .mode      = core::mcu::io::pinMode_t::ALTERNATE_PP,
-                .pull      = core::mcu::io::pullMode_t::NONE,
-                .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,
-                .alternate = GPIO_AF8_UART4,
+                CORE_MCU_IO_PIN_PORT_DEF(C),
+                CORE_MCU_IO_PIN_INDEX_DEF(11),
+                core::mcu::io::pinMode_t::ALTERNATE_PP,
+                core::mcu::io::pullMode_t::NONE,
+                core::mcu::io::gpioSpeed_t::VERY_HIGH,
+                GPIO_AF8_UART4,
             },
 
             // tx
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(C),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(10),
-                .mode      = core::mcu::io::pinMode_t::ALTERNATE_PP,
-                .pull      = core::mcu::io::pullMode_t::NONE,
-                .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,
-                .alternate = GPIO_AF8_UART4,
+                CORE_MCU_IO_PIN_PORT_DEF(C),
+                CORE_MCU_IO_PIN_INDEX_DEF(10),
+                core::mcu::io::pinMode_t::ALTERNATE_PP,
+                core::mcu::io::pullMode_t::NONE,
+                core::mcu::io::gpioSpeed_t::VERY_HIGH,
+                GPIO_AF8_UART4,
             },
         };
 
@@ -281,22 +281,22 @@ namespace
         std::vector<core::mcu::io::pin_t> _pins = {
             // rx
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(D),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(2),
-                .mode      = core::mcu::io::pinMode_t::ALTERNATE_PP,
-                .pull      = core::mcu::io::pullMode_t::NONE,
-                .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,
-                .alternate = GPIO_AF8_UART5,
+                CORE_MCU_IO_PIN_PORT_DEF(D),
+                CORE_MCU_IO_PIN_INDEX_DEF(2),
+                core::mcu::io::pinMode_t::ALTERNATE_PP,
+                core::mcu::io::pullMode_t::NONE,
+                core::mcu::io::gpioSpeed_t::VERY_HIGH,
+                GPIO_AF8_UART5,
             },
 
             // tx
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(C),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(12),
-                .mode      = core::mcu::io::pinMode_t::ALTERNATE_PP,
-                .pull      = core::mcu::io::pullMode_t::NONE,
-                .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,
-                .alternate = GPIO_AF8_UART5,
+                CORE_MCU_IO_PIN_PORT_DEF(C),
+                CORE_MCU_IO_PIN_INDEX_DEF(12),
+                core::mcu::io::pinMode_t::ALTERNATE_PP,
+                core::mcu::io::pullMode_t::NONE,
+                core::mcu::io::gpioSpeed_t::VERY_HIGH,
+                GPIO_AF8_UART5,
             },
         };
 
@@ -337,22 +337,22 @@ namespace
         std::vector<core::mcu::io::pin_t> _pins = {
             // rx
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(C),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(7),
-                .mode      = core::mcu::io::pinMode_t::ALTERNATE_PP,
-                .pull      = core::mcu::io::pullMode_t::NONE,
-                .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,
-                .alternate = GPIO_AF8_USART6,
+                CORE_MCU_IO_PIN_PORT_DEF(C),
+                CORE_MCU_IO_PIN_INDEX_DEF(7),
+                core::mcu::io::pinMode_t::ALTERNATE_PP,
+                core::mcu::io::pullMode_t::NONE,
+                core::mcu::io::gpioSpeed_t::VERY_HIGH,
+                GPIO_AF8_USART6,
             },
 
             // tx
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(C),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(6),
-                .mode      = core::mcu::io::pinMode_t::ALTERNATE_PP,
-                .pull      = core::mcu::io::pullMode_t::NONE,
-                .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,
-                .alternate = GPIO_AF8_USART6,
+                CORE_MCU_IO_PIN_PORT_DEF(C),
+                CORE_MCU_IO_PIN_INDEX_DEF(6),
+                core::mcu::io::pinMode_t::ALTERNATE_PP,
+                core::mcu::io::pullMode_t::NONE,
+                core::mcu::io::gpioSpeed_t::VERY_HIGH,
+                GPIO_AF8_USART6,
             },
         };
 
@@ -393,22 +393,22 @@ namespace
         std::vector<core::mcu::io::pin_t> _pins = {
             // sda
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(B),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(7),
-                .mode      = core::mcu::io::pinMode_t::ALTERNATE_OD,
-                .pull      = core::mcu::io::pullMode_t::UP,
-                .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,
-                .alternate = GPIO_AF4_I2C1,
+                CORE_MCU_IO_PIN_PORT_DEF(B),
+                CORE_MCU_IO_PIN_INDEX_DEF(7),
+                core::mcu::io::pinMode_t::ALTERNATE_OD,
+                core::mcu::io::pullMode_t::UP,
+                core::mcu::io::gpioSpeed_t::VERY_HIGH,
+                GPIO_AF4_I2C1,
             },
 
             // scl
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(B),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(6),
-                .mode      = core::mcu::io::pinMode_t::ALTERNATE_OD,
-                .pull      = core::mcu::io::pullMode_t::UP,
-                .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,
-                .alternate = GPIO_AF4_I2C1,
+                CORE_MCU_IO_PIN_PORT_DEF(B),
+                CORE_MCU_IO_PIN_INDEX_DEF(6),
+                core::mcu::io::pinMode_t::ALTERNATE_OD,
+                core::mcu::io::pullMode_t::UP,
+                core::mcu::io::gpioSpeed_t::VERY_HIGH,
+                GPIO_AF4_I2C1,
             },
         };
 
@@ -449,22 +449,22 @@ namespace
         std::vector<core::mcu::io::pin_t> _pins = {
             // sda
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(F),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(0),
-                .mode      = core::mcu::io::pinMode_t::ALTERNATE_OD,
-                .pull      = core::mcu::io::pullMode_t::UP,
-                .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,
-                .alternate = GPIO_AF4_I2C2,
+                CORE_MCU_IO_PIN_PORT_DEF(F),
+                CORE_MCU_IO_PIN_INDEX_DEF(0),
+                core::mcu::io::pinMode_t::ALTERNATE_OD,
+                core::mcu::io::pullMode_t::UP,
+                core::mcu::io::gpioSpeed_t::VERY_HIGH,
+                GPIO_AF4_I2C2,
             },
 
             // scl
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(F),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(1),
-                .mode      = core::mcu::io::pinMode_t::ALTERNATE_OD,
-                .pull      = core::mcu::io::pullMode_t::UP,
-                .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,
-                .alternate = GPIO_AF4_I2C2,
+                CORE_MCU_IO_PIN_PORT_DEF(F),
+                CORE_MCU_IO_PIN_INDEX_DEF(1),
+                core::mcu::io::pinMode_t::ALTERNATE_OD,
+                core::mcu::io::pullMode_t::UP,
+                core::mcu::io::gpioSpeed_t::VERY_HIGH,
+                GPIO_AF4_I2C2,
             },
         };
 
@@ -505,22 +505,22 @@ namespace
         std::vector<core::mcu::io::pin_t> _pins = {
             // sda
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(H),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(8),
-                .mode      = core::mcu::io::pinMode_t::ALTERNATE_OD,
-                .pull      = core::mcu::io::pullMode_t::UP,
-                .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,
-                .alternate = GPIO_AF4_I2C3,
+                CORE_MCU_IO_PIN_PORT_DEF(H),
+                CORE_MCU_IO_PIN_INDEX_DEF(8),
+                core::mcu::io::pinMode_t::ALTERNATE_OD,
+                core::mcu::io::pullMode_t::UP,
+                core::mcu::io::gpioSpeed_t::VERY_HIGH,
+                GPIO_AF4_I2C3,
             },
 
             // scl
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(H),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(7),
-                .mode      = core::mcu::io::pinMode_t::ALTERNATE_OD,
-                .pull      = core::mcu::io::pullMode_t::UP,
-                .speed     = core::mcu::io::gpioSpeed_t::VERY_HIGH,
-                .alternate = GPIO_AF4_I2C3,
+                CORE_MCU_IO_PIN_PORT_DEF(H),
+                CORE_MCU_IO_PIN_INDEX_DEF(7),
+                core::mcu::io::pinMode_t::ALTERNATE_OD,
+                core::mcu::io::pullMode_t::UP,
+                core::mcu::io::gpioSpeed_t::VERY_HIGH,
+                GPIO_AF4_I2C3,
             },
         };
 

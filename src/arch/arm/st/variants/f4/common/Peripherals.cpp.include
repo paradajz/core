@@ -62,22 +62,22 @@ namespace
         std::vector<core::mcu::io::pin_t> _pins = {
             // d+
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(A),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(11),
-                .mode      = core::mcu::io::pinMode_t::ALTERNATE_PP,
-                .pull      = core::mcu::io::pullMode_t::NONE,
-                .speed     = core::mcu::io::gpioSpeed_t::HIGH,
-                .alternate = GPIO_AF10_OTG_FS,
+                CORE_MCU_IO_PIN_PORT_DEF(A),
+                CORE_MCU_IO_PIN_INDEX_DEF(11),
+                core::mcu::io::pinMode_t::ALTERNATE_PP,
+                core::mcu::io::pullMode_t::NONE,
+                core::mcu::io::gpioSpeed_t::HIGH,
+                GPIO_AF10_OTG_FS,
             },
 
             // d-
             {
-                .port      = CORE_MCU_IO_PIN_PORT_DEF(A),
-                .index     = CORE_MCU_IO_PIN_INDEX_DEF(12),
-                .mode      = core::mcu::io::pinMode_t::ALTERNATE_PP,
-                .pull      = core::mcu::io::pullMode_t::NONE,
-                .speed     = core::mcu::io::gpioSpeed_t::HIGH,
-                .alternate = GPIO_AF10_OTG_FS,
+                CORE_MCU_IO_PIN_PORT_DEF(A),
+                CORE_MCU_IO_PIN_INDEX_DEF(12),
+                core::mcu::io::pinMode_t::ALTERNATE_PP,
+                core::mcu::io::pullMode_t::NONE,
+                core::mcu::io::gpioSpeed_t::HIGH,
+                GPIO_AF10_OTG_FS,
             },
         };
 

@@ -22,8 +22,8 @@
     - "F_USB=16000000UL"
   include-dirs:
     - "include"
-    - "modules/lufa"
-    - "modules/avr-libstdcpp/include"
+    - "../lufa"
+    - "../avr-libstdcpp/include"
   sources:
     - "src/arch/common/ISR.cpp"
     - "src/arch/common/Timing.cpp"

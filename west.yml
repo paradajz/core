@@ -1,0 +1,37 @@
+manifest:
+  remotes:
+    - name: hathach
+      url-base: https://github.com/hathach
+    - name: abcminiuser
+      url-base: https://github.com/abcminiuser
+    - name: raspberrypi
+      url-base: https://github.com/raspberrypi
+    - name: modm-io
+      url-base: https://github.com/modm-io
+
+  projects:
+    - name: tinyusb
+      remote: hathach
+      revision: 86c416d4c0fb38432460b3e11b08b9de76941bf5
+      path: modules/tinyusb
+      submodules:
+        - path: hw/mcu/nordic/nrfx
+        - path: tools/uf2
+        - path: hw/mcu/st/cmsis_device_f4
+        - path: hw/mcu/st/stm32f4xx_hal_driver
+        - path: lib/CMSIS_5
+    - name: lufa
+      remote: abcminiuser
+      revision: d2aaa0a3a28cc2f15a131e6319ab9920b0e1ea1b
+      path: modules/lufa
+      submodules: true
+    - name: pico-sdk
+      remote: raspberrypi
+      revision: 6a7db34ff63345a7badec79ebea3aaef1712f374
+      path: modules/pico-sdk
+      submodules: false
+    - name: avr-libstdcpp
+      remote: modm-io
+      revision: ec849a2e266ae7a349ed77fb3f3b85413e86b329
+      path: modules/avr-libstdcpp
+      submodules: true

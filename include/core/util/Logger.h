@@ -24,6 +24,7 @@
 #include <cstdarg>
 #include <stdio.h>
 #include <functional>
+#include "core/MCU.h"
 
 namespace core::util
 {
@@ -56,6 +57,13 @@ namespace core::util
             }
 
             snprintf(_logBuffer, sizeof(_logBuffer), "[%s:%d] ", file, line);
+
+            if (!_writer(_logBuffer))
+            {
+                return false;
+            }
+
+            snprintf(_logBuffer, sizeof(_logBuffer), "[%lu] ", core::mcu::timing::ms());
 
             if (!_writer(_logBuffer))
             {

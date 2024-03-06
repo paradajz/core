@@ -74,6 +74,7 @@ namespace core::mcu
 
     inline void deInit()
     {
+        core::mcu::timers::stopAll();
     }
 
     inline void reset()

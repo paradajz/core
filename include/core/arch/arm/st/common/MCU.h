@@ -53,6 +53,8 @@ namespace core::mcu
 
     inline void deInit()
     {
+        core::mcu::timers::stopAll();
+
         HAL_RCC_DeInit();
         HAL_DeInit();
     }

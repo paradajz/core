@@ -61,25 +61,30 @@ namespace core::util
         }
 
         /// Fills the existing string with spaces.
-        /// param [in]: size Number of spaces to append.
-        bool fillUntil(size_t size)
+        /// param [in]: size The length of the string after appending spaces.
+        void fillUntil(size_t size)
         {
-            size_t strSize = strlen(_buffer);
+            int index = strlen(_buffer);
 
-            if ((strSize + size) >= (BUFFER_SIZE - 1))
+            for (; index < static_cast<int>(index + size); index++)
             {
-                return false;    // overflow
+                if (index >= static_cast<int>(BUFFER_SIZE - 1))
+                {
+                    break;
+                }
+
+                if (index >= static_cast<int>(size))
+                {
+                    break;
+                }
+
+                _buffer[index] = ' ';
             }
 
-            for (size_t i = 0; i < size; i++)
+            for (; index < static_cast<int>(BUFFER_SIZE); index++)
             {
-                _buffer[strSize + i] = ' ';
+                _buffer[index] = '\0';
             }
-
-            strSize += size;
-            _buffer[strSize] = '\0';
-
-            return true;
         }
 
         private:

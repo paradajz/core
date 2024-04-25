@@ -14,7 +14,6 @@ SCRIPTS_DIR               := $(ROOT_MAKEFILE_DIR)/scripts
 MCU                       := $(shell basename $(shell $(FIND) $(ROOT_MAKEFILE_DIR)/src/arch -type f -name "*.yml" | sort | head -n 1) .yml)
 MCU_YML_FILE              := $(shell find $(ROOT_MAKEFILE_DIR) -type f -name "*$(MCU).yml")
 MCU_GENERATED_SUBDIR_BASE := $(ROOT_MAKEFILE_DIR)/include/generated
-MCU_DEPS_SUBDIR_BASE      := $(ROOT_MAKEFILE_DIR)/deps
 MCU_GEN_DIR               := $(MCU_GENERATED_SUBDIR_BASE)/$(MCU)
 MCU_EXT_CLOCK_MHZ         :=
 MCU_GEN_USB               := 0
@@ -31,7 +30,7 @@ mcu:
 	--gen-usb=$(MCU_GEN_USB)
 
 clean:
-	@rm -rf $(MCU_GENERATED_SUBDIR_BASE) $(MCU_DEPS_SUBDIR_BASE)
+	@rm -rf $(MCU_GENERATED_SUBDIR_BASE)
 
 # Debugging
 print-%:

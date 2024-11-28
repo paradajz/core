@@ -62,6 +62,7 @@
     - "src/arch/common/Timing.cpp"
     - "src/arch/common/BootloaderCache.cpp"
     - "src/arch/arm/common/ISR.cpp"
+    - "src/arch/arm/common/StdLibDummy.cpp"
     - "src/arch/arm/st/common/ISR.cpp"
     - "src/arch/arm/st/common/UART.cpp"
     - "src/arch/arm/st/common/I2C.cpp"

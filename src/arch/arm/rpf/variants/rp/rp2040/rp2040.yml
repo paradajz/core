@@ -153,6 +153,7 @@
     - "src/arch/common/Timing.cpp"
     - "src/arch/common/BootloaderCache.cpp"
     - "src/arch/arm/common/ISR.cpp"
+    - "src/arch/arm/common/StdLibDummy.cpp"
     - "src/arch/arm/rpf/common/Flash.cpp"
     - "src/arch/arm/rpf/common/Clocks.cpp"
     - "src/arch/arm/rpf/common/Timers.cpp"

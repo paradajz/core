@@ -19,6 +19,9 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+
 #include "nrfx_clock.h"
 
 namespace core::mcu::clocks
@@ -56,3 +59,5 @@ namespace core::mcu::clocks
         }
     }
 }    // namespace core::mcu::clocks
+
+#pragma GCC diagnostic pop

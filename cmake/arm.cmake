@@ -63,6 +63,7 @@ set(CORE_C_FLAGS
     -Wno-parentheses-equality
     -Wno-unused-value
     -Wno-implicit-function-declaration
+    -Wno-array-bounds
 )
 
 set(CORE_ASM_FLAGS

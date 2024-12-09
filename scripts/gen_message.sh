@@ -24,7 +24,7 @@ namespace=$($yaml_parser "$yaml_file" namespace)
 
 {
     printf "%s\n\n" "#pragma once"
-    printf "%s\n\n" "#include \"core/util/messaging/Messaging.h\""
+    printf "%s\n\n" "#include \"core/util/messaging/messaging.h\""
 } > "$out_header"
 
 {

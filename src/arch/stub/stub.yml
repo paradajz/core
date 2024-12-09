@@ -5,4 +5,4 @@
   include-dirs:
     - "include"
   sources:
-    - "src/arch/stub/Timing.cpp"
+    - "src/arch/stub/timing.cpp"

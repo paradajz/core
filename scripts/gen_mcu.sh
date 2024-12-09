@@ -23,7 +23,7 @@ done
 script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 
 yaml_parser="dasel -n -p yaml --plain -f"
-out_header="$gen_dir"/CoreMCUGenerated.h
+out_header="$gen_dir"/core_mcu_generated.h
 out_cmakelists="$gen_dir"/CMakeLists.txt
 
 mkdir -p "$gen_dir"

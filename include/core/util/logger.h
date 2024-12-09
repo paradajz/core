@@ -34,9 +34,9 @@ namespace core::util
         public:
         enum class logLevel_t : uint8_t
         {
-            INFO,
-            WARNING,
-            ERROR,
+            INF,
+            WARN,
+            ERR,
             AMOUNT
         };
 
@@ -94,9 +94,9 @@ namespace core::util
         char                    _logBuffer[LOG_BUFFER_SIZE];
 
         static constexpr const char* LOG_LEVEL_STRING[static_cast<uint8_t>(logLevel_t::AMOUNT)] = {
-            "[INFO] ",
-            "[WARNING] ",
-            "[ERROR] ",
+            "[INF] ",
+            "[WARN] ",
+            "[ERR] ",
         };
     };
 }    // namespace core::util
@@ -113,6 +113,6 @@ namespace core::util
 #define CORE_LOGGER_CREATE(loggerName, writerFunc) \
     CoreLogger_##loggerName coreLoggerInstance_##loggerName = CoreLogger_##loggerName(writerFunc);
 
-#define CORE_LOG_INFO(loggerName, ...)  (coreLoggerInstance_##loggerName.write(CoreLogger_##loggerName::logLevel_t::INFO, __FILE_NAME__, __LINE__, __VA_ARGS__))
-#define CORE_LOG_WARN(loggerName, ...)  (coreLoggerInstance_##loggerName.write(CoreLogger_##loggerName::logLevel_t::WARNING, __FILE_NAME__, __LINE__, __VA_ARGS__))
-#define CORE_LOG_ERROR(loggerName, ...) (coreLoggerInstance_##loggerName.write(CoreLogger_##loggerName::logLevel_t::ERROR, __FILE_NAME__, __LINE__, __VA_ARGS__))
+#define CORE_LOG_INF(loggerName, ...)   (coreLoggerInstance_##loggerName.write(CoreLogger_##loggerName::logLevel_t::INF, __FILE_NAME__, __LINE__, __VA_ARGS__))
+#define CORE_LOG_WARN(loggerName, ...)  (coreLoggerInstance_##loggerName.write(CoreLogger_##loggerName::logLevel_t::WARN, __FILE_NAME__, __LINE__, __VA_ARGS__))
+#define CORE_LOG_ERROR(loggerName, ...) (coreLoggerInstance_##loggerName.write(CoreLogger_##loggerName::logLevel_t::ERR, __FILE_NAME__, __LINE__, __VA_ARGS__))
